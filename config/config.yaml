@@ -1,0 +1,33 @@
+# config/config.yaml
+
+paths:
+  pdf_raw: "pdfs/raw"
+  pdf_processed: "pdfs/processed"
+  vector_db: "pdfs/processed/vector_db"
+  metadata: "pdfs/processed/metadata.json"
+  bm25_cache: "pdfs/processed/vector_db"
+
+extraction:
+  dpi: 216   # images_scale = dpi/72 = 3.0
+  min_text_length: 80
+  min_table_pipes: 4
+
+embedding:
+  model: "gemini-embedding-2-preview"
+  embed_dim: 3072
+  batch_size: 10
+  sleep_between_batches: 1.5
+  min_token_count: 50
+  text_collection: "rag_text"       # text + table chunks
+  image_collection: "rag_image"     # image chunks (aggregated caption+image)
+
+retrieval:
+  text_top_k: 5       # top-k cho text pipeline
+  image_top_k: 3      # top-k cho image pipeline
+  rrf_k: 60
+
+agents:
+  llm_model: "google/gemini-2.5-flash"
+  vision_model: "google/gemini-2.5-pro"
+  max_context_chunks: 3
+  temperature: 0.1

@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+ragenv/
+
+# Environment variables
+.env
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# PDF processed data
+pdfs/processed/
+
+# ChromaDB vector store
+chroma_db/
+
+# Evaluation results
+results/
+
+# Jupyter
+.ipynb_checkpoints/

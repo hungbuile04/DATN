@@ -1,0 +1,26 @@
+# PDF extraction
+docling>=2.0.0
+PyMuPDF>=1.24.10
+
+# Vector database
+chromadb==0.5.3
+
+# Embedding (Gemini Embedding 2 via google-genai)
+google-genai>=1.0.0
+
+# Retrieval
+rank-bm25==0.2.2
+openai>=1.30.0          # vẫn dùng cho LLM agents qua OpenRouter
+
+# Config management
+pyyaml==6.0.2
+python-dotenv==1.0.1
+
+# Utilities
+tqdm==4.66.5
+Pillow==10.4.0
+requests>=2.31.0
+tabulate>=0.9.0         # cho df.to_markdown()
+
+# Web UI
+streamlit>=1.30.0
