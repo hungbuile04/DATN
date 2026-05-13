@@ -1,20 +1,17 @@
 # src/eval/ablation_agents.py
 
 """
-Ablation: Đóng góp của từng agent trong 4-agent pipeline.
+Ablation: Đóng góp của từng agent trong 3-agent pipeline.
 
-5 biến thể — bỏ từng agent so với full:
-  full            — Critical + Text + Image + Sum (đầy đủ, 4 LLM calls)
-  no_critical     — bỏ CriticalAgent (Text/Image không có guidance)
+5 biến thể so sánh:
+  full            — Text + Image + Sum (đầy đủ, 3 LLM calls)
   no_text         — bỏ TextAgent
   no_image        — bỏ ImageAgent
   no_sum          — bỏ SumAgent (ghép thô)
-  single_llm      — 1 LLM call (full_multimodal baseline)
+  single_llm      — 1 LLM call (full_multimodal baseline, không chia agent)
 
 Usage:
-    conda run -n base python src/eval/ablation_agents.py
-    conda run -n base python src/eval/ablation_agents.py --judge
-    conda run -n base python src/eval/ablation_agents.py --judge --judge_model google/gemini-2.5-flash
+    python src/eval/ablation_agents.py --questions src/eval/question_test.json --output results/eval_ablation.json --judge
 """
 
 import argparse
@@ -32,7 +29,7 @@ load_dotenv()
 from config.settings import CFG
 from src.retrieval.retriever import DualRetriever
 from src.agents.agents import (
-    CriticalAgent, TextAgent, ImageAgent, SumAgent,
+    TextAgent, ImageAgent, SumAgent,
     AgentOutput, _format_chunks,
 )
 from src.eval.generator import AnswerGenerator
@@ -52,7 +49,8 @@ def _empty_output(agent_name: str) -> AgentOutput:
 
 def run(questions_path: str, output_path: str,
         text_top_k: int = 5, image_top_k: int = 3,
-        use_judge: bool = False, judge_model: str = "google/gemini-2.5-flash"):
+        use_judge: bool = False, judge_model: str = "openai/gpt-4o-mini",
+        only_full: bool = False):
 
     google_key     = os.environ.get("GOOGLE_API_KEY", "")
     openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
@@ -75,7 +73,6 @@ def run(questions_path: str, output_path: str,
     text_model   = CFG["agents"]["llm_model"]
     vision_model = CFG["agents"]["vision_model"]
 
-    critical_agent = CriticalAgent(client, text_model)
     text_agent     = TextAgent(client, text_model)
     image_agent    = ImageAgent(client, vision_model)
     sum_agent      = SumAgent(client, text_model)
@@ -86,7 +83,10 @@ def run(questions_path: str, output_path: str,
         vision_model=vision_model,
     )
 
-    VARIANTS = ["full", "no_critical", "no_text", "no_image", "no_sum", "single_llm"]
+    if only_full:
+        VARIANTS = ["full"]
+    else:
+        VARIANTS = ["full", "no_text", "no_image", "no_sum", "single_llm"]
 
     # ── LLM Judge (nếu bật) ──
     judge = None
@@ -115,23 +115,11 @@ def run(questions_path: str, output_path: str,
         image_chunks = result.image_chunks
         print(f"  T={len(text_chunks)} I={len(image_chunks)}")
 
-        # ── Chạy full pipeline 1 lần ──
-        text_context  = _format_chunks(text_chunks)
-        image_context = _format_chunks(image_chunks)
-
-        # Critical
-        critical_info = critical_agent.extract(
-            question=question,
-            text_context=text_context,
-            image_context=image_context,
-        )
-        print(f"  Critical: text='{critical_info['text'][:40]}' img='{critical_info['image'][:40]}'")
-
-        # Text + Image (guided)
-        text_out = text_agent.analyze(question, text_chunks, critical_info["text"])
+        # ── Chạy full pipeline 1 lần (dùng lại cho các variant) ──
+        text_out = text_agent.analyze(question, text_chunks)
         print(f"  Text: conf={text_out.confidence:.2f}")
 
-        image_out = image_agent.analyze(question, image_chunks, critical_info["image"])
+        image_out = image_agent.analyze(question, image_chunks)
         print(f"  Image: conf={image_out.confidence:.2f}")
 
         # ── Build variants ──
@@ -150,12 +138,6 @@ def run(questions_path: str, output_path: str,
             if variant == "full":
                 gen = sum_agent.synthesize(question, text_out, image_out)
 
-            elif variant == "no_critical":
-                # Text/Image không có guidance
-                text_plain  = text_agent.analyze(question, text_chunks, critical_info="")
-                image_plain = image_agent.analyze(question, image_chunks, critical_info="")
-                gen = sum_agent.synthesize(question, text_plain, image_plain)
-
             elif variant == "no_text":
                 gen = sum_agent.synthesize(question, _empty_output("text"), image_out)
 
@@ -163,7 +145,7 @@ def run(questions_path: str, output_path: str,
                 gen = sum_agent.synthesize(question, text_out, _empty_output("image"))
 
             elif variant == "no_sum":
-                # Ghép thô
+                # Ghép thô không qua SumAgent
                 parts = []
                 for out in [text_out, image_out]:
                     if out.has_data and out.analysis:
@@ -179,7 +161,7 @@ def run(questions_path: str, output_path: str,
                 gen = {
                     "answer": gen_single["answer"],
                     "confidence": 0.0,
-                    "reasoning": "Single LLM",
+                    "reasoning": "Single LLM (1 call duy nhất)",
                 }
 
             answer = gen.get("answer", "")[:120]
@@ -195,22 +177,35 @@ def run(questions_path: str, output_path: str,
         # ── Judge scoring (nếu bật) ──
         expected_hint = q.get("expected_answer_hint", "")
         if judge and expected_hint:
+            # Build context string từ retrieved chunks để Judge đánh giá Faithfulness
+            context_parts = []
+            for c in text_chunks:
+                context_parts.append(f"[{c.chunk_type}] {c.content[:500]}")
+            for c in image_chunks:
+                cap = c.caption[:300] if c.caption else c.content[:300]
+                context_parts.append(f"[image] {cap}")
+            context_str = "\n---\n".join(context_parts)
+
             print(f"  → Judging {len(VARIANTS)} variants...")
             for variant in VARIANTS:
                 m = entry["modes"].get(variant, {})
                 answer_text = m.get("answer", "")
                 print(f"    [{variant}]", end=" ", flush=True)
-                score = judge.evaluate(question, answer_text, expected_hint)
+                score = judge.evaluate(
+                    question, answer_text, expected_hint,
+                    context=context_str,
+                )
                 m["judge"] = score
                 print(f"→ {score['total']}/20")
 
         results.append(entry)
 
-    # ── Save ──
-    out = Path(output_path)
-    out.parent.mkdir(parents=True, exist_ok=True)
-    with open(out, "w", encoding="utf-8") as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+        # ── Incremental save (lưu sau mỗi câu) ──
+        out = Path(output_path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with open(out, "w", encoding="utf-8") as f:
+            json.dump(results, f, ensure_ascii=False, indent=2)
+
     print(f"\n✓ Results → {out}")
 
     if use_judge:
@@ -218,7 +213,7 @@ def run(questions_path: str, output_path: str,
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Ablation: 4-Agent Contribution")
+    parser = argparse.ArgumentParser(description="Ablation: 3-Agent Contribution")
     parser.add_argument("--questions", default="src/eval/questions.json")
     parser.add_argument("--output", default="results/ablation_agents.json")
     parser.add_argument("--text_top_k", type=int, default=5)
@@ -226,12 +221,15 @@ if __name__ == "__main__":
     parser.add_argument("--judge", action="store_true",
                         help="Bật LLM-as-a-Judge chấm điểm tự động")
     parser.add_argument("--judge_model", type=str,
-                        default="google/gemini-2.5-flash",
+                        default="openai/gpt-4o-mini",
                         help="Model dùng làm judge")
+    parser.add_argument("--only_full", action="store_true",
+                        help="Chỉ đánh giá biến thể full (không chạy ablation)")
     args = parser.parse_args()
     run(
         args.questions, args.output,
         args.text_top_k, args.image_top_k,
         use_judge=args.judge,
         judge_model=args.judge_model,
+        only_full=args.only_full,
     )

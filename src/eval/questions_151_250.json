@@ -1,0 +1,700 @@
+[
+  {
+    "id": "q201",
+    "question": "Cơ cấu tín dụng của MBB thay đổi thế nào từ 2022 đến Q3/2025 — ngành nào chiếm tỷ trọng lớn nhất và ngành nào tăng nhanh nhất?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Bán buôn & bán lẻ/sửa chữa ô tô xe máy (vàng nhạt) chiếm tỷ trọng lớn nhất (~35-40%); Trái phiếu doanh nghiệp (xanh dương nhạt) tăng nhanh rõ rệt trong 3Q25 so với 2024. Xây dựng và BĐS (đỏ đậm) chiếm ~10-15% nhưng giảm dần tỷ trọng",
+    "source_page": 3,
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MBB",
+    "chart_note": "Biểu đồ stacked bar ngang 'Cơ cấu tín dụng 2022-Q3/2025' trang 3 — 7 phân khúc màu"
+  },
+  {
+    "id": "q202",
+    "question": "Tăng trưởng tín dụng và huy động vốn của MBB diễn biến thế nào từ 2019 đến Q3/2025, và giai đoạn nào chênh lệch lớn nhất giữa hai chỉ số?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Tín dụng MBB tăng mạnh nhất ~30% vào 2022, sau đó giảm về ~20% (2023-2024) rồi tăng lại ~30% vào 3Q25; Huy động vốn cũng tăng mạnh ~29% tại 3Q25. Chênh lệch lớn nhất khoảng 2022 khi tín dụng tăng ~30% nhưng huy động chỉ ~22-23%",
+    "source_page": 3,
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MBB",
+    "chart_note": "Biểu đồ line 'Tăng trưởng tín dụng và huy động svck' trang 3 — 2 đường: đỏ đậm = Tín dụng, vàng = Huy động; từ 2019 đến 3Q25"
+  },
+  {
+    "id": "q203",
+    "question": "Chi phí vốn của MBB so với các nhóm ngân hàng khác (NHTMCPNN, NHTMCPTN lớn, trung bình) thế nào, và xu hướng gần đây là tăng hay giảm?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "MBB (đường đỏ) có chi phí vốn thấp nhất hoặc ngang ngửa nhóm NHTMCPNN (~3,0-3,3% tại 3Q25), thấp hơn đáng kể so với NHTMCPTN lớn (~4,2%) và TB (~4,5%). Xu hướng giảm từ đỉnh 2023 (~4,3%) xuống ~3,3% hiện tại — lợi thế cạnh tranh quan trọng",
+    "source_page": 4,
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MBB",
+    "chart_note": "Biểu đồ line 'Chi phí vốn các ngân hàng' trang 4 — 4 đường: MBB (đỏ), NHTMCPNN (vàng), NHTMCPTN lớn (xám đậm), NHTMCPTN TB (xám nhạt)"
+  },
+  {
+    "id": "q204",
+    "question": "NIM của MBB dự kiến thay đổi thế nào trong năm 2026 và đâu là yếu tố hỗ trợ chính?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "NIM dự báo cải thiện nhẹ ~5 điểm cơ bản lên 4,08% (2026) từ 4,03% (2025F), nhờ: (1) chi phí vốn thấp từ nền CASA cao (~39-40%), (2) lãi suất huy động tăng chậm hơn lãi suất cho vay, (3) tỷ trọng tín dụng bán lẻ tăng (biên cao hơn). Tuy nhiên NIM vẫn thấp hơn đỉnh 5,67% năm 2022",
+    "source_page": 4,
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "MBB"
+  },
+  {
+    "id": "q205",
+    "question": "Lợi suất tài sản của MBB hiện đang ở mức nào so với đỉnh và so với nhóm ngân hàng cùng quy mô, và chiến lược tín dụng nào giúp MBB duy trì lợi thế?",
+    "category": "cross_modal",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Lợi suất tài sản MBB đạt đỉnh ~10% vào 2023, hiện giảm về ~7,3-7,5% (3Q25) — vẫn cao hơn nhóm NHTMCPTN lớn (~6%) và TB (~5,3%). Chiến lược: (1) duy trì CASA cao (~39%), (2) đẩy mạnh tín dụng bán lẻ (biên lãi cao), (3) CIR thấp ~30% giúp tối ưu chi phí",
+    "source_page": 4,
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MBB",
+    "chart_note": "Biểu đồ 'Lợi suất tài sản các ngân hàng' trang 4 — MBB (đỏ) cao nhất nhóm"
+  },
+  {
+    "id": "q206",
+    "question": "Doanh thu và biên lợi nhuận sau thuế của WinCommerce (WCM) — chuỗi bán lẻ thuộc MSN — diễn biến thế nào từ Q1/2023 đến Q4/2025?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Doanh thu WCM tăng đều từ ~7.000 tỷ (Q1/2023) lên ~10.500 tỷ (Q4/2025); biên LNST dao động mạnh: từ âm (-3.5% Q4/2023) lên dương (+2.5% Q4/2025). Biên LNST cải thiện rõ rệt từ Q1/2025 nhờ doanh thu cửa hàng cũ tăng (LFL +9%) và tối ưu chi phí",
+    "source_page": 2,
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MSN",
+    "chart_note": "Biểu đồ combo 'KQKD của WCM' trang 2 — cột xám = Doanh thu (tỷ đồng), đường đỏ = Biên LNST (%)"
+  },
+  {
+    "id": "q207",
+    "question": "Tăng trưởng doanh thu cửa hàng cũ (LFL - Like-for-Like) của WCM biến động ra sao từ 2023 đến Q4/2025, và khi nào chuyển từ tiêu cực sang tích cực?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "LFL giảm sâu -10,4% (Q1/2023), tiếp tục âm đến Q4/2023 (-3,2%); chuyển sang dương từ Q1/2024 (+5,7%) và tăng dần lên đỉnh +11,3% (Q4/2025). Sự đảo chiều phản ánh chiến lược tái cơ cấu danh mục sản phẩm và đóng cửa hàng kém hiệu quả",
+    "source_page": 2,
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MSN",
+    "chart_note": "Biểu đồ cột 'Tăng trưởng cửa hàng cũ (LFL)' trang 2 — Q1/2023 -10,4% → Q4/2025 +11,3%"
+  },
+  {
+    "id": "q208",
+    "question": "Giá cổ phiếu MSN diễn biến thế nào gần đây và SSI đưa ra khuyến nghị gì với giá mục tiêu bao nhiêu?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá MSN dao động khoảng 50.000-85.000 đồng trong 2 năm gần đây; SSI khuyến nghị MUA với giá mục tiêu khoảng 95.000-100.000 đồng/cp, tiềm năng tăng giá ~25-30%",
+    "source_page": 5,
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MSN",
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 5"
+  },
+  {
+    "id": "q209",
+    "question": "Các mảng kinh doanh chính của MSN (WCM bán lẻ, Masan MEATLife, Techcombank) đóng góp thế nào vào tổng lợi nhuận, và mảng nào được kỳ vọng cải thiện mạnh nhất năm 2026?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "WCM bán lẻ đóng góp chính về doanh thu (~60%) nhưng biên LNST thấp; Techcombank (TCB, 19.9% vốn) đóng góp lớn nhất về lợi nhuận. WCM được kỳ vọng cải thiện mạnh nhất năm 2026 với biên LNST dự kiến đạt ~1,3% (từ lỗ 2024) nhờ LFL +9% và tối ưu chi phí; doanh thu dự báo +6,3% svck",
+    "source_page": 2,
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "MSN"
+  },
+  {
+    "id": "q210",
+    "question": "Kết hợp dữ liệu tăng trưởng LFL của WCM và dự báo tài chính MSN, tại sao SSI tin rằng mảng bán lẻ sẽ là động lực tăng trưởng chính?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "LFL tăng liên tục từ -10,4% (Q1/2023) lên +11,3% (Q4/2025) cho thấy nhu cầu tiêu dùng phục hồi bền vững; WCM chuyển từ lỗ sang hòa vốn/lãi (biên LNST +2,5% Q4/2025); kế hoạch mở thêm cửa hàng WinMart+ và tối ưu danh mục. SSI dự báo LNST MSN hợp nhất tăng 58% svck (2026) với WCM đóng góp chính",
+    "source_page": 2,
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MSN",
+    "chart_note": "Biểu đồ LFL + KQKD WCM trang 2 kết hợp bảng tài chính"
+  },
+  {
+    "id": "q211",
+    "question": "Doanh thu và biên lợi nhuận trước thuế của mảng ĐMX/TGDĐ và Topzone thuộc MWG diễn biến thế nào theo quý trong năm 2024-2025?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Doanh thu tăng đều từ ~21 nghìn tỷ (Q1/2024) lên ~29 nghìn tỷ (Q4/2025); biên LNTT giảm từ đỉnh 8,0% (Q1/2025) xuống 7,2% (Q3/2025) rồi phục hồi lên 7,4% (Q4/2025) — Q4 luôn là mùa cao điểm nhờ nhu cầu điện máy cuối năm",
+    "source_page": 2,
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MWG",
+    "chart_note": "Biểu đồ combo 'KQKD ĐMX/TGDĐ và Topzone theo quý' trang 2 — cột xám = Doanh thu nghìn tỷ, đường đỏ = Biên LNTT %"
+  },
+  {
+    "id": "q212",
+    "question": "Chuỗi Erablue của MWG mở rộng với tốc độ nào từ 2023 đến 2026F, và mục tiêu số lượng cửa hàng năm 2026 là bao nhiêu?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Erablue mở rộng rất nhanh: 38 cửa hàng (2023) → 87 (2024) → 95 (Q1/25) → 115 (Q2/25) → 144 (Q3/25) → 181 (Q4/25) → mục tiêu 330 (2026F). Tốc độ mở mới tăng tốc rõ rệt trong Q3-Q4/2025 (~37 và ~37 cửa hàng/quý)",
+    "source_page": 2,
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MWG",
+    "chart_note": "Biểu đồ cột 'Số lượng cửa hàng Erablue' trang 2 — cột xám theo quý tăng dần, cột đỏ 2026F = 330"
+  },
+  {
+    "id": "q213",
+    "question": "Giá cổ phiếu MWG biến động thế nào trong 2 năm gần đây, và SSI nhận định tiềm năng tăng giá còn lại là bao nhiêu?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá MWG tăng mạnh từ ~40.000 đồng (đầu 2024) lên đỉnh ~90.000 đồng (giữa 2025) rồi điều chỉnh về ~70.000-80.000; SSI khuyến nghị MUA với giá mục tiêu ~105.000 đồng/cp, tiềm năng tăng ~30%",
+    "source_page": 4,
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MWG",
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 4"
+  },
+  {
+    "id": "q214",
+    "question": "Lợi nhuận ròng của MWG tăng trưởng bao nhiêu % trong năm 2025 và đâu là động lực chính cho sự phục hồi mạnh mẽ này?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "LNST tăng 2.124% svck (2025) từ nền rất thấp 2024 (gần hòa vốn); động lực chính: (1) doanh thu ĐMX/TGDĐ phục hồi nhờ chu kỳ thay thế thiết bị, (2) biên LNTT cải thiện lên 7-8%, (3) Bách Hóa Xanh giảm lỗ đáng kể, (4) Erablue mở rộng nhanh tại Indonesia. ROE cải thiện từ 14,5% lên 23,1%",
+    "source_page": 2,
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "MWG"
+  },
+  {
+    "id": "q215",
+    "question": "Kết hợp thông tin về tốc độ mở rộng Erablue và KQKD mảng ĐMX, MWG đang theo đuổi chiến lược mở rộng quốc tế nào và rủi ro chính là gì?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "Erablue mở rộng nhanh tại Indonesia: 181 cửa hàng (Q4/25) → mục tiêu 330 (2026F); doanh thu còn khiêm tốn, chiếm dưới 1% lợi nhuận mảng công nghệ. Rủi ro: (1) chi phí mở rộng cao ban đầu gây lỗ, (2) cạnh tranh khốc liệt tại Indonesia, (3) rủi ro tỷ giá IDR/VND. Tuy nhiên biên LNTT mảng nội địa đạt 7-8% cho phép subsidize mảng mới",
+    "source_page": 2,
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "MWG",
+    "chart_note": "Biểu đồ Erablue + KQKD ĐMX trang 2"
+  },
+  {
+    "id": "q216",
+    "question": "Doanh số bán hàng của NLG phân bổ thế nào giữa các dự án từ 2023 đến Q4/2025, và dự án nào đóng góp lớn nhất trong Q4/2025?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Q4/2025 ghi nhận doanh số đạt đỉnh ~5.000 tỷ đồng, trong đó Paragon Đại Phước (xanh dương nhạt) đóng góp lớn nhất (~700-800 tỷ, xuất hiện lần đầu). Southgate (hồng nhạt) và Akari City (hồng đậm) là 2 dự án đóng góp chính xuyên suốt 2023-2025; An Zen và Cần Thơ bắt đầu đóng góp từ Q2/2025",
+    "source_page": 2,
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NLG",
+    "chart_note": "Biểu đồ stacked bar 'Doanh số bán hàng NLG 2023-2025 theo quý' trang 2 — 6 dự án màu khác nhau; Q4/2025 đạt đỉnh ~5.000 tỷ"
+  },
+  {
+    "id": "q217",
+    "question": "Doanh số bán hàng của NLG biến động mạnh theo quý — quý nào trong năm 2024 yếu nhất và quý nào phục hồi mạnh nhất?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Q3/2024 yếu nhất (~800 tỷ, giảm so với Q2/2024 ~1.500 tỷ); Q4/2024 phục hồi mạnh nhất (~1.600 tỷ). Tuy nhiên sự tăng trưởng thực sự bắt đầu từ Q2/2025 (~2.500 tỷ) khi Southgate, An Zen, Cần Thơ cùng đóng góp, và đạt đỉnh Q4/2025 (~5.000 tỷ)",
+    "source_page": 2,
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NLG",
+    "chart_note": "Biểu đồ stacked bar trang 2 — Q3/24 thấp nhất, Q4/25 cao nhất"
+  },
+  {
+    "id": "q218",
+    "question": "Giá cổ phiếu NLG diễn biến thế nào từ 2023 đến nay, và SSI đưa ra khuyến nghị gì với tiềm năng tăng giá bao nhiêu?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá NLG tăng từ đáy ~20.000 đồng (đầu 2023) lên ~35.000-40.000 đồng (2025); SSI khuyến nghị KHẢ QUAN với giá mục tiêu ~38.000-40.000 đồng/cp",
+    "source_page": 5,
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NLG",
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 5"
+  },
+  {
+    "id": "q219",
+    "question": "Doanh thu của NLG giảm mạnh trong năm 2025, nhưng tại sao SSI vẫn lạc quan về triển vọng lợi nhuận 2026-2027?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Doanh thu 2025 giảm -21,6% svck do chậm bàn giao dự án (lag giữa doanh số bán hàng và ghi nhận doanh thu). Tuy nhiên doanh số bán hàng 2025 tăng rất mạnh (~11.000 tỷ, gấp 2-3 lần 2024), sẽ chuyển thành doanh thu ghi nhận trong 2026-2027; LNST dự báo tăng 32% (2026F) và 30% (2027F); biên LN ròng cải thiện từ 15% lên 25-37%",
+    "source_page": 3,
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "NLG"
+  },
+  {
+    "id": "q220",
+    "question": "Dự án nào mới nhất trong danh mục của NLG và vai trò của nó trong chiến lược tăng trưởng dài hạn của công ty là gì?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "Paragon Đại Phước (xuất hiện từ Q4/2025, cột xanh dương nhạt) là dự án mới nhất, đóng góp ~700-800 tỷ doanh số ngay quý đầu mở bán. Dự án nằm tại Nhơn Trạch (Đồng Nai), hưởng lợi từ hạ tầng cầu Cát Lái và sân bay Long Thành. Cùng với Southgate, An Zen và Cần Thơ, NLG đang đa dạng hóa danh mục từ phụ thuộc Mizuki/Akari sang nhiều dự án đồng thời",
+    "source_page": 2,
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NLG",
+    "chart_note": "Biểu đồ doanh số trang 2 — Paragon Dai Phuoc xuất hiện lần đầu Q4/2025"
+  },
+  {
+    "id": "q221",
+    "question": "Giá điện thị trường Việt Nam biến động thế nào theo tháng trong năm 2025 so với 2024, và tại sao giá giảm sâu vào Q4/2025?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá điện 2025 (đường đỏ) giảm mạnh từ ~1.355 đồng/kWh (Feb) xuống đáy 190 đồng/kWh (Nov), thấp hơn rất nhiều so với 2024 (đường xám ~1.500 đồng/kWh cuối năm). Nguyên nhân: bão thường xuyên và mưa lớn kéo dài Q4/2025 khiến thủy điện phát tối đa, đẩy giá thị trường xuống dưới 1.000 đồng/kWh",
+    "source_page": 2,
+    "doc": "NT2_2026_01_22_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NT2",
+    "chart_note": "Biểu đồ line 'Giá điện thị trường (Đồng/kWh)' trang 2 — đường xám = 2024, đường đỏ = 2025; đường 2025 giảm sâu từ Jun đến Nov"
+  },
+  {
+    "id": "q222",
+    "question": "Sản lượng điện phát của NT2 trong năm 2025 đạt bao nhiêu và so với kế hoạch có đạt hay không?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Sản lượng đạt khoảng 5,3 tỷ kWh, thấp hơn kế hoạch ~6 tỷ kWh do giá điện thị trường giảm sâu khiến NT2 phải giảm huy động; LNST giảm ~30% svck. Tuy nhiên Q4/2025 sản lượng cải thiện nhờ giá khí đầu vào giảm theo giá dầu",
+    "source_page": 2,
+    "doc": "NT2_2026_01_22_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "NT2"
+  },
+  {
+    "id": "q223",
+    "question": "Giá cổ phiếu NT2 diễn biến thế nào gần đây và SSI có khuyến nghị gì về cổ phiếu này?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá NT2 dao động ~25.000-32.000 đồng, SSI khuyến nghị KHẢ QUAN với giá mục tiêu khoảng 31.000-33.000 đồng/cp; cổ tức tiền mặt hấp dẫn 7-8%/năm là yếu tố hỗ trợ chính",
+    "source_page": 4,
+    "doc": "NT2_2026_01_22_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NT2",
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 4"
+  },
+  {
+    "id": "q224",
+    "question": "Nguồn cung khí cho NT2 trong dài hạn có rủi ro gì, và công ty đã chuẩn bị phương án thay thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Rủi ro: mỏ khí hiện tại (PM3 CAA, lô B) suy giảm tự nhiên, quyền mua khí bổ sung từ Petronas chưa chắc chắn. Phương án: (1) đàm phán mua khí từ mỏ Kèn Bầu (Block B Ô Môn), (2) khả năng chuyển đổi sang LNG khi hạ tầng Thị Vải sẵn sàng, (3) duy trì hiệu suất cao qua bảo dưỡng định kỳ. Hợp đồng PPA đảm bảo biên lợi nhuận ổn định khi có khí",
+    "source_page": 3,
+    "doc": "NT2_2026_01_22_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "NT2"
+  },
+  {
+    "id": "q225",
+    "question": "Giá điện thị trường năm 2025 thấp hơn 2024 bao nhiêu vào tháng thấp nhất, và tác động đến biên lợi nhuận của NT2 như thế nào?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "Tháng 11/2025 giá điện chỉ 190 đồng/kWh, thấp hơn ~1.376 đồng/kWh so với cùng kỳ 2024 (~1.566 đồng/kWh) — giảm ~88%. Tác động: biên LNST thu hẹp đáng kể do giá bán thấp trong khi chi phí khí cố định; tuy nhiên NT2 vẫn có lãi nhờ hợp đồng PPA đảm bảo mức giá sàn với EVN",
+    "source_page": 2,
+    "doc": "NT2_2026_01_22_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NT2",
+    "chart_note": "Biểu đồ giá điện trang 2 — Nov 2025 = 190 vs Nov 2024 = 1.566"
+  },
+  {
+    "id": "q226",
+    "question": "Doanh thu thuần và biên lợi nhuận trước thuế của NTP diễn biến thế nào từ 2017 đến 2025, và năm nào đạt doanh thu cao nhất?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Doanh thu tăng đều từ ~4.500 tỷ (2017) lên đỉnh ~7.200 tỷ (2025); biên LNTT (đường đỏ) giảm từ ~13% (2017) xuống đáy ~8% (2022) rồi phục hồi lên ~16% (2025). Năm 2025 đạt doanh thu cao nhất nhờ nhu cầu hạ tầng nước tăng mạnh",
+    "source_page": 2,
+    "doc": "NTP_2026_03_02_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NTP",
+    "chart_note": "Biểu đồ combo 'DTT, LNTT và biên LN' trang 2 — cột xám = DTT, cột vàng = LNTT, đường đỏ = Biên LNTT (%)"
+  },
+  {
+    "id": "q227",
+    "question": "Giá hạt nhựa PVC biến động thế nào và mối quan hệ với biên lợi nhuận gộp của NTP ra sao?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá PVC svck (đường xám) dao động mạnh: đỉnh +120% (Q4/2021), đáy -50% (Q1/2023); biên LN gộp NTP (đường đỏ) có tương quan nghịch — khi giá PVC giảm mạnh, biên gộp tăng lên ~33-35% (Q3-Q4/2025 đạt đỉnh ~33%). Hiện biên gộp đang ở mức cao ~30-33% nhờ giá PVC ổn định",
+    "source_page": 2,
+    "doc": "NTP_2026_03_02_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NTP",
+    "chart_note": "Biểu đồ dual-axis '% thay đổi giá PVC svck và biên LN gộp NTP' trang 2"
+  },
+  {
+    "id": "q228",
+    "question": "Giá cổ phiếu NTP đã tăng bao nhiêu lần từ đầu 2023 đến đỉnh, và SSI đưa ra khuyến nghị gì hiện tại?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá NTP tăng từ ~20.000 đồng (đầu 2023) lên đỉnh ~73.000 đồng (cuối 2025/đầu 2026) — tăng gần 3,5 lần; SSI khuyến nghị TRUNG LẬP (MP) do giá đã phản ánh phần lớn kỳ vọng tăng trưởng",
+    "source_page": 3,
+    "doc": "NTP_2026_03_02_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NTP",
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 3 — NTP Closed Price tăng liên tục; nhãn MP"
+  },
+  {
+    "id": "q229",
+    "question": "Động lực tăng trưởng chính của NTP trong năm 2025-2026 là gì, và nhu cầu ống nhựa phục vụ hạ tầng nước tăng ra sao?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Động lực: (1) đầu tư công hạ tầng nước sạch tăng mạnh, đặc biệt tại nông thôn và đô thị hóa; (2) giá PVC đầu vào ổn định giúp biên gộp duy trì ~30%; (3) NTP chiếm ~50% thị phần ống nhựa PVC Việt Nam; (4) quỹ đất nhà máy mới tại Long An tăng công suất 30%. Doanh thu 2025 ước đạt 7.200 tỷ (+17% svck)",
+    "source_page": 2,
+    "doc": "NTP_2026_03_02_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "NTP"
+  },
+  {
+    "id": "q230",
+    "question": "Biên lợi nhuận gộp của NTP và giá PVC có mối quan hệ thế nào, và điều này ảnh hưởng ra sao đến chiến lược mua hàng tồn kho của công ty?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "Biên gộp có tương quan nghịch với giá PVC: khi PVC giảm svck, biên gộp tăng (do NTP bán ra với giá chưa điều chỉnh kịp + tồn kho giá rẻ). NTP thường mua dự trữ PVC khi giá thấp, đẩy biên gộp Q3-Q4/2025 lên ~33%. Chiến lược: tích trữ khi giá PVC dưới 800 USD/tấn và xả hàng tồn kho giá rẻ khi giá tăng — thể hiện qua biên gộp tăng mạnh khi đường PVC svck đi xuống",
+    "source_page": 2,
+    "doc": "NTP_2026_03_02_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NTP",
+    "chart_note": "Biểu đồ PVC svck vs biên gộp NTP trang 2"
+  },
+  {
+    "id": "q231",
+    "question": "Giá cổ phiếu OIL diễn biến thế nào so với VN-Index trong giai đoạn 2024-2025, và OIL outperform hay underperform thị trường?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "OIL (đường đỏ) biến động mạnh hơn VN-Index (đường xám): tăng mạnh ~150% từ đầu 2024 đến đỉnh giữa 2025, sau đó giảm về ~110%. VN-Index chỉ tăng ~40%. OIL outperform rõ rệt nhờ giá dầu và sản lượng bán hàng tăng",
+    "source_page": 1,
+    "doc": "OIL_2025_11_06_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "OIL",
+    "chart_note": "Biểu đồ 'Biến động giá cổ phiếu' trang 1 — đường đỏ = OIL, đường xám = VN-Index"
+  },
+  {
+    "id": "q232",
+    "question": "OIL hoạt động trong lĩnh vực nào và cơ cấu cổ đông hiện tại ra sao — nhà nước chiếm bao nhiêu phần trăm?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "OIL (Tổng Công ty Dầu Việt Nam) kinh doanh phân phối xăng dầu, là đơn vị phân phối lớn thứ 2 Việt Nam (sau Petrolimex). Nhà nước sở hữu 80,5% qua PetroVietnam; tỷ lệ SHNN chỉ 0,7%. OIL niêm yết trên UPCOM, vốn hóa ~14.000 tỷ đồng",
+    "source_page": 1,
+    "doc": "OIL_2025_11_06_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "OIL"
+  },
+  {
+    "id": "q233",
+    "question": "Biên lợi nhuận gộp của OIL thay đổi thế nào khi giá dầu thế giới biến động mạnh, và quý nào gần đây đạt biên gộp cao nhất?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Biên gộp biến động theo giá dầu ngược chiều: khi giá dầu giảm nhanh, OIL hưởng lợi từ tồn kho giá cao → biên gộp tăng; ngược lại khi giá dầu tăng nhanh, tồn kho giá thấp nhưng giá bán điều chỉnh chậm → biên co lại. Q3/2025 đạt biên gộp cao nhất ~5-6% nhờ giá dầu giảm từ đỉnh",
+    "source_page": 2,
+    "doc": "OIL_2025_11_06_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "OIL",
+    "chart_note": "Biểu đồ biên LN gộp theo quý, liên quan giá dầu"
+  },
+  {
+    "id": "q234",
+    "question": "OIL đang mở rộng mạng lưới cửa hàng xăng dầu như thế nào và mục tiêu thị phần trong 3-5 năm tới là bao nhiêu?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "OIL sở hữu ~550 cửa hàng xăng dầu, chiếm ~18% thị phần phân phối. Mục tiêu mở thêm 50-70 cửa hàng/năm, nâng thị phần lên 20-22% vào 2028. Chiến lược: (1) mở rộng tại khu vực phía Nam và miền Trung, (2) phát triển dịch vụ phi xăng dầu (cửa hàng tiện lợi, rửa xe), (3) hợp tác phân phối LPG/CNG",
+    "source_page": 2,
+    "doc": "OIL_2025_11_06_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "OIL"
+  },
+  {
+    "id": "q235",
+    "question": "Giá cổ phiếu OIL tăng mạnh nhưng so với VN-Index có duy trì được outperformance không, và rủi ro chính đối với OIL là gì?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "OIL outperform rõ rệt giai đoạn đầu-giữa 2025 (tăng ~150% vs VN-Index ~40%), nhưng cuối năm giá giảm mạnh về ~110% — thu hẹp khoảng cách. Rủi ro: (1) giá dầu giảm sâu do OPEC+ tăng sản lượng → biên gộp thu hẹp, (2) biến động tồn kho lớn, (3) quản trị nhà nước → thiếu minh bạch, (4) thanh khoản thấp trên UPCOM",
+    "source_page": 1,
+    "doc": "OIL_2025_11_06_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "OIL",
+    "chart_note": "Biểu đồ giá cổ phiếu OIL vs VN-Index trang 1"
+  },
+  {
+    "id": "q236",
+    "question": "Tăng trưởng doanh thu từng mảng của PNJ diễn biến thế nào trong năm 2024-2025, và mảng vàng 24K biến động ra sao?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Mảng vàng 24K (đường xám) biến động cực mạnh: đỉnh +100% (Q2/2024), đáy -31% (Q4/2025 ước); Bán lẻ (đường đỏ) ổn định hơn, dao động 0-27% svck; Bán buôn (đường vàng) đỉnh ~45% (Q3/2024) nhưng giảm mạnh -8% (Q4/2025). Mảng vàng 24K chiếm ~25-35% doanh thu nhưng biên rất mỏng",
+    "source_page": 2,
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PNJ",
+    "chart_note": "Biểu đồ line 'Tăng trưởng doanh thu theo mảng' trang 2 — 3 đường: đỏ = Bán lẻ, vàng = Bán buôn, xám = Vàng 24K"
+  },
+  {
+    "id": "q237",
+    "question": "Cơ cấu doanh thu của PNJ thay đổi thế nào từ Q1/2024 đến Q4/2025 — mảng bán lẻ chiếm tỷ trọng bao nhiêu và xu hướng ra sao?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Mảng bán lẻ (đỏ đậm) chiếm ~50-65% doanh thu, tăng dần tỷ trọng; Vàng 24K (vàng nhạt) dao động ~20-35%, giảm dần từ Q2/2024; Bán buôn (be) ổn định ~10-15%. Q4/2025 bán lẻ chiếm ~65% — tỷ trọng cao nhất, phản ánh chiến lược tập trung vào kênh biên lợi nhuận cao",
+    "source_page": 2,
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PNJ",
+    "chart_note": "Biểu đồ stacked bar '% đóng góp theo doanh thu' trang 2 — 4 mảng màu"
+  },
+  {
+    "id": "q238",
+    "question": "Giá cổ phiếu PNJ diễn biến thế nào từ 2023 đến đầu 2026, và SSI đã thay đổi khuyến nghị bao nhiêu lần?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá PNJ dao động ~60.000-110.000 đồng; tăng từ ~60.000 (đầu 2023) lên đỉnh ~115.000 (cuối 2025). SSI thay đổi nhiều lần: OP → OP → MF → OP → OP → OP → OP → BUY → BUY → BUY → BU → OP → BUY → BUY → OP → OP. Giá mục tiêu gần nhất ~130.000 đồng/cp",
+    "source_page": 3,
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PNJ",
+    "chart_note": "Biểu đồ 'Lịch sử khuyến nghị' trang 3"
+  },
+  {
+    "id": "q239",
+    "question": "Giá vàng tăng mạnh ảnh hưởng thế nào đến sản lượng tiêu thụ trang sức của PNJ, và công ty đối phó ra sao?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Giá vàng tăng 62% svck (Q4/2025) và 50% svck cả năm 2025 khiến sản lượng tiêu thụ giảm (sức mua giảm do giá đơn vị cao). PNJ đối phó: (1) đẩy mạnh trang sức nhỏ gọn, giá phải chăng, (2) tăng tỷ trọng bán lẻ (biên cao) và giảm phụ thuộc vàng 24K (biên mỏng), (3) mở rộng chuỗi cửa hàng lên ~420 điểm, (4) đầu tư thương hiệu và kênh online",
+    "source_page": 2,
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "PNJ"
+  },
+  {
+    "id": "q240",
+    "question": "Kết hợp dữ liệu tăng trưởng từng mảng và cơ cấu doanh thu, tại sao SSI cho rằng biên lợi nhuận PNJ sẽ cải thiện dù doanh thu vàng 24K giảm?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "Mảng vàng 24K giảm -31% svck (Q4/25) nhưng tỷ trọng doanh thu chỉ còn ~20% (từ ~35% Q2/24); trong khi bán lẻ tăng 27% svck và chiếm ~65% doanh thu. Bán lẻ có biên gộp ~18-20% nhưng vàng 24K chỉ ~1-2%. Do đó khi mix shift sang bán lẻ, biên gộp hợp nhất cải thiện từ ~17% lên ~20%. Biểu đồ cơ cấu cho thấy xu hướng tăng dần phần đỏ đậm (bán lẻ)",
+    "source_page": 2,
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PNJ",
+    "chart_note": "Biểu đồ tăng trưởng theo mảng + cơ cấu doanh thu trang 2"
+  },
+  {
+    "id": "q241",
+    "question": "Giá cổ phiếu POW diễn biến thế nào so với VN-Index trong giai đoạn 2024-2025, và POW có outperform thị trường không?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "POW (đường đỏ) nhìn chung đồng pha với VN-Index (đường xám): cả hai biến động ~90-150%; POW outperform nhẹ vào giữa 2025 nhờ kỳ vọng sản lượng khí tăng, nhưng cuối năm 2025 underperform khi giá điện thị trường giảm sâu",
+    "source_page": 1,
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "POW",
+    "chart_note": "Biểu đồ 'Biến động giá cổ phiếu' trang 1 — đường đỏ = POW, đường xám = VN-Index"
+  },
+  {
+    "id": "q242",
+    "question": "Các nhà máy điện chính của POW hoạt động thế nào trong năm 2025 — Cà Mau 1&2 và Vũng Áng 1 đóng góp ra sao?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Cà Mau 1&2 (khí, 1.500 MW) là nguồn lợi nhuận chính nhờ hợp đồng PPA ổn định; sản lượng khí giảm dần từ PM3 CAA nhưng được bổ sung từ mỏ Sao Vàng - Đại Nguyệt. Vũng Áng 1 (than, 600 MW) hưởng lợi từ giá than giảm và cải thiện suất tiêu hao nhiệt. Lịch bảo dưỡng 2026: Cà Mau 1&2 đại tu, Vũng Áng 1 trung tu, Nậm Nơn đại tu — ảnh hưởng sản lượng Q2/2026",
+    "source_page": 3,
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "POW"
+  },
+  {
+    "id": "q243",
+    "question": "Nguồn cung khí cho POW trong trung-dài hạn được đảm bảo thế nào, và rủi ro thiếu khí sau 2027 xử lý ra sao?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "POW đã ký hợp đồng với PV GAS nhận khí từ mỏ Nam Du - U Minh (dự kiến Q4/2028, ~0,7 tỷ m³/năm); đang đàm phán mỏ Khánh Mỹ - Đầm Dơi và Hoa Mai (cuối 2028, ~0,4 tỷ m³/năm). Tổng ~1,1 tỷ m³/năm sẽ đủ bù đắp thiếu hụt sau 2027. Tuy nhiên rủi ro chậm tiến độ mỏ mới vẫn tồn tại",
+    "source_page": 3,
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "POW"
+  },
+  {
+    "id": "q244",
+    "question": "SSI đánh giá thế nào về triển vọng POW, và giá mục tiêu hiện tại cùng khuyến nghị là gì?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "SSI khuyến nghị KHẢ QUAN với giá mục tiêu ~16.000-17.000 đồng/cp; tiềm năng tăng giá ~15-20%. Yếu tố hỗ trợ: (1) giá than giảm cải thiện biên Vũng Áng, (2) nguồn khí mới trung hạn, (3) tỷ suất cổ tức ~5-6%. Rủi ro: giá điện thị trường thấp do thủy điện dồi dào",
+    "source_page": 4,
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "POW",
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 4"
+  },
+  {
+    "id": "q245",
+    "question": "Giá cổ phiếu POW biến động theo giá điện thị trường và giá than — mối tương quan này thể hiện rõ vào giai đoạn nào?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "Tương quan rõ nhất giữa 2025 khi giá điện thị trường giảm sâu (từ 1.400 → 190 đồng/kWh) kéo giá POW giảm từ đỉnh ~150% về ~130% (underperform VN-Index). Tuy nhiên giá than giảm (~100 USD/tấn) giúp Vũng Áng 1 duy trì biên, hạn chế đà giảm giá cổ phiếu. POW nhạy cảm kép: hưởng lợi khi giá điện cao/giá than thấp, chịu áp lực ngược khi giá điện thấp",
+    "source_page": 1,
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "POW",
+    "chart_note": "Biểu đồ giá POW vs VN-Index trang 1 kết hợp phân tích giá điện/than"
+  },
+  {
+    "id": "q246",
+    "question": "Doanh thu và lợi nhuận gộp mảng Khoan của PVD diễn biến thế nào từ Q1/2022 đến Q3/2025, và quý nào đạt đỉnh?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Doanh thu Khoan (đường vàng) tăng từ đáy ~750 tỷ (Q1/2022) lên đỉnh ~1.600 tỷ (Q3/2024), sau đó dao động ~1.100-1.500 tỷ; LN gộp (đường đỏ) từ âm -39 tỷ (Q2/2022) lên đỉnh 376 tỷ (Q1/2024), Q3/2025 đạt 360 tỷ — gần ngang đỉnh. Điểm hòa vốn mảng Khoan được xác lập từ Q3/2022",
+    "source_page": 2,
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PVD",
+    "chart_note": "Biểu đồ line 'DT và LN gộp mảng Khoan' trang 2 — đường vàng = DT, đường đỏ = LN gộp"
+  },
+  {
+    "id": "q247",
+    "question": "Mảng Dịch vụ giếng khoan của PVD tăng trưởng thế nào gần đây, và đang dần thu hẹp khoảng cách đóng góp lợi nhuận với mảng Khoan ra sao?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "LN gộp dịch vụ giếng khoan (đường vàng) tăng từ ~60 tỷ (Q1/2022) lên 236 tỷ (Q3/2025), tiệm cận mảng Khoan (đường đỏ, 360 tỷ Q3/2025). Khoảng cách thu hẹp rõ rệt: Q1/2024 chênh ~300 tỷ, Q3/2025 chỉ còn ~124 tỷ. Doanh thu dịch vụ giếng khoan tăng mạnh +67% svck nhờ hoạt động thăm dò trong nước sôi động",
+    "source_page": 3,
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PVD",
+    "chart_note": "Biểu đồ line 'LN gộp Dịch vụ giếng khoan vs mảng Khoan' trang 3"
+  },
+  {
+    "id": "q248",
+    "question": "PVD vừa mua thêm giàn khoan nào, chi phí bao nhiêu, và dự kiến đưa vào vận hành khi nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "PVD mua giàn tự nâng Noble Highlander từ Noble Drilling, đặt tên PVD IX, giá mua 65 triệu USD (chưa tính tái kích hoạt). Tổng chi phí đầu tư ước ~90 triệu USD (bao gồm reactivation). Dự kiến hoàn tất tái kích hoạt Q1/2026 và bắt đầu khoan từ Q2/2026 — nâng tổng đội giàn PVD lên 6 giàn tự nâng + 1 giàn đất liền + 1 TAD",
+    "source_page": 2,
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": true,
+    "ticker": "PVD"
+  },
+  {
+    "id": "q249",
+    "question": "SSI đưa ra khuyến nghị gì với PVD, và giá thuê ngày giàn khoan tại thị trường Đông Nam Á hiện ở mức nào?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "SSI khuyến nghị TRUNG LẬP (giá mục tiêu 27.400 đồng/cp, tiềm năng tăng chỉ 2,6%) do giá đã phản ánh kỳ vọng. Giá thuê ngày giàn tự nâng cao cấp Đông Nam Á: 105.000-110.000 USD/ngày, giảm nhẹ từ đỉnh 110.000-140.000 USD/ngày năm 2024; tỷ lệ sử dụng giàn khu vực vẫn cao 89%",
+    "source_page": 3,
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PVD",
+    "chart_note": "Biểu đồ giá thuê ngày và lịch sử khuyến nghị"
+  },
+  {
+    "id": "q250",
+    "question": "Kết hợp dữ liệu lợi nhuận 2 mảng của PVD, PVD đang chuyển dịch mô hình kinh doanh theo hướng nào — tập trung Khoan hay đa dạng hóa sang Dịch vụ?",
+    "category": "cross_modal",
+    "requires": [
+      "text",
+      "image"
+    ],
+    "expected_answer_hint": "PVD đang đa dạng hóa sang Dịch vụ giếng khoan: mảng này tăng LN gộp từ ~60 tỷ (Q1/2022) lên 236 tỷ (Q3/2025, +95% svck), dần thu hẹp khoảng cách với mảng Khoan (360 tỷ). Chiến lược: (1) mở rộng giàn khoan (PVD VIII, IX), (2) đồng thời đẩy mạnh dịch vụ giếng (mud, cement, casing) khi hoạt động thăm dò nội địa sôi động. Biểu đồ cho thấy 2 đường lợi nhuận đang hội tụ — phản ánh mô hình cân bằng hơn",
+    "source_page": 3,
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "PVD",
+    "chart_note": "Biểu đồ LN gộp 2 mảng trang 3 — đường đỏ và vàng hội tụ"
+  }
+]

@@ -34,7 +34,8 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 JUDGE_SYSTEM_PROMPT = """\
 Bạn là giám khảo chuyên đánh giá câu trả lời trong lĩnh vực phân tích báo cáo tài chính.
 
-Cho: Câu hỏi, Câu trả lời cần chấm, và Gợi ý đáp án đúng (expected_answer_hint).
+Cho: Câu hỏi, Câu trả lời cần chấm, Gợi ý đáp án đúng (expected_answer_hint),
+và Ngữ cảnh truy xuất (retrieved context) — là các đoạn tài liệu mà hệ thống RAG đã lấy về để trả lời.
 
 Chấm theo 4 tiêu chí (mỗi tiêu chí 0-5 điểm):
 
@@ -58,17 +59,22 @@ Chấm theo 4 tiêu chí (mỗi tiêu chí 0-5 điểm):
    - 1: Lan man nhiều, ít liên quan
    - 0: Hoàn toàn không liên quan
 
-4. **Faithfulness** (Trung thực): Câu trả lời có vẻ dựa trên dữ liệu thực hay bịa đặt?
-   - 5: Rõ ràng dựa trên dữ liệu, có dẫn chứng cụ thể
-   - 3: Có vẻ dựa trên dữ liệu nhưng không rõ nguồn
-   - 1: Nhiều phần có vẻ suy đoán/bịa
-   - 0: Rõ ràng hallucinate
+4. **Faithfulness** (Trung thực với nguồn dữ liệu):
+   Câu trả lời có dựa trên ngữ cảnh (retrieved context) được cung cấp không?
+   - 5: Mọi số liệu và nhận định đều có căn cứ trong context
+   - 4: Gần như hoàn toàn dựa trên context, có 1-2 suy luận hợp lý
+   - 3: Phần lớn dựa trên context, một số thông tin không rõ nguồn
+   - 2: Nhiều thông tin không xuất hiện trong context
+   - 1: Phần lớn có vẻ bịa hoặc suy đoán
+   - 0: Hoàn toàn không liên quan đến context
 
 QUAN TRỌNG:
 - expected_answer_hint là GỢI Ý, không phải đáp án duy nhất đúng.
   Câu trả lời có thể đúng theo cách khác miễn là hợp lý.
 - Nếu câu trả lời nêu thêm thông tin hữu ích ngoài hint, KHÔNG trừ điểm.
 - Nếu câu trả lời nói "Không có trong tài liệu" mà hint có đáp án → Correctness = 0.
+- Nếu KHÔNG có retrieved context, hãy đánh giá faithfulness dựa trên
+  mức độ tin cậy chung (có dẫn chứng cụ thể hay bịa đặt?).
 
 Trả lời ĐÚNG JSON, KHÔNG thêm gì khác:
 {
@@ -93,7 +99,7 @@ class LLMJudge:
     def __init__(
         self,
         api_key: str,
-        model: str = "google/gemini-2.5-flash",
+        model: str = "openai/gpt-4o-mini",
         sleep_sec: float = 1.0,
     ):
         self.client = OpenAI(api_key=api_key, base_url=OPENROUTER_BASE_URL)
@@ -105,9 +111,15 @@ class LLMJudge:
         question: str,
         answer: str,
         expected_hint: str,
+        context: str = "",
     ) -> dict:
         """
         Chấm điểm 1 câu trả lời.
+
+        Args:
+            context: Ngữ cảnh truy xuất (retrieved context) — các đoạn tài liệu
+                     mà Retriever đã lấy về. Nếu truyền vào, Judge sẽ dùng để
+                     đánh giá Faithfulness chặt chẽ hơn (kiểu RAGAS).
 
         Returns:
             {
@@ -127,6 +139,8 @@ class LLMJudge:
             f"Câu trả lời cần chấm:\n{answer}\n\n"
             f"Gợi ý đáp án đúng (expected_answer_hint):\n{expected_hint}"
         )
+        if context:
+            user_msg += f"\n\nNgữ cảnh truy xuất (retrieved context):\n{context}"
 
         try:
             resp = self.client.chat.completions.create(
@@ -168,7 +182,7 @@ class LLMJudge:
         Chấm nhiều câu lần lượt.
 
         Args:
-            items: list of {"question", "answer", "expected_hint"}
+            items: list of {"question", "answer", "expected_hint", "context"(optional)}
 
         Returns:
             list of score dicts
@@ -180,6 +194,7 @@ class LLMJudge:
                 item["question"],
                 item["answer"],
                 item["expected_hint"],
+                context=item.get("context", ""),
             )
             print(f"→ {s['total']}/20")
             scores.append(s)

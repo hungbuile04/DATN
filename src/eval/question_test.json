@@ -1,0 +1,156 @@
+[
+  {
+    "id": "hq001",
+    "question": "Dựa trên dữ liệu NIM và tỷ lệ nợ xấu của HDB trong Q2 và Q3/2025, ngân hàng đang cải thiện hay suy giảm về chất lượng tài sản?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Suy giảm (NIM giảm và NPL tăng)",
+    "source_page": "2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq002",
+    "question": "Mức giảm tương đối của NIM của HDB từ Q2 sang Q3/2025 là bao nhiêu phần trăm và điều này có đáng kể không?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "~25%, là mức giảm đáng kể",
+    "source_page": "2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq003",
+    "question": "Nếu ROE dự phóng năm 2026 của HDB ở mức cao nhưng NIM giảm trong ngắn hạn, điều này gợi ý điều gì về chiến lược kinh doanh của ngân hàng?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Tăng trưởng tín dụng hoặc tối ưu chi phí bù đắp NIM",
+    "source_page": "1-2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq004",
+    "question": "So với mức ROE dự phóng, mức tăng của tỷ lệ nợ xấu có thể tạo ra mâu thuẫn gì trong đánh giá hiệu quả hoạt động của HDB?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "ROE cao nhưng rủi ro tín dụng tăng → hiệu quả không bền vững",
+    "source_page": "1-2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq005",
+    "question": "Giữa hai yếu tố NIM giảm và nợ xấu tăng, yếu tố nào có tác động tiêu cực lớn hơn đến lợi nhuận tương lai của HDB?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Nợ xấu tăng (ảnh hưởng chi phí dự phòng)",
+    "source_page": "2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq006",
+    "question": "Trong báo cáo, liệu có bằng chứng nào cho thấy HDB vừa cải thiện biên lợi nhuận vừa giảm rủi ro tín dụng trong cùng kỳ không?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Không, cả hai đều xấu đi",
+    "source_page": "2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq007",
+    "question": "Nếu nhà đầu tư chỉ nhìn vào ROE mà bỏ qua NIM và nợ xấu, họ có thể đưa ra kết luận sai lệch gì về HDB?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Đánh giá quá tích cực và bỏ qua rủi ro",
+    "source_page": "1-2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq008",
+    "question": "So sánh ROE của HDB với VCB, ngân hàng nào có hiệu quả sinh lời cao hơn và điều này có phản ánh rủi ro cao hơn không?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "HDB cao hơn nhưng rủi ro cao hơn",
+    "source_page": "1",
+    "doc": [
+      "HDB_2025_11_21_SSIResearch",
+      "VCB_2026_02_26_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "hq009",
+    "question": "So sánh xu hướng NIM của HDB và TPB, ngân hàng nào đang chịu áp lực giảm biên lợi nhuận mạnh hơn?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "HDB giảm mạnh hơn",
+    "source_page": "1-2",
+    "doc": [
+      "HDB",
+      "TPB"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "hq010",
+    "question": "Nếu NIM giảm 1.5 điểm % nhưng ROE vẫn giữ ở mức cao, điều này ngụ ý mức leverage hoặc cấu trúc tài sản thay đổi như thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Có thể leverage cao hơn hoặc tăng tài sản sinh lời khác",
+    "source_page": "1-2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq011",
+    "question": "Kết hợp thông tin về khuyến nghị, ROE và rủi ro tín dụng, tại sao SSI vẫn giữ đánh giá tích cực đối với HDB?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Tăng trưởng dài hạn tốt dù có rủi ro ngắn hạn",
+    "source_page": "1-2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "hq012",
+    "question": "Nếu xu hướng hiện tại tiếp diễn, yếu tố nào sẽ là rủi ro lớn nhất ảnh hưởng đến định giá cổ phiếu HDB?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Nợ xấu tăng",
+    "source_page": "2",
+    "doc": "HDB_2025_11_21_SSIResearch",
+    "answer_in_text": false
+  }
+]

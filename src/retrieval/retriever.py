@@ -99,6 +99,8 @@ class DualRetriever:
 
         # Known tickers — populated during _load_corpus
         self._known_tickers: set[str] = set()
+        # Query embedding cache: avoid re-embedding identical queries
+        self._query_cache: dict[str, list[float]] = {}
 
         self._load_corpus()
 
@@ -135,28 +137,28 @@ class DualRetriever:
         # Encode query 1 lần duy nhất
         query_vec = self._embed_query(query)
 
-        # Detect ticker từ query
-        ticker = self._detect_ticker(query)
-        if ticker:
-            print(f"  🏷  Detected ticker (query): {ticker}")
+        # Detect tickers từ query
+        tickers = self._detect_tickers(query)
+        if tickers:
+            print(f"  🏷  Detected tickers (query): {tickers}")
 
         # === TEXT PIPELINE (chạy trước) ===
         text_chunks = []
         if text_top_k > 0:
-            text_chunks = self._text_pipeline(query, query_vec, text_top_k, ticker)
+            text_chunks = self._text_pipeline(query, query_vec, text_top_k, tickers)
 
         # === Ticker fallback: suy luận từ text results ===
         # Nếu query không nhắc ticker nhưng text results đa số cùng 1 mã
         # → suy luận đó là ticker chính → dùng cho image filter
-        if not ticker and text_chunks:
-            ticker = self._infer_ticker_from_chunks(text_chunks)
-            if ticker:
-                print(f"  🏷  Inferred ticker (text): {ticker}")
+        if not tickers and text_chunks:
+            tickers = self._infer_tickers_from_chunks(text_chunks)
+            if tickers:
+                print(f"  🏷  Inferred tickers (text): {tickers}")
 
         # === IMAGE PIPELINE ===
         image_chunks = []
         if image_top_k > 0:
-            image_chunks = self._image_pipeline(query, query_vec, image_top_k, ticker)
+            image_chunks = self._image_pipeline(query, query_vec, image_top_k, tickers)
             # Lọc ảnh score quá thấp — không relevant, chỉ gây nhiễu
             image_chunks = [
                 c for c in image_chunks if c.score >= self.IMAGE_MIN_SCORE
@@ -211,7 +213,7 @@ class DualRetriever:
         "ha do":          "HDG",
     }
 
-    def _detect_ticker(self, query: str) -> str:
+    def _detect_tickers(self, query: str) -> list[str]:
         """
         Detect mã cổ phiếu trong query.
 
@@ -220,14 +222,15 @@ class DualRetriever:
             2. Fallback: tìm tên công ty / alias (Vinamilk, Hòa Phát, ...)
 
         Returns:
-            Ticker string (e.g. "VNM") hoặc "" nếu không tìm thấy.
+            Danh sách các Ticker string (e.g. ["VNM", "HPG"]) hoặc [] nếu không tìm thấy.
         """
         q_upper = query.upper()
+        detected = set()
 
         # Bước 1: match mã ticker trực tiếp
         for ticker in sorted(self._known_tickers, key=len, reverse=True):
             if re.search(r'\b' + re.escape(ticker) + r'\b', q_upper):
-                return ticker
+                detected.add(ticker)
 
         # Bước 2: match tên công ty / alias (case-insensitive)
         q_lower = query.lower()
@@ -235,11 +238,11 @@ class DualRetriever:
             self._COMPANY_ALIASES.items(), key=lambda x: len(x[0]), reverse=True
         ):
             if alias in q_lower:
-                return ticker
+                detected.add(ticker)
 
-        return ""
+        return list(detected)
 
-    def _infer_ticker_from_chunks(self, chunks: list[RetrievedChunk]) -> str:
+    def _infer_tickers_from_chunks(self, chunks: list[RetrievedChunk]) -> list[str]:
         """
         Suy luận ticker từ text results bằng majority vote.
 
@@ -252,19 +255,19 @@ class DualRetriever:
         from collections import Counter
         tickers = [_ticker_of(c.chunk_id) for c in chunks if _ticker_of(c.chunk_id)]
         if not tickers:
-            return ""
+            return []
         counter = Counter(tickers)
         top_ticker, top_count = counter.most_common(1)[0]
         if top_count / len(tickers) >= 0.5:
-            return top_ticker
-        return ""
+            return [top_ticker]
+        return []
 
     # ──────────────────────────────────────────
     # Private: Pipelines
     # ──────────────────────────────────────────
 
     def _text_pipeline(
-        self, query: str, query_vec: list[float], top_k: int, ticker: str = ""
+        self, query: str, query_vec: list[float], top_k: int, tickers: list[str] = None
     ) -> list[RetrievedChunk]:
         """
         Text pipeline: Dense search → ticker boost → top-k.
@@ -281,8 +284,8 @@ class DualRetriever:
         )
 
         # Ticker boost: ưu tiên chunks cùng mã, nhưng không loại bỏ mã khác
-        if ticker:
-            dense_results = _ticker_boost(dense_results, ticker, boost=1.5)
+        if tickers:
+            dense_results = _ticker_boost(dense_results, tickers, boost=1.5)
 
         results = []
         for chunk_id, score in dense_results[:top_k]:
@@ -292,7 +295,7 @@ class DualRetriever:
         return results
 
     def _image_pipeline(
-        self, query: str, query_vec: list[float], top_k: int, ticker: str = ""
+        self, query: str, query_vec: list[float], top_k: int, tickers: list[str] = None
     ) -> list[RetrievedChunk]:
         """
         Image pipeline: Dense search → ticker hard filter → top-k.
@@ -306,11 +309,12 @@ class DualRetriever:
         """
         candidate_k = top_k * 4
 
-        if ticker:
+        if tickers:
             # ── Phase 1: Ticker-filtered Dense search ──
+            where_clause = {"ticker": tickers[0]} if len(tickers) == 1 else {"ticker": {"$in": tickers}}
             filtered_results = self._dense_search(
                 query_vec, self.image_col, top_n=candidate_k,
-                where={"ticker": ticker},
+                where=where_clause,
             )
 
             results = []
@@ -425,8 +429,13 @@ class DualRetriever:
     def _embed_query(self, query: str) -> list[float]:
         """
         Embed query bằng Gemini Embedding 2.
+        Cache kết quả để tránh gọi API lại cho query giống hệt.
         Auto-retry khi bị 429 RESOURCE_EXHAUSTED (quota per minute).
         """
+        # ── Cache hit → skip API call ──
+        if query in self._query_cache:
+            return self._query_cache[query]
+
         import time
         max_retries = 6
         for attempt in range(max_retries):
@@ -435,7 +444,9 @@ class DualRetriever:
                     model=self._embed_model,
                     contents=query,
                 )
-                return list(result.embeddings[0].values)
+                vec = list(result.embeddings[0].values)
+                self._query_cache[query] = vec  # cache for reuse
+                return vec
             except Exception as e:
                 if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
                     wait = 10 * (attempt + 1)   # 10s, 20s, 30s, ...
@@ -510,7 +521,7 @@ def _ticker_of(chunk_id: str) -> str:
 
 def _ticker_boost(
     merged: list[tuple[str, float]],
-    ticker: str,
+    tickers: list[str],
     boost: float = 1.5,
 ) -> list[tuple[str, float]]:
     """
@@ -521,7 +532,7 @@ def _ticker_boost(
     """
     boosted = []
     for chunk_id, score in merged:
-        if _ticker_of(chunk_id) == ticker:
+        if _ticker_of(chunk_id) in tickers:
             boosted.append((chunk_id, score * boost))
         else:
             boosted.append((chunk_id, score))

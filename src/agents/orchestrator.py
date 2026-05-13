@@ -1,21 +1,20 @@
 # src/agents/orchestrator.py
 
 """
-MultiAgentOrchestrator — 4-agent pipeline.
+MultiAgentOrchestrator — 3-agent pipeline.
 
-Luồng 3 stages:
-    Stage 1: CriticalAgent (text + image + question) → {Tc, Ic}
-    Stage 2: TextAgent  (text+table chunks + Tc) → aT
-             ImageAgent (image chunks + Ic)       → aI
-    Stage 3: SumAgent   (ghép thô aT + aI → chỉnh sửa mạch lạc)
+Luồng 2 stages:
+    Stage 1: TextAgent  (text+table chunks) → aT
+             ImageAgent (image chunks)      → aI
+    Stage 2: SumAgent   (ghép thô aT + aI → chỉnh sửa mạch lạc)
 
-4 LLM calls/question: Critical + Text + Image + Sum
+3 LLM calls/question: Text + Image + Sum
 """
 
 from openai import OpenAI
 from src.retrieval.retriever import RetrievalResult
 from src.agents.agents import (
-    CriticalAgent, TextAgent, ImageAgent, SumAgent,
+    TextAgent, ImageAgent, SumAgent,
     AgentOutput, _format_chunks,
 )
 
@@ -23,7 +22,7 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 class MultiAgentOrchestrator:
-    """Điều phối 4-agent reasoning pipeline."""
+    """Điều phối 3-agent reasoning pipeline."""
 
     def __init__(
         self,
@@ -33,19 +32,18 @@ class MultiAgentOrchestrator:
     ):
         client = OpenAI(api_key=api_key, base_url=OPENROUTER_BASE_URL)
 
-        self.critical_agent = CriticalAgent(client, text_model)
         self.text_agent     = TextAgent(client, text_model)
         self.image_agent    = ImageAgent(client, vision_model)
         self.sum_agent      = SumAgent(client, text_model)
 
     def run(self, question: str, result: RetrievalResult) -> dict:
         """
-        Chạy 4-agent pipeline.
+        Chạy 3-agent pipeline.
 
         Returns:
             {
                 "answer", "sources", "confidence", "reasoning",
-                "agent_outputs", "critical_info",
+                "agent_outputs",
                 "model", "has_image", "num_images",
             }
         """
@@ -55,41 +53,29 @@ class MultiAgentOrchestrator:
         print(f"    Text chunks  : {len(text_chunks)}")
         print(f"    Image chunks : {len(image_chunks)}")
 
-        # ── Stage 1: Critical Agent ──
-        print(f"    → Critical Agent...", end=" ", flush=True)
-        text_context  = _format_chunks(text_chunks)
-        image_context = _format_chunks(image_chunks)
+        # ── Stage 1: Text + Image (parallel — saves ~40% latency) ──
+        from concurrent.futures import ThreadPoolExecutor
 
-        critical_info = self.critical_agent.extract(
-            question=question,
-            text_context=text_context,
-            image_context=image_context,
-        )
-        print(f"text='{critical_info['text'][:50]}' image='{critical_info['image'][:50]}'")
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            print(f"    → Text + Image Agents (parallel)...", flush=True)
+            text_future = executor.submit(
+                self.text_agent.analyze, question, text_chunks,
+            )
+            image_future = executor.submit(
+                self.image_agent.analyze, question, image_chunks,
+            )
+            text_output = text_future.result()
+            image_output = image_future.result()
 
-        # ── Stage 2: Text + Image (guided) ──
-        print(f"    → Text Agent...", end=" ", flush=True)
-        text_output = self.text_agent.analyze(
-            question, text_chunks,
-            critical_info=critical_info["text"],
-        )
-        print(f"confidence={text_output.confidence:.2f}")
+        print(f"      text={text_output.confidence:.2f}, image={image_output.confidence:.2f}")
 
-        print(f"    → Image Agent...", end=" ", flush=True)
-        image_output = self.image_agent.analyze(
-            question, image_chunks,
-            critical_info=critical_info["image"],
-        )
-        print(f"confidence={image_output.confidence:.2f}")
-
-        # ── Stage 3: Sum Agent (editor) ──
+        # ── Stage 2: Sum Agent (editor) ──
         print(f"    → Sum Agent...", end=" ", flush=True)
         final = self.sum_agent.synthesize(question, text_output, image_output)
         print(f"confidence={final['confidence']:.2f}")
 
         # Metadata
-        final["critical_info"] = critical_info
-        final["model"]         = "multi-agent-4"
+        final["model"]         = "multi-agent-3"
         final["has_image"]     = image_output.has_data
         final["num_images"]    = len(image_chunks) if image_output.has_data else 0
 

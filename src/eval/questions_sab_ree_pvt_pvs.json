@@ -1,0 +1,275 @@
+[
+  {
+    "id": "q041",
+    "question": "Sản lượng bia của SAB thể hiện xu hướng gì từ 2019 đến 2025, và năm nào chạm đáy sản lượng?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Sản lượng bia giảm mạnh trong 2020-2021 do Covid, chạm đáy năm 2021. Phục hồi từ 2022 nhưng năm 2025 doanh thu giảm 18,8% svck — cho thấy sức mua người tiêu dùng vẫn yếu",
+    "source_page": "2-3",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ cột sản lượng bia SAB 2019-2025"
+  },
+  {
+    "id": "q042",
+    "question": "Biên lợi nhuận gộp của SAB cải thiện từ 29,2% (2024) lên 35,9% (2025) dù doanh thu giảm 18,8%. Cơ cấu chi phí giải thích điều này như thế nào?",
+    "category": "cross_modal",
+    "requires": [
+      "image",
+      "table"
+    ],
+    "expected_answer_hint": "Giá vốn hàng bán giảm mạnh hơn doanh thu (từ 22.554 tỷ xuống 16.588 tỷ, giảm 26%) do giá nguyên liệu đầu vào (đại mạch, nhôm) giảm. Doanh thu giảm 18,8% nhưng GVHB giảm 26% → biên gộp cải thiện mạnh",
+    "source_page": "2-4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q043",
+    "question": "Mảng vận tải và mảng thương mại đóng góp thế nào vào cơ cấu doanh thu và lợi nhuận gộp của PVT, và tại sao biên lợi nhuận hợp nhất bị kéo xuống?",
+    "category": "cross_modal",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Mảng vận tải có biên gộp cao (~22%) nhưng mảng thương mại (biên rất thấp ~1-2%) ngày càng đóng góp lớn vào doanh thu, kéo biên hợp nhất từ 20,8% (2024) xuống 14,6% (2025). Biểu đồ cho thấy cột thương mại tăng nhanh nhưng lợi nhuận gộp rất mỏng",
+    "source_page": "2",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "2 biểu đồ stacked bar trang 2: Cơ cấu doanh thu và Cơ cấu lợi nhuận gộp theo mảng"
+  },
+  {
+    "id": "q044",
+    "question": "REE đặt mục tiêu nâng tổng công suất điện lên 3GW vào năm 2030 từ mức 1,2GW hiện tại. Dựa trên bảng SOTP, mảng điện chiếm bao nhiêu phần trăm tổng giá trị doanh nghiệp?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table",
+      "text"
+    ],
+    "expected_answer_hint": "Mảng Điện có giá trị 30.789 tỷ đồng / tổng 43.617 tỷ = ~70,6% tổng giá trị doanh nghiệp. Trong đó thủy điện và năng lượng tái tạo (điện gió, điện mặt trời) chiếm phần lớn. BĐS chỉ chiếm ~17,7%",
+    "source_page": "5",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q045",
+    "question": "PVS ghi nhận backlog giá trị hợp đồng chưa thực hiện ở mức nào, và điều này hỗ trợ triển vọng doanh thu 2026 như thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "PVS có backlog hợp đồng chưa thực hiện lớn nhờ các dự án dầu khí mới (Lô B, Cá Voi Xanh). Backlog tạo nền tảng doanh thu ổn định cho 2026-2027. PVS được hưởng lợi từ chu kỳ đầu tư thượng nguồn dầu khí Việt Nam",
+    "source_page": "1-2",
+    "doc": "PVS_2025_12_22_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q046",
+    "question": "So sánh tỷ suất cổ tức của SAB (~8%) với REE (~1,5% tiền mặt + 15% cổ phiếu). Đối với nhà đầu tư ưu tiên thu nhập, cổ phiếu nào hấp dẫn hơn và tại sao?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table",
+      "text"
+    ],
+    "expected_answer_hint": "SAB hấp dẫn hơn với tỷ suất cổ tức tiền mặt ~8% (4.000 đồng/cp), ổn định và không pha loãng. REE chỉ chi 1.000 đồng tiền mặt + 15% cổ phiếu → pha loãng EPS liên tục 5 năm. REE đang xem xét tạm dừng cổ tức cổ phiếu từ 2026",
+    "source_page": "1,3-4",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q047",
+    "question": "Giá thuê tàu định hạn (time charter) có xu hướng gì trong giai đoạn 2023-2025, và PVT có được hưởng lợi từ xu hướng này không?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá thuê tàu định hạn phục hồi từ đáy 2023, tăng dần trong 2024-2025. PVT được hưởng lợi vì các tàu mới bàn giao được hưởng mức giá thuê thuận lợi hơn, giúp biên lợi nhuận mảng vận tải cải thiện lên 22,1%",
+    "source_page": "2-3",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ giá thuê tàu time charter theo quý/năm"
+  },
+  {
+    "id": "q048",
+    "question": "SAB có ROE tăng từ 18% (2024) lên 21,6% (2027F) dù doanh thu gần như không tăng (+2,9%/năm). Điều gì giải thích sự cải thiện ROE mà không cần tăng trưởng doanh thu mạnh?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "ROE tăng nhờ: (1) Biên lợi nhuận cải thiện mạnh (biên gộp từ 29,2% lên 36,5%, biên ròng từ 14,1% lên 17,3%) do giá nguyên liệu giảm; (2) Vốn chủ sở hữu giảm dần (từ 24.437 tỷ xuống 22.041 tỷ) do chi trả cổ tức lớn hơn lợi nhuận giữ lại → equity multiplier tăng",
+    "source_page": "4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q049",
+    "question": "PVT mở rộng đội tàu bằng cách mua tàu mới — chi phí quản lý doanh nghiệp tăng cao do chi phí ban đầu. Biên lợi nhuận gộp mảng vận tải có xu hướng phục hồi thế nào từ đáy?",
+    "category": "visual_analysis",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Biên gộp mảng vận tải chạm đáy đầu năm 2025, sau đó phục hồi lên 22,1% trong Q4/2025 (+0,9 điểm % svck). Xu hướng phục hồi nhờ tàu mới đi vào vận hành ổn định + giá thuê thuận lợi. Chi phí quản lý cao là tạm thời do đưa tàu mới vào khai thác",
+    "source_page": "2-3",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ biên LN gộp mảng vận tải theo quý"
+  },
+  {
+    "id": "q050",
+    "question": "So sánh P/E 2026F của SAB (~13,9x), REE (~14x) và PVT. Doanh nghiệp nào có định giá hấp dẫn nhất khi xét đến tốc độ tăng trưởng lợi nhuận?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "PVT có P/E thấp nhất (~5-7x) với tốc độ tăng trưởng LNST cao (doanh thu +36,8% svck). SAB P/E 13,9x nhưng tăng trưởng chỉ 3,6%. REE P/E 14x, tăng trưởng bị áp lực ngắn hạn. PVT hấp dẫn nhất về tương quan P/E vs growth",
+    "source_page": "1",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch",
+      "PVT_2026_03_30_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q051",
+    "question": "REE sử dụng phương pháp định giá kết hợp P/E (40%) và SOTP (60%). Tại sao SOTP được gán tỷ trọng cao hơn, và chiết khấu tập đoàn 10% phản ánh điều gì?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table",
+      "text"
+    ],
+    "expected_answer_hint": "SOTP được ưu tiên vì REE là tập đoàn đa ngành (điện, BĐS, M&E, nước) — mỗi mảng có đặc thù định giá khác nhau (DCF cho thủy điện, RNAV cho BĐS). Chiết khấu 10% phản ánh rủi ro phức tạp cấu trúc tập đoàn, khó giám sát dòng tiền giữa các công ty con",
+    "source_page": "4-5",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q052",
+    "question": "PVS và PVT đều hoạt động trong lĩnh vực dầu khí nhưng ở phân khúc khác nhau. So sánh mô hình kinh doanh và rủi ro chính của hai doanh nghiệp này.",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "PVS: dịch vụ kỹ thuật dầu khí (EPC, M&C) — phụ thuộc vào chu kỳ đầu tư thượng nguồn, backlog hợp đồng lớn từ Lô B/Cá Voi Xanh. PVT: vận tải dầu khí — phụ thuộc vào giá thuê tàu và sản lượng vận chuyển. PVS rủi ro cao hơn do biến động dự án, PVT ổn định hơn nhờ hợp đồng dài hạn",
+    "source_page": "1-2",
+    "doc": [
+      "PVS_2025_12_22_SSIResearch",
+      "PVT_2026_03_30_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q053",
+    "question": "SAB có Nợ ròng/EBITDA âm (-0,60 đến -0,67x) trong giai đoạn 2024-2027. Điều này phản ánh gì về vị thế tài chính của SAB so với các doanh nghiệp có đòn bẩy cao?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Nợ ròng/EBITDA âm nghĩa là SAB có tiền mặt nhiều hơn nợ vay — vị thế 'net cash'. SAB gần như không dùng đòn bẩy (vay ngắn hạn chỉ ~268 tỷ, tiền mặt + đầu tư ngắn hạn ~19.000 tỷ). Điều này cho thấy SAB cực kỳ an toàn về tài chính nhưng có thể chưa tối ưu cơ cấu vốn",
+    "source_page": "4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q054",
+    "question": "Trong cơ cấu công suất điện của REE theo loại nguồn (thủy điện, điện gió, điện mặt trời, nhiệt điện), tỷ trọng năng lượng tái tạo hiện đạt bao nhiêu phần trăm?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Năng lượng tái tạo (điện gió + điện mặt trời) chiếm khoảng 40-50% tổng công suất 1,2GW hiện tại. Thủy điện vẫn là nguồn lớn nhất. Mục tiêu 3GW đến 2030 sẽ tập trung mở rộng điện gió ngoài khơi và điện mặt trời",
+    "source_page": "2-3",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ cơ cấu công suất điện REE theo loại nguồn"
+  },
+  {
+    "id": "q055",
+    "question": "SSI khuyến nghị SAB là TRUNG LẬP với giá mục tiêu dựa trên DCF + P/E 13x, trong khi REE cũng TRUNG LẬP với P/E 14x + SOTP. Nếu chỉ so P/E mục tiêu, doanh nghiệp nào được kỳ vọng tăng trưởng cao hơn?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "REE được gán P/E mục tiêu 14x (cao hơn SAB 13x), phản ánh kỳ vọng tăng trưởng cao hơn nhờ chiến lược mở rộng năng lượng tái tạo (mục tiêu 3GW). SAB P/E thấp hơn vì tăng trưởng lợi nhuận chỉ một chữ số, ngành bia đã bão hòa",
+    "source_page": "3-5",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch"
+    ],
+    "answer_in_text": true
+  },
+  {
+    "id": "q056",
+    "question": "PVT bổ sung thêm tàu mới vào đội tàu trong năm 2025. Quy mô số lượng và tổng trọng tải đội tàu của PVT thay đổi thế nào trong 3 năm gần đây?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Đội tàu PVT mở rộng đáng kể, tổng trọng tải tăng nhờ bổ sung tàu mới có trọng tải lớn hơn. Số lượng tàu tăng đều qua các năm 2023-2025, hỗ trợ tăng trưởng doanh thu mảng vận tải +9,3% svck",
+    "source_page": "2-3",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ đội tàu PVT (số lượng + trọng tải DWT)"
+  },
+  {
+    "id": "q057",
+    "question": "SAB có vốn chủ sở hữu giảm liên tục từ 24.437 tỷ (2024) xuống 22.041 tỷ (2027F) dù vẫn có lãi. Nguyên nhân chính là gì?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Vốn chủ giảm vì SAB chi trả cổ tức lớn hơn lợi nhuận giữ lại. Cổ tức 3.500-4.000 đồng/cp × 1,32 tỷ cp = ~4.600-5.280 tỷ/năm, trong khi LNST chỉ ~4.500-4.800 tỷ. Lợi nhuận chưa phân phối giảm từ 9.218 tỷ xuống 5.776 tỷ. Đây là chiến lược chia hết lợi nhuận cho cổ đông",
+    "source_page": "4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q058",
+    "question": "Xếp hạng 4 cổ phiếu SAB, REE, PVT, PVS theo mức độ phòng thủ (defensive) từ cao đến thấp. Tiêu chí nào được sử dụng?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Phòng thủ cao → thấp: (1) SAB — FMCG, net cash, cổ tức 8%, nhu cầu bia ổn định; (2) REE — danh mục đa dạng, thủy điện có doanh thu recurring; (3) PVT — vận tải dầu khí, hợp đồng dài hạn nhưng phụ thuộc giá thuê tàu; (4) PVS — dịch vụ EPC dầu khí, biến động theo chu kỳ đầu tư",
+    "source_page": "1",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch",
+      "PVT_2026_03_30_SSIResearch",
+      "PVS_2025_12_22_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q059",
+    "question": "SSI đã duy trì khuyến nghị gì đối với SAB trong đa phần thời gian, và có thời điểm nào nâng lên MUA không?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "SSI duy trì khuyến nghị TRUNG LẬP (MP) đối với SAB trong phần lớn thời gian. Giá mục tiêu và giá thực tế dao động gần nhau, cho thấy SAB là cổ phiếu ổn định, ít có catalyst để nâng khuyến nghị lên MUA",
+    "source_page": "3",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 3: đường giá CP + đường Target Price + nhãn MP"
+  },
+  {
+    "id": "q060",
+    "question": "REE đang xem xét tạm dừng cổ tức bằng cổ phiếu từ năm 2026 sau 5 năm liên tục phát hành. Nếu dừng, EPS sẽ bị ảnh hưởng thế nào so với việc tiếp tục pha loãng?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Nếu dừng cổ tức cổ phiếu, số CP lưu hành không tăng thêm → EPS được bảo toàn và có thể tăng theo tốc độ tăng lợi nhuận. Nếu tiếp tục 15%/năm, số CP tăng ~80 triệu/năm → EPS bị pha loãng khoảng 13-15%. Việc dừng là tín hiệu tích cực cho nhà đầu tư",
+    "source_page": "3-4",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": true
+  }
+]

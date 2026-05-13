@@ -28,6 +28,6 @@ retrieval:
 
 agents:
   llm_model: "google/gemini-2.5-flash"
-  vision_model: "google/gemini-2.5-pro"
+  vision_model: "google/gemini-2.5-flash"
   max_context_chunks: 3
   temperature: 0.1

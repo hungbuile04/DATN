@@ -1,0 +1,270 @@
+[
+  {
+    "id": "q001",
+    "question": "So sánh NIM của VPB (5,39% trong Q3/2025) với biên lợi nhuận gộp của VNM (40,4% trong Q4/2025) — hai chỉ số này phản ánh điều gì khác nhau về mô hình kinh doanh, và doanh nghiệp nào có rủi ro biên lợi nhuận lớn hơn trong năm 2026?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "NIM phản ánh chênh lệch lãi suất cho vay/huy động (ngân hàng), GPM phản ánh giá vốn sản xuất (FMCG). VPB có rủi ro biên lớn hơn do NIM đang giảm từ 5,85% xuống 5,39% và chi phí vốn tăng, trong khi VNM được hưởng lợi từ giá nguyên liệu sữa thấp",
+    "source_page": "1-2",
+    "doc": [
+      "VPB_2025_12_05_SSIResearch(1)",
+      "VNM_2026_02_24_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q002",
+    "question": "VPB có tỷ lệ nợ xấu (NPL) giảm từ 4,80% xuống 3,51% trong 9T2025, trong khi tỷ lệ dự phòng bao nợ xấu (LLC) cũng giảm từ 15,7% xuống 13%. Hai xu hướng này có mâu thuẫn không, và điều này phản ánh gì về chiến lược quản lý rủi ro của VPB?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Không hoàn toàn mâu thuẫn — NPL giảm có thể do xử lý nợ xấu hoặc tăng mẫu số (tín dụng tăng 29%), nhưng LLC giảm cho thấy bộ đệm dự phòng mỏng hơn. Nếu chất lượng tài sản xấu đi, VPB sẽ phải tăng trích lập mạnh, ảnh hưởng lợi nhuận",
+    "source_page": "2",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": false
+  },
+  {
+    "id": "q003",
+    "question": "Tăng trưởng tín dụng của VPB đạt +29% so với đầu năm, trong đó bất động sản + xây dựng chiếm +34 nghìn tỷ và chứng khoán chiếm +25 nghìn tỷ. Nếu thị trường bất động sản hoặc chứng khoán suy giảm, mức độ rủi ro tập trung danh mục cho vay của VPB nghiêm trọng đến đâu?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "BĐS + chứng khoán chiếm ~59 nghìn tỷ / ~70 nghìn tỷ tăng ròng = ~84% tăng trưởng mới. Rủi ro tập trung rất cao vào ngành chu kỳ. Thêm vào đó, tài sản bảo đảm 'Tài sản khác' chiếm 70% (từ 31% năm 2022) cho thấy chất lượng tài sản đảm bảo đáng lo ngại",
+    "source_page": "2-3",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": false
+  },
+  {
+    "id": "q004",
+    "question": "VNM có biên lợi nhuận gộp Q4/2025 đạt 40,4% (+30 điểm cơ bản svck) và biên lợi nhuận ròng đạt 16,6% (+270 điểm cơ bản svck). Tại sao biên ròng cải thiện mạnh hơn nhiều so với biên gộp, và xu hướng này có bền vững trong 2026 không?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Biên ròng cải thiện mạnh hơn nhờ chi phí bán hàng giảm 5% svck (tiết kiệm marketing). Tuy nhiên, SSI dự báo chi phí marketing sẽ tăng trở lại trong 2026 để hỗ trợ tăng trưởng, nên biên ròng khó duy trì mức cải thiện tương tự",
+    "source_page": "1-2",
+    "doc": "VNM_2026_02_24_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q005",
+    "question": "VHM ghi nhận doanh số bán hàng Q3/2025 đạt 95,1 nghìn tỷ đồng (gấp 3 lần svck), nhưng doanh thu thuần chỉ đạt 16,4 nghìn tỷ (-51% svck). Giải thích sự chênh lệch lớn giữa doanh số bán hàng và doanh thu ghi nhận, và điều này ảnh hưởng thế nào đến triển vọng lợi nhuận 2026?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Doanh số bán hàng là giá trị hợp đồng ký, doanh thu ghi nhận khi bàn giao. Chênh lệch lớn tạo ra backlog (doanh thu chưa ghi nhận) rất cao, hỗ trợ NPATMI 2026 dự báo đạt 40 nghìn tỷ (+8% svck). Doanh số bán Q3 chủ yếu từ bán buôn Green Paradise",
+    "source_page": "1-2",
+    "doc": "VHM_2025_12_15_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q006",
+    "question": "So sánh ROE của VNM (~27-29%), VHM (~16-17%) và VEA (tính từ LNST/VCSH). Doanh nghiệp nào có hiệu quả sinh lời trên vốn chủ tốt nhất, và mức ROE đó có phản ánh đúng chất lượng kinh doanh khi xét thêm tỷ lệ Nợ/VCSH?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VNM có ROE cao nhất (~27-29%) với đòn bẩy rất thấp (Nợ/VCSH 0,24-0,27x), cho thấy hiệu quả thực sự cao. VHM có ROE 16-17% nhưng Nợ/VCSH tăng từ 0,24 lên 0,5x — ROE được hỗ trợ bởi đòn bẩy. VEA có biên lợi nhuận hoạt động >149% (do thu nhập liên kết) nhưng quy mô nhỏ",
+    "source_page": "1",
+    "doc": [
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q007",
+    "question": "VEA có lợi nhuận hoạt động đạt 1,63 nghìn tỷ đồng trong Q3/2025, gấp ~1,5 lần doanh thu thuần (1,09 nghìn tỷ). Điều này có hợp lý không, và cấu trúc lợi nhuận đặc biệt này phản ánh điều gì về mô hình kinh doanh của VEA?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Hoàn toàn hợp lý — VEA là holding company, thu nhập chính đến từ cổ tức và lợi nhuận từ công ty liên kết (Honda VN 30%, Toyota VN 20%, Ford VN 25%). Thu nhập liên kết (~1,45 nghìn tỷ) vượt xa doanh thu hoạt động tự thân, tạo biên lợi nhuận hoạt động >100%",
+    "source_page": "1-2",
+    "doc": "VEA_2025_12_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q008",
+    "question": "Doanh số xe máy Honda giảm 7% svck trong Q3/2025 do quy định hạn chế xe máy xăng tại Hà Nội từ 1/7/2026. Nếu xu hướng điện hóa tiếp tục và Honda chuyển sang xe máy điện với giá bán cao hơn 18-20% so với VinFast/Yadea, điều này ảnh hưởng thế nào đến cổ tức mà VEA nhận được từ Honda?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Xe máy điện Honda giá cao hơn 18-20% có thể giảm thị phần trước VinFast và Yadea. Nếu doanh số giảm, lợi nhuận Honda VN giảm → cổ tức cho VEA (sở hữu 30%) giảm theo. SSI dự báo LNST 2026 giảm 14% svck, cổ tức kỳ vọng ~5.390 đồng/cp",
+    "source_page": "2-3",
+    "doc": "VEA_2025_12_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q009",
+    "question": "So sánh chiến lược tăng trưởng của VPB (tăng trưởng tín dụng +29%, tập trung BĐS) với VHM (doanh số bán hàng +75% svck, mở bán đại dự án). Hai doanh nghiệp này đang đặt cược vào cùng một xu hướng bất động sản — nếu thị trường BĐS đảo chiều, doanh nghiệp nào chịu rủi ro lớn hơn?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "VPB chịu rủi ro lớn hơn vì: (1) cho vay BĐS chiếm tỷ trọng lớn trong tăng trưởng tín dụng, (2) tài sản bảo đảm chất lượng giảm (70% là 'Tài sản khác'), (3) LLC chỉ 13%. VHM có quỹ đất lớn và backlog cao, có thể điều chỉnh tốc độ bàn giao linh hoạt hơn",
+    "source_page": "1-3",
+    "doc": [
+      "VPB_2025_12_05_SSIResearch(1)",
+      "VHM_2025_12_15_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q010",
+    "question": "VNM dự báo tăng trưởng LNST năm 2026 chỉ +6,3% svck, trong khi VHM dự báo NPATMI tăng +8% svck. Tuy nhiên P/E 2026F của VNM (~17x) cao gấp 1,6 lần VHM (~10,6x). Giải thích tại sao thị trường sẵn sàng trả premium cao hơn cho VNM dù tăng trưởng thấp hơn?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VNM có: (1) dòng tiền ổn định và dự đoán được (FMCG), (2) tỷ suất cổ tức 6%, (3) ROE 27-29% với đòn bẩy thấp, (4) rủi ro thấp hơn. VHM có tính chu kỳ cao, doanh thu phụ thuộc thời điểm bàn giao, và rủi ro BĐS lớn → thị trường yêu cầu risk discount",
+    "source_page": "1",
+    "doc": [
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q011",
+    "question": "Tỷ lệ CIR (Chi phí trên thu nhập) của VPB đạt 24,9% trong Q3/2025, tăng từ 22,0% trong Q2/2025. Đồng thời chi phí dự phòng rủi ro tín dụng đạt 6.125 tỷ đồng. Nếu CIR tiếp tục tăng trong khi chi phí dự phòng không giảm, LNTT dự phóng 2026 của VPB có khả thi không?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "CIR tăng 2,9 điểm % là dấu hiệu hiệu quả hoạt động giảm. Với LNTT Q3 đạt 5.187 tỷ và lũy kế 9T đạt 20.396 tỷ (81% kế hoạch), VPB cần Q4 đạt ~4.800 tỷ. Nếu CIR tiếp tục tăng + chi phí dự phòng cao, mục tiêu sẽ bị đe dọa nhưng vẫn khả thi do LNTT Q3 đã tăng 77% svck",
+    "source_page": "2",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": false
+  },
+  {
+    "id": "q012",
+    "question": "VNM có doanh thu xuất khẩu tăng 26% svck trong Q4/2025, trong khi doanh thu nội địa chỉ tăng 8%. Phân khúc cao cấp/siêu cao cấp chiếm ~10% doanh thu. Nếu VNM tiếp tục đẩy mạnh xuất khẩu và phân khúc cao cấp, biên lợi nhuận gộp dự phóng 42,6% cho 2026 có hợp lý không?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Hợp lý vì: (1) xuất khẩu tăng nhanh giúp tối ưu công suất, (2) phân khúc cao cấp có biên cao hơn, (3) giá nguyên liệu sữa duy trì thấp trong 2026. Tuy nhiên, rủi ro là chi phí marketing sẽ tăng mạnh để hỗ trợ mở rộng, có thể ăn vào biên ròng",
+    "source_page": "1-2",
+    "doc": "VNM_2026_02_24_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q013",
+    "question": "VHM có biên lợi nhuận gộp Q3/2025 chỉ đạt 15,0%, giảm mạnh từ 29,3% (Q3/2024) và 22,1% (Q2/2025). Tuy nhiên SSI dự báo biên gộp cả năm 2025 đạt 38% và 2026 đạt 41%. Sự chênh lệch lớn này có hợp lý không?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Hợp lý vì biên gộp quý đơn lẻ phụ thuộc vào cơ cấu sản phẩm bàn giao. Q3 có thể bàn giao chủ yếu sản phẩm biên thấp. Doanh thu cả năm sẽ bao gồm các dự án biên cao hơn (từ backlog 182 nghìn tỷ doanh số), đẩy biên trung bình lên. VHM đã từng có biên 49% năm 2022",
+    "source_page": "1-2",
+    "doc": "VHM_2025_12_15_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q014",
+    "question": "Trong 4 doanh nghiệp VPB, VNM, VHM, VEA — SSI đưa ra khuyến nghị MUA cho doanh nghiệp nào, và TRUNG LẬP cho doanh nghiệp nào? Phân tích lý do khuyến nghị khác nhau khi xét đến tiềm năng tăng giá và rủi ro của từng cổ phiếu.",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Tất cả 4 đều được khuyến nghị TRUNG LẬP hoặc tương đương. VPB: KHẢ QUAN (giá mục tiêu 22.700, tiềm năng +14,8%). VNM: TRUNG LẬP (72.000 đồng, +8%). VHM: TRUNG LẬP (105.600 đồng, +14,2%). VEA: TRUNG LẬP (34.000 đồng, -2,9%). VPB được đánh giá tích cực nhất nhờ đà cải thiện chất lượng tài sản",
+    "source_page": "1",
+    "doc": [
+      "VPB_2025_12_05_SSIResearch(1)",
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": true
+  },
+  {
+    "id": "q015",
+    "question": "VEA có EPS dự phóng 2026F đạt 4.635 VND và cổ tức dự kiến 5.392 đồng/cp. Cổ tức cao hơn EPS — điều này có bất thường không, và nguồn tiền chi trả cổ tức đến từ đâu?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Có vẻ bất thường nhưng hợp lý — VEA là holding company, EPS tính trên BCTC riêng (cty mẹ) trong khi nguồn cổ tức chính đến từ lợi nhuận chưa phân phối tích lũy và cổ tức từ các công ty liên kết (Honda 30%, Toyota 20%, Ford 25%). Tiền mặt và đầu tư ngắn hạn dồi dào (~13-14 nghìn tỷ đồng)",
+    "source_page": "1,5",
+    "doc": "VEA_2025_12_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q016",
+    "question": "Tỷ lệ 'Tài sản khác' trong cơ cấu tài sản bảo đảm của VPB tăng từ 31% (cuối 2022) lên 70% (hiện tại). Nếu kết hợp thông tin này với tăng trưởng cho vay BĐS +34 nghìn tỷ đồng, điều gì có thể suy ra về loại tài sản đảm bảo mà VPB đang nhận?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "VPB đang nhận nhiều tài sản hình thành trong tương lai hoặc quyền phát triển dự án BĐS (chưa đủ điều kiện ghi nhận là BĐS hữu hình) làm tài sản đảm bảo. Đây là rủi ro cao vì tài sản này phụ thuộc vào tiến độ dự án và khó thanh lý khi thị trường suy giảm",
+    "source_page": "3",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": true
+  },
+  {
+    "id": "q017",
+    "question": "VHM có Nợ/VCSH tăng từ 0,24x (2022) lên 0,5x dự phóng 2025F. Cùng lúc, doanh số bán hàng 2025 dự kiến đạt 182 nghìn tỷ đồng (+75% svck). Việc tăng đòn bẩy tài chính đồng thời với tăng trưởng doanh số mạnh phản ánh chiến lược gì, và rủi ro ra sao?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VHM đang tăng vay nợ để đầu tư phát triển quỹ đất và triển khai đại dự án mới, đặt cược vào chu kỳ phục hồi BĐS. Rủi ro: nếu thị trường hấp thụ yếu tại các thị trường cấp 2 hoặc triển khai chậm, đòn bẩy cao sẽ tạo áp lực tài chính lớn, trong khi ROE đang giảm từ 21% về 16%",
+    "source_page": "1-2",
+    "doc": "VHM_2025_12_15_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q018",
+    "question": "VNM có tỷ suất cổ tức ổn định ~6% trong giai đoạn 2023-2027F, trong khi VEA có tỷ suất cổ tức ~15%. Nếu nhà đầu tư ưu tiên thu nhập cổ tức, VEA có thực sự hấp dẫn hơn khi xét đến rủi ro giảm LNST 14% trong 2026?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VEA có tỷ suất cổ tức cao hơn nhiều (15% vs 6%) nhưng LNST dự báo giảm 14% do xu hướng điện hóa xe máy. VNM có tỷ suất thấp hơn nhưng ổn định hơn và ít rủi ro ngành hơn. VEA hấp dẫn trong ngắn hạn nhưng bền vững kém hơn nếu Honda mất thị phần xe máy",
+    "source_page": "1",
+    "doc": [
+      "VNM_2026_02_24_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q019",
+    "question": "LDR theo quy định của VPB đã tăng lên 83%, tiến sát mức trần 85%, và tỷ lệ cho vay trung dài hạn (MLTL) đạt 26,5% (trần 30%). Nếu cả hai tỷ lệ chạm trần, VPB sẽ phải thay đổi chiến lược tăng trưởng như thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "VPB sẽ phải: (1) chậm lại tốc độ tăng trưởng tín dụng, (2) tăng cường huy động tiền gửi dài hạn thay vì vay nước ngoài ngắn hạn, (3) phát hành trái phiếu để tăng vốn trung dài hạn. SSI nhận định tăng cường nguồn vốn trung dài hạn sẽ là trọng tâm chiến lược",
+    "source_page": "2-3",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": true
+  },
+  {
+    "id": "q020",
+    "question": "Xét 4 cổ phiếu VPB, VNM, VHM, VEA — nếu xếp hạng theo mức độ rủi ro từ cao đến thấp dựa trên đòn bẩy tài chính, tính chu kỳ ngành, và xu hướng lợi nhuận, thứ tự sẽ như thế nào và tại sao?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Rủi ro cao → thấp: (1) VPB — ngân hàng có đòn bẩy cao nhất, NPL + tập trung cho vay BĐS/chứng khoán; (2) VHM — BĐS chu kỳ cao, đòn bẩy tăng mạnh, phụ thuộc thời điểm bàn giao; (3) VEA — rủi ro chuyển đổi xe điện nhưng mô hình holding ổn định; (4) VNM — FMCG phòng thủ, đòn bẩy thấp, ROE ổn định",
+    "source_page": "1",
+    "doc": [
+      "VPB_2025_12_05_SSIResearch(1)",
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": false
+  }
+]

@@ -192,14 +192,14 @@ def eval_search_components(retriever: DualRetriever, questions: list[dict],
             time.sleep(10)
             continue
 
-        ticker = retriever._detect_ticker(question)
+        tickers = retriever._detect_tickers(question)
 
         # A) Dense + ticker boost (current pipeline)
         dense_results = retriever._dense_search(
             query_vec, retriever.text_col, top_n=candidate_k
         )
-        if ticker:
-            boosted = _ticker_boost(dense_results, ticker, boost=1.5)
+        if tickers:
+            boosted = _ticker_boost(dense_results, tickers, boost=1.5)
         else:
             boosted = dense_results
         boost_chunks = _ids_to_text_chunks(retriever, boosted[:top_k])

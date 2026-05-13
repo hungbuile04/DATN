@@ -1,0 +1,215 @@
+[
+  {
+    "id": "q021",
+    "question": "Biểu đồ NIM và tỷ lệ nợ xấu của TPB cho thấy mối tương quan gì giữa hai chỉ số này từ 2019 đến 2025, và giai đoạn nào NIM giảm đồng thời nợ xấu tăng mạnh nhất?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "NIM và NPL có tương quan nghịch rõ rệt — khi nợ xấu tăng (2023: NPL ~3,5%) thì NIM giảm mạnh do phải tăng chi phí dự phòng + giảm lợi suất tài sản. Giai đoạn Q2-Q3/2023 là thời điểm NIM giảm sâu nhất đồng thời NPL tăng vọt",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 5 trang 3: NIM (đường xanh) vs NPL Ratios (đường đỏ), dual-axis"
+  },
+  {
+    "id": "q022",
+    "question": "Biểu đồ nợ xấu theo quý của TPB cho thấy tỷ lệ nợ xấu thường giảm vào Q4 rồi tăng lại ở các quý sau. Xu hướng này lặp lại bao nhiêu năm liên tiếp, và điều gì khiến SSI cho rằng sự cải thiện Q4/2025 mang tính thời vụ?",
+    "category": "visual_analysis",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "Xu hướng lặp lại 3 năm liên tiếp (2022-2024): NPL giảm trong Q4 rồi tăng lại Q1-Q2 năm sau. SSI nghi ngờ tính bền vững vì TPB đẩy mạnh xử lý nợ 1,4 nghìn tỷ và phân loại lại 1,8 nghìn tỷ về Nhóm 1 trong Q4/2025",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 3 trang 3: NPLs (cột xanh) + Group 2 (cột cam) + NPL ratios (đường), seasonal Q4 dip pattern"
+  },
+  {
+    "id": "q023",
+    "question": "Biểu đồ tỷ lệ bao phủ nợ xấu (LLCR) của các ngân hàng cho thấy TPB đứng ở đâu so với VCB và các NHTMCP khác?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "VCB có LLCR cao nhất (~200-250%), TPB thuộc nhóm trung bình-cao trong NHTMCP (~92-100%), cao hơn STB, VIB, OCB, MSB. Các NHTMNN (VCB, CTG, BID) nhìn chung có bộ đệm dự phòng dày hơn NHTMCP",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 4 trang 3: NPL ratios (cột trái) và Loss coverage ratios (cột phải) cho 13 ngân hàng"
+  },
+  {
+    "id": "q024",
+    "question": "Biểu đồ nợ xấu, nợ cần chú ý, khoản vay tái cơ cấu và tổng dự phòng của VCB từ 2015 đến 2025 cho thấy xu hướng gì về chất lượng tài sản dài hạn?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "Tổng dự phòng (aggregate provision) tăng liên tục từ ~10.000 tỷ (2015) lên ~30.000+ tỷ (2025), luôn vượt xa tổng nợ xấu + nợ cần chú ý + khoản vay tái cơ cấu. Cho thấy VCB xây dựng bộ đệm dự phòng ngày càng dày, chất lượng tài sản tốt nhất hệ thống",
+    "source_page": "3",
+    "doc": "VCB_2026_02_26_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ stacked bar trang 3: NPLs + SMLs + Restructured loan + Aggregate provision 2015-2025"
+  },
+  {
+    "id": "q025",
+    "question": "Biểu đồ thu nhập từ phí trên tổng tài sản của các ngân hàng cho thấy VCB đứng ở vị trí nào so với các ngân hàng tư nhân như TPB, VPB, TCB?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "VCB có tỷ lệ thu nhập phí/tổng tài sản thấp hơn nhóm ngân hàng tư nhân (TCB, VPB dẫn đầu ~0,7-0,8%). VCB khoảng 0,3-0,4%. Tuy nhiên giá trị tuyệt đối thu nhập phí (cột phải) của VCB vẫn thuộc top nhờ quy mô tài sản lớn",
+    "source_page": "3",
+    "doc": "VCB_2026_02_26_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ bar+line trang 3: Fee income to Total assets (cột trái %) và Fee income RHS (nghìn tỷ) cho 13 NH"
+  },
+  {
+    "id": "q026",
+    "question": "Biên lợi nhuận gộp và biên lợi nhuận ròng của TNG biến động thế nào từ Q1/2024 đến Q4/2025, và quý nào đạt đỉnh biên gộp?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "Biên gộp (gross margin) dao động 13-16%, đạt đỉnh ~16% vào Q1/2025. Biên ròng (net margin) dao động 3-6%, cải thiện rõ rệt từ Q4/2024 (~4%) lên Q4/2025 (~5,5%). Xu hướng cho thấy TNG đang cải thiện hiệu quả hoạt động",
+    "source_page": "2",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 2 đường trang 2: Gross margin và Net margin theo quý Q1/24-Q4/25"
+  },
+  {
+    "id": "q027",
+    "question": "Cơ cấu vốn vay của TNG (Equity, Current Liabilities, Long-term Liabilities, D/E) thay đổi thế nào từ 2020 đến 2025, và tỷ lệ D/E có xu hướng tăng hay giảm?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "D/E giảm từ ~4,5x (2020) xuống khoảng 1,5-1,7x (2025). Vốn chủ sở hữu tăng đều trong khi nợ ngắn hạn tăng chậm hơn. Cho thấy TNG đang giảm đòn bẩy tài chính, cải thiện cơ cấu vốn",
+    "source_page": "3",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ stacked bar + line trang 3: Equity/Current L/Long-term L (bar) + D/E ratio (line) 2020-2025"
+  },
+  {
+    "id": "q028",
+    "question": "Biểu đồ lợi suất tài sản, chi phí vốn và NIM của TPB cho thấy NIM phục hồi hay tiếp tục giảm trong Q4/2025? Nguyên nhân chính là gì?",
+    "category": "cross_modal",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "NIM phục hồi nhẹ +7 điểm cơ bản QoQ lên 3,18% trong Q4/2025. Nguyên nhân: lợi suất tài sản tăng +39 bps (tăng cho vay trung dài hạn + điều chỉnh lãi suất cho vay) nhanh hơn chi phí vốn tăng +33 bps. Chất lượng tài sản cải thiện cũng hỗ trợ NIM",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 6 trang 3: Asset yields (đường xanh), Funding costs (đường cam), NIM (đường đỏ, trục phải)"
+  },
+  {
+    "id": "q029",
+    "question": "So sánh tỷ lệ nợ xấu (NPL) của VCB và STB — ngân hàng nào có chất lượng tài sản tốt hơn, và STB đã cải thiện được bao nhiêu so với giai đoạn tái cơ cấu?",
+    "category": "multi_doc_comparison",
+    "requires": ["text", "table"],
+    "expected_answer_hint": "VCB có NPL thấp nhất hệ thống (~0,8-1,0%). STB đã cải thiện mạnh từ mức NPL rất cao trong giai đoạn tái cơ cấu xuống ~1,5-2% hiện tại, nhưng vẫn cao hơn VCB. STB phải xử lý tài sản tồn đọng từ việc sáp nhập Southern Bank",
+    "source_page": "1-2",
+    "doc": ["VCB_2026_02_26_SSIResearch", "STB_2025_12_08_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q030",
+    "question": "Thuế suất bình quân của Mỹ (tính đến tháng 11/2025) thay đổi thế nào theo biểu đồ, và điều này ảnh hưởng thế nào đến biên lợi nhuận xuất khẩu của TNG?",
+    "category": "cross_modal",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "Thuế suất bình quân Mỹ tăng từ ~2% lên ~20% (theo biểu đồ trang 3). TNG đã chuyển hướng tăng tỷ trọng xuất khẩu sang Châu Âu (từ 34% lên ~50% doanh thu) để giảm rủi ro thuế quan Mỹ. Tuy nhiên biên lợi nhuận gộp dự kiến bị thu hẹp do phải chia sẻ chi phí thuế đối ứng",
+    "source_page": "3",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ bar trang 3: US average tariff rate, tăng mạnh đến 2025"
+  },
+  {
+    "id": "q031",
+    "question": "Biểu đồ cơ cấu thu nhập hoạt động của TPB (NII, NFI, Trading income, Others) cho thấy mảng nào đóng góp lớn nhất và mảng nào biến động mạnh nhất theo quý?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "NII (thu nhập lãi thuần) đóng góp lớn nhất (~3.000-3.500 tỷ/quý), tăng ổn định. Mảng 'Others' (chủ yếu thu hồi nợ xấu đã xử lý) biến động mạnh nhất, có thời điểm âm. NFI (thu nhập phí) tăng dần. Trading income nhỏ và hay biến động",
+    "source_page": "4",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 7 trang 4: stacked bar NII, NFI, Trading income, Others theo quý"
+  },
+  {
+    "id": "q032",
+    "question": "Chi phí hoạt động (OPEX) và tỷ lệ CIR của TPB biến động thế nào theo quý, và tại sao Q4/2025 CIR giảm đột ngột xuống 22,8%?",
+    "category": "cross_modal",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "CIR Q4/2025 giảm mạnh xuống 22,8% (từ 37,9% Q3) nhờ chi phí nhân sự giảm 40% svck do tái cơ cấu tổ chức và sắp xếp lại nhân sự. Tuy nhiên pattern lịch sử cho thấy CIR thường tăng mạnh vào Q4 do chi thưởng — nên Q4/2025 là ngoại lệ đáng chú ý",
+    "source_page": "4",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 8 trang 4: OPEX (cột, nghìn tỷ) + CIR (đường, %, trục phải)"
+  },
+  {
+    "id": "q033",
+    "question": "Biểu đồ xuất khẩu dệt may Việt Nam cho thấy tăng trưởng doanh thu xuất khẩu thường mạnh hơn vào những năm có nhiều sự kiện thể thao lớn. Mức tăng trưởng trung bình của những năm có sự kiện thể thao là bao nhiêu?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "Tăng trưởng xuất khẩu dệt may vào những năm có sự kiện thể thao lớn (World Cup, Olympic) đạt 13-17%. Năm 2021 là ngoại lệ do ảnh hưởng Covid 2020. Năm 2026 kỳ vọng tăng trưởng nhờ FIFA World Cup",
+    "source_page": "3",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ bar trang 3: Xuất khẩu dệt may VN, highlight năm có sự kiện thể thao tăng 13-17%"
+  },
+  {
+    "id": "q034",
+    "question": "So sánh ROE và P/B của VCB, TPB và STB — ngân hàng nào có mức định giá hấp dẫn nhất khi xét tương quan giữa hiệu quả sinh lời và giá thị trường?",
+    "category": "multi_doc_comparison",
+    "requires": ["table"],
+    "expected_answer_hint": "TPB có P/B thấp nhất (~0,79x) với ROE ~18% → tương quan hấp dẫn nhất (giao dịch dưới book value). VCB có ROE thấp hơn (~18-20%) nhưng P/B cao nhất (~2,0-2,2x) do premium ngân hàng nhà nước. STB có ROE cải thiện nhưng P/B trung bình. TPB rẻ nhất theo P/B vs ROE",
+    "source_page": "1",
+    "doc": ["VCB_2026_02_26_SSIResearch", "TPB_2026_03_23_SSIResearch", "STB_2025_12_08_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q035",
+    "question": "TNG có tỷ lệ Nợ/VCSH giảm từ 1,66x (2024) xuống 1,52x (2025F), trong khi ROE duy trì 20%. Nếu TNG tiếp tục giảm đòn bẩy, ROE có thể bị ảnh hưởng thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "Giảm đòn bẩy thường kéo ROE giảm theo (công thức DuPont: ROE = Net margin × Asset turnover × Equity multiplier). SSI dự báo ROE 2026F giảm nhẹ xuống 19%. Tuy nhiên nếu biên ròng cải thiện (từ 4,1% lên 4,5%) có thể bù đắp bớt ảnh hưởng",
+    "source_page": "1-2",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q036",
+    "question": "VCB được SSI khuyến nghị MUA với giá mục tiêu bao nhiêu, và đâu là yếu tố chính tạo premium cho VCB so với các ngân hàng tư nhân như TPB hay STB?",
+    "category": "multi_doc_comparison",
+    "requires": ["text"],
+    "expected_answer_hint": "VCB khuyến nghị MUA với giá mục tiêu ~107.000 đồng/cp. Premium đến từ: (1) chất lượng tài sản tốt nhất hệ thống (NPL thấp nhất, LLCR cao nhất), (2) vị thế ngân hàng nhà nước dẫn đầu, (3) tiềm năng tăng vốn và thu nhập phí từ bancassurance, (4) dự phòng dồi dào tạo room giải phóng lợi nhuận tương lai",
+    "source_page": "1,3",
+    "doc": ["VCB_2026_02_26_SSIResearch", "TPB_2026_03_23_SSIResearch", "STB_2025_12_08_SSIResearch"],
+    "answer_in_text": true
+  },
+  {
+    "id": "q037",
+    "question": "TPB dự báo tỷ lệ nợ xấu tăng từ 1,28% lên 1,4% năm 2026 nhưng vẫn duy trì khuyến nghị KHẢ QUAN. Lý do nào khiến SSI lạc quan dù chất lượng tài sản dự kiến xấu đi?",
+    "category": "multi_hop_reasoning",
+    "requires": ["text", "table"],
+    "expected_answer_hint": "SSI vẫn lạc quan vì: (1) LLCR duy trì 100% — bộ đệm đủ dày, (2) LNTT dự báo tăng 14% svck lên 10,5 nghìn tỷ, (3) P/B chỉ 0,79x — dưới book value với ROE 18%, (4) tăng trưởng tín dụng 13,6% ổn định, (5) thu nhập phí tăng 16,3% từ thẻ và ngân hàng điện tử",
+    "source_page": "1,4",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q038",
+    "question": "Trong 4 công ty VCB, TPB, TNG, STB — so sánh tăng trưởng lợi nhuận năm 2025 svck. Doanh nghiệp nào đạt tốc độ tăng trưởng cao nhất?",
+    "category": "multi_doc_comparison",
+    "requires": ["table"],
+    "expected_answer_hint": "TNG tăng trưởng LNST cao nhất (+24,2% svck lên 392 tỷ), tiếp theo TPB (+21,1% LNTT lên 9,2 nghìn tỷ). VCB và STB có tốc độ tăng chậm hơn. TNG nổi bật nhờ đơn hàng xuất khẩu tăng mạnh và kiểm soát chi phí tốt",
+    "source_page": "1-2",
+    "doc": ["VCB_2026_02_26_SSIResearch", "TPB_2026_03_23_SSIResearch", "TNG_2026_01_27_SSIResearch", "STB_2025_12_08_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q039",
+    "question": "Chi phí bán hàng (S margin) và chi phí quản lý (GA margin) của TNG biến động thế nào từ Q1/2024 đến Q4/2025 theo biểu đồ? Xu hướng nào đáng chú ý nhất?",
+    "category": "visual_analysis",
+    "requires": ["image"],
+    "expected_answer_hint": "Cả S margin và GA margin đều có xu hướng giảm từ 2024 sang 2025, đặc biệt GA margin giảm rõ rệt từ ~7% xuống ~4-5%. Xu hướng đáng chú ý nhất là chi phí quản lý giảm mạnh nhờ tự động hóa và tăng năng suất lao động",
+    "source_page": "2",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 2 đường trang 2: S margin và GA margin theo quý Q1/24-Q4/25"
+  },
+  {
+    "id": "q040",
+    "question": "Nếu xếp hạng 4 cổ phiếu VCB, TPB, TNG, STB theo mức định giá từ rẻ nhất đến đắt nhất (dựa trên P/E và P/B), thứ tự sẽ như thế nào và đâu là lựa chọn giá trị tốt nhất?",
+    "category": "multi_doc_comparison",
+    "requires": ["table"],
+    "expected_answer_hint": "Rẻ nhất → đắt nhất (P/B): TPB (0,79x) → STB (~0,9x) → TNG (~1,06x) → VCB (~2,0x). Theo P/E: TPB (~5,1x) → TNG (~6,2x) → STB → VCB (cao nhất ~14-15x). TPB là lựa chọn giá trị tốt nhất với P/B dưới 1x và ROE 18%, tiềm năng tăng giá 23,8%",
+    "source_page": "1",
+    "doc": ["VCB_2026_02_26_SSIResearch", "TPB_2026_03_23_SSIResearch", "TNG_2026_01_27_SSIResearch", "STB_2025_12_08_SSIResearch"],
+    "answer_in_text": false
+  }
+]

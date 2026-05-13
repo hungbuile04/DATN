@@ -1,18 +1,16 @@
 # src/agents/agents.py
 
 """
-4 Agents cho Multi-Agent RAG (MDocAgent-inspired).
+3 Agents cho Multi-Agent RAG.
 
-Luồng 3 stages:
-    Stage 1: CriticalAgent (text + image + question) → critical info {text, image}
-    Stage 2: TextAgent     (text+table chunks + Tc)   → text-based answer
-             ImageAgent    (image chunks + Ic)         → image-based answer
-    Stage 3: SumAgent      (ghép thô aT + aI → chỉnh sửa mạch lạc)
+Luồng 2 stages:
+    Stage 1: TextAgent     (text+table chunks)   → text-based answer
+             ImageAgent    (image chunks)         → image-based answer
+    Stage 2: SumAgent      (ghép thô aT + aI → chỉnh sửa mạch lạc)
 
 Thiết kế:
-    - CriticalAgent: xác định keypoints → guide TextAgent + ImageAgent focus đúng hướng
     - TextAgent: text + table gộp (không tách TableAgent riêng)
-    - ImageAgent: OCR + visual analysis, guided by critical info
+    - ImageAgent: OCR + visual analysis
     - SumAgent: editor — nhận bản nháp ghép thô, chỉnh mạch lạc, KHÔNG viết lại
 """
 
@@ -43,68 +41,7 @@ class AgentOutput:
 
 
 # ──────────────────────────────────────────────
-# Critical Agent (Stage 1)
-# ──────────────────────────────────────────────
-
-CRITICAL_AGENT_PROMPT = """\
-Dựa trên câu hỏi và context, hãy xác định thông tin quan trọng cần tìm.
-
-Cho MỖI nguồn (text và image), liệt kê 2-3 điểm cần tập trung.
-ĐỂ RỘNG — không thu hẹp quá mức. Bao gồm cả thông tin trực tiếp lẫn liên quan.
-
-[FUZZ ENTITY] Nếu câu hỏi KHÔNG đề cập tên công ty hoặc mã cổ phiếu cụ thể, hãy
-xác định công ty nào trong context phù hợp nhất với đặc điểm mô tả trong câu hỏi
-(ví dụ: "công ty sản xuất sữa" → VNM, "ngân hàng có NIM cao nhất" → xem context).
-Đưa tên công ty đã xác định vào phần "text" để TextAgent biết cần tìm về ai.
-
-Ví dụ câu hỏi "NIM thay đổi thế nào từ Q2 sang Q3?":
-  text: "Tìm giá trị NIM ở Q2/2025 VÀ Q3/2025, nguyên nhân thay đổi, so sánh với các ngân hàng khác"
-  image: "Tìm biểu đồ NIM theo quý, đọc giá trị trục Y tại Q2 và Q3, xu hướng đường"
-
-Trả lời ĐÚNG định dạng JSON, KHÔNG thêm gì khác:
-{"text": "các điểm cần tìm trong text/bảng", "image": "các điểm cần nhìn trong biểu đồ"}"""
-
-
-class CriticalAgent:
-    """Extract critical info để guide TextAgent + ImageAgent."""
-
-    def __init__(self, client: OpenAI, model: str):
-        self.client = client
-        self.model = model
-
-    def extract(
-        self, question: str,
-        text_context: str,
-        image_context: str,
-    ) -> dict:
-        """
-        Returns: {"text": "...", "image": "..."}
-        """
-        user_msg = (
-            f"Câu hỏi: {question}\n\n"
-            f"Text context (tóm tắt):\n{text_context[:1500]}\n\n"
-            f"Image captions:\n{image_context[:500]}"
-        )
-
-        resp = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {"role": "system", "content": CRITICAL_AGENT_PROMPT},
-                {"role": "user",   "content": user_msg},
-            ],
-            temperature=0.1,
-        )
-        raw = resp.choices[0].message.content or ""
-        parsed = _parse_json(raw)
-
-        return {
-            "text":  parsed.get("text", ""),
-            "image": parsed.get("image", ""),
-        }
-
-
-# ──────────────────────────────────────────────
-# Text Agent (Stage 2a) — text + table combined
+# Text Agent — text + table combined
 # ──────────────────────────────────────────────
 
 TEXT_AGENT_PROMPT = """\
@@ -114,9 +51,6 @@ Nhiệm vụ:
 1. Trích xuất dữ kiện quan trọng: Tập trung vào số liệu, nhận định, khuyến nghị liên quan đến câu hỏi.
 2. Hiểu ngữ cảnh: Chú ý đến ý nghĩa và chi tiết trong văn bản và bảng.
 3. Trả lời rõ ràng: Dùng thông tin đã trích xuất để đưa ra câu trả lời ngắn gọn, chính xác.
-
-Bạn được cung cấp CRITICAL INFO — đây là gợi ý về phần quan trọng nhất cần tập trung.
-Hãy ưu tiên tìm thông tin liên quan đến critical info trong context.
 
 QUAN TRỌNG — Hai khả năng đặc biệt:
 [SELF-CORRECTION] CHỈ kích hoạt khi bạn CHẮC CHẮN 100% rằng câu hỏi có CON SỐ CỤ THỂ sai.
@@ -153,7 +87,7 @@ CHỈ trả lời JSON, không thêm gì khác."""
 
 
 class TextAgent:
-    """Phân tích text + table chunks, guided by critical info."""
+    """Phân tích text + table chunks."""
 
     def __init__(self, client: OpenAI, model: str):
         self.client = client
@@ -162,7 +96,7 @@ class TextAgent:
     def analyze(
         self, question: str,
         chunks: list[RetrievedChunk],
-        critical_info: str = "",
+        critical_info: str = "",          # giữ tham số cho backward compat, nhưng bỏ qua
     ) -> AgentOutput:
         if not chunks:
             return AgentOutput(
@@ -171,12 +105,7 @@ class TextAgent:
             )
 
         context = _format_chunks(chunks)
-
-        critical_section = ""
-        if critical_info:
-            critical_section = f"\n\nCRITICAL INFO (tập trung vào đây): {critical_info}"
-
-        user_msg = f"Context:\n{context}{critical_section}\n\nCâu hỏi: {question}"
+        user_msg = f"Context:\n{context}\n\nCâu hỏi: {question}"
 
         raw = self._call_llm(user_msg)
         parsed = _parse_json(raw)
@@ -200,46 +129,125 @@ class TextAgent:
                 {"role": "user",   "content": user_msg},
             ],
             temperature=0.1,
+            max_tokens=1500,
         )
+        if not resp.choices:
+            return ""
         return resp.choices[0].message.content or ""
 
 
 # ──────────────────────────────────────────────
-# Image Agent (Stage 2b)
+# Image Agent
 # ──────────────────────────────────────────────
 
 IMAGE_AGENT_PROMPT = """\
-Bạn là Image Agent chuyên phân tích và trích xuất thông tin từ hình ảnh biểu đồ tài chính.
-Hình ảnh có thể bao gồm biểu đồ đường, biểu đồ cột, biểu đồ tròn, hoặc ảnh chụp trang báo cáo.
+Bạn là Image Agent chuyên phân tích hình ảnh biểu đồ tài chính và trích xuất thông tin trực quan.
 
-Nhiệm vụ:
-1. ĐỌC TEXT trong ảnh (OCR): Trích xuất nhãn trục, legend, tiêu đề, số liệu trên biểu đồ.
-   Nêu rõ các CON SỐ CỤ THỂ mà bạn đọc được (VD: "GPM = 40,4% ở Q4/2025").
-2. PHÂN TÍCH trực quan: Nhận diện xu hướng, điểm cực đại/cực tiểu, giao điểm,
-   vị trí tương đối giữa các đường/cột.
-3. KẾT HỢP text và visual để trả lời câu hỏi chính xác.
+Vai trò của bạn là CUNG CẤP TÍN HIỆU TỪ HÌNH ẢNH để hỗ trợ các agent khác, KHÔNG phải để phủ định hoặc loại bỏ thông tin.
 
-Bạn được cung cấp CRITICAL INFO — đây là gợi ý về phần quan trọng nhất cần nhìn trong biểu đồ.
-Hãy tập trung vào vùng/chi tiết liên quan đến critical info.
+---
 
-Lưu ý quan trọng:
-- CHỈ trả lời dựa trên thông tin NHÌN THẤY trong ảnh. Không suy đoán thêm.
-- Nếu ảnh không rõ hoặc không liên quan đến câu hỏi, đặt confidence thấp và nói rõ.
-- Các agents khác có thể bổ sung thông tin từ text — bạn chỉ cần tập trung vào ảnh.
+## NHIỆM VỤ CHÍNH
 
-Trả lời dạng JSON:
+### 1. ĐỌC TEXT & SỐ LIỆU (OCR)
+
+* Trích xuất các thông tin nhìn thấy được:
+
+  * tiêu đề
+  * nhãn trục
+  * chú giải (legend)
+  * số liệu trên biểu đồ
+* Nếu không có số chính xác, hãy đưa ra giá trị xấp xỉ:
+
+  * ví dụ: "~4.8%", "khoảng 5%", "gần 10"
+
+---
+
+### 2. PHÂN TÍCH TRỰC QUAN
+
+* Xác định xu hướng:
+
+  * tăng / giảm / ổn định / biến động
+* So sánh tương đối:
+
+  * A cao hơn B
+  * đạt đỉnh / giảm mạnh / giao nhau
+* Nhận diện pattern quan trọng ngay cả khi không có số cụ thể
+
+---
+
+### 3. ƯU TIÊN TÍN HIỆU HỮU ÍCH
+
+* Nếu không có số chính xác:
+
+  * vẫn phải cung cấp:
+
+    * khoảng giá trị
+    * xu hướng
+    * quan hệ tương đối
+
+* KHÔNG được trả lời "không có thông tin" nếu vẫn có thể suy ra xu hướng hoặc so sánh
+
+---
+
+### 4. XỬ LÝ KHÔNG CHẮC CHẮN
+
+* Khi không chắc:
+
+  * dùng các từ:
+
+    * "khoảng"
+    * "có vẻ"
+    * "ước tính"
+    * "xấp xỉ"
+
+* Tránh khẳng định tuyệt đối nếu dữ liệu không rõ
+
+---
+
+## NGUYÊN TẮC QUAN TRỌNG
+
+* CHỈ sử dụng thông tin nhìn thấy trong ảnh
+* KHÔNG dùng kiến thức bên ngoài
+* KHÔNG bịa số liệu chính xác
+* KHÔNG phủ định quá sớm (tránh kiểu: "biểu đồ không có dữ liệu")
+* Vai trò của bạn là BỔ SUNG THÔNG TIN, không phải kiểm duyệt
+
+---
+
+## FORMAT OUTPUT (BẮT BUỘC JSON)
+
 {
-  "analysis": "Phân tích chi tiết từ biểu đồ (2-5 câu, nêu con số cụ thể đọc được)",
+  "analysis": "2–4 câu mô tả các số liệu (hoặc xấp xỉ), xu hướng và so sánh quan sát được từ biểu đồ",
   "confidence": 0.0-1.0,
   "chart_type": "line|bar|pie|other",
-  "trend": "tăng|giảm|ổn định|biến động"
+  "trend": "tăng|giảm|ổn định|biến động|không_rõ"
 }
 
+---
+
+## VÍ DỤ TỐT
+
+* "Biểu đồ cho thấy NIM giảm từ khoảng ~6% xuống ~4.5% từ Q2 sang Q3."
+* "ROE duy trì quanh mức ~20–25% và tương đối ổn định."
+* "Cột A luôn thấp hơn cột B trong toàn bộ giai đoạn."
+
+---
+
+## VÍ DỤ CẦN TRÁNH
+
+* "Biểu đồ không cung cấp thông tin" (khi vẫn có thể suy ra xu hướng)
+* "Không có dữ liệu" (khi có thể ước lượng hoặc so sánh)
+* Bịa số liệu cụ thể không nhìn thấy
+
+---
+
+Mục tiêu của bạn là: trích xuất tối đa tín hiệu hữu ích từ hình ảnh để hỗ trợ suy luận ở bước sau.
 CHỈ trả lời JSON, không thêm gì khác."""
 
 
 class ImageAgent:
-    """Phân tích biểu đồ, guided by critical info."""
+    """Phân tích biểu đồ."""
 
     def __init__(self, client: OpenAI, vision_model: str):
         self.client = client
@@ -248,7 +256,7 @@ class ImageAgent:
     def analyze(
         self, question: str,
         chunks: list[RetrievedChunk],
-        critical_info: str = "",
+        critical_info: str = "",          # giữ tham số cho backward compat, nhưng bỏ qua
     ) -> AgentOutput:
         if not chunks:
             return AgentOutput(
@@ -262,13 +270,9 @@ class ImageAgent:
             f"[{i+1}] {c.caption}" for i, c in enumerate(chunks) if c.caption
         )
 
-        critical_section = ""
-        if critical_info:
-            critical_section = f"\n\nCRITICAL INFO (tập trung nhìn vào đây): {critical_info}"
-
         content.append({
             "type": "text",
-            "text": f"Image captions:\n{caption_text}{critical_section}\n\nCâu hỏi: {question}",
+            "text": f"Image captions:\n{caption_text}\n\nCâu hỏi: {question}",
         })
 
         n_img = 0
@@ -309,12 +313,15 @@ class ImageAgent:
                 {"role": "user",   "content": content},
             ],
             temperature=0.1,
+            max_tokens=1500,
         )
+        if not resp.choices:
+            return ""
         return resp.choices[0].message.content or ""
 
 
 # ──────────────────────────────────────────────
-# Sum Agent (Stage 3) — editor, not writer
+# Sum Agent — editor, not writer
 # ──────────────────────────────────────────────
 
 SUM_AGENT_PROMPT = """\
@@ -411,13 +418,24 @@ class SumAgent:
                 {"role": "user",   "content": user_msg},
             ],
             temperature=0.1,
+            max_tokens=2000,
         )
+        if not resp.choices:
+            return ""
         return resp.choices[0].message.content or ""
 
 
 # ──────────────────────────────────────────────
 # Backward compatibility
 # ──────────────────────────────────────────────
+
+# CriticalAgent stub — giữ lại cho backward compat (import cũ không bị vỡ)
+class CriticalAgent:
+    """Deprecated — CriticalAgent đã bị loại bỏ khỏi pipeline chính."""
+    def __init__(self, client, model):
+        pass
+    def extract(self, question="", text_context="", image_context=""):
+        return {"text": "", "image": ""}
 
 # TableAgent = TextAgent (gộp)
 TableAgent = TextAgent
@@ -446,12 +464,33 @@ def _format_chunks(chunks: list[RetrievedChunk]) -> str:
     return "\n\n---\n\n".join(parts)
 
 
-def _encode_image(img_path: str) -> str | None:
+def _encode_image(img_path: str, max_long_edge: int = 1280) -> str | None:
+    """
+    Encode ảnh sang base64, resize nếu vượt max_long_edge.
+    Giảm ~50% token cost cho Image Agent mà không mất chi tiết biểu đồ.
+    """
     try:
-        with open(img_path, "rb") as f:
-            return base64.b64encode(f.read()).decode("utf-8")
-    except (FileNotFoundError, OSError):
-        return None
+        from PIL import Image
+        import io
+
+        img = Image.open(img_path)
+        w, h = img.size
+        long_edge = max(w, h)
+
+        if long_edge > max_long_edge:
+            scale = max_long_edge / long_edge
+            img = img.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
+
+        buf = io.BytesIO()
+        img.save(buf, format="PNG", optimize=True)
+        return base64.b64encode(buf.getvalue()).decode("utf-8")
+    except (FileNotFoundError, OSError, ImportError):
+        # Fallback: đọc raw nếu PIL không có
+        try:
+            with open(img_path, "rb") as f:
+                return base64.b64encode(f.read()).decode("utf-8")
+        except (FileNotFoundError, OSError):
+            return None
 
 
 def _parse_json(text: str) -> dict:

@@ -4,7 +4,7 @@ Streamlit Demo — Hệ thống RAG Phân tích Tài chính Đa phương thức 
 Giao diện demo cho đồ án tốt nghiệp:
     - Hỏi đáp tài chính (Q&A)
     - Hiển thị pipeline retrieval (text + image)
-    - Trực quan hóa luồng reasoning 4-agent
+    - Trực quan hóa luồng reasoning 3-agent (Text + Image → Sum)
     - Thống kê hệ thống
 """
 
@@ -24,6 +24,7 @@ load_dotenv(ROOT / ".env")
 from config.settings import CFG
 from src.retrieval.retriever import DualRetriever, RetrievalResult
 from src.agents.orchestrator import MultiAgentOrchestrator
+from src.eval.generator import AnswerGenerator
 
 # ─────────────────────────────────────────────
 # Page config
@@ -61,7 +62,6 @@ st.markdown("""
         margin-bottom: 0.8rem;
         background: #fafbfc;
     }
-    .agent-card.critical { border-left: 4px solid #e74c3c; }
     .agent-card.text     { border-left: 4px solid #3498db; }
     .agent-card.image    { border-left: 4px solid #2ecc71; }
     .agent-card.sum      { border-left: 4px solid #f39c12; }
@@ -133,12 +133,12 @@ st.markdown("""
 
 @st.cache_resource(show_spinner="Đang khởi tạo hệ thống RAG...")
 def init_system():
-    """Khởi tạo Retriever và Orchestrator một lần."""
+    """Khởi tạo Retriever, Orchestrator, và AnswerGenerator một lần."""
     google_key = os.getenv("GOOGLE_API_KEY", "")
     openrouter_key = os.getenv("OPENROUTER_API_KEY", "")
 
     if not google_key or not openrouter_key:
-        return None, None, "Thiếu GOOGLE_API_KEY hoặc OPENROUTER_API_KEY trong .env"
+        return None, None, None, "Thiếu GOOGLE_API_KEY hoặc OPENROUTER_API_KEY trong .env"
 
     retriever = DualRetriever(
         chroma_path=str(CFG["paths"]["vector_db"]),
@@ -152,7 +152,13 @@ def init_system():
         vision_model=CFG["agents"]["vision_model"],
     )
 
-    return retriever, orchestrator, None
+    generator = AnswerGenerator(
+        api_key=openrouter_key,
+        text_model=CFG["agents"]["llm_model"],
+        vision_model=CFG["agents"]["vision_model"],
+    )
+
+    return retriever, orchestrator, generator, None
 
 
 def get_system_stats(retriever: DualRetriever) -> dict:
@@ -212,6 +218,28 @@ def render_sidebar(retriever):
     with st.sidebar:
         st.markdown("## ⚙️ Cấu hình")
 
+        # ── Chế độ trả lời ──
+        MODE_OPTIONS = {
+            "multi_agent": "🤖 Multi-Agent (3 Agents)",
+            "single_llm": "💬 Single LLM",
+        }
+        answer_mode = st.radio(
+            "Chế độ trả lời",
+            options=list(MODE_OPTIONS.keys()),
+            format_func=lambda k: MODE_OPTIONS[k],
+            index=0,
+            help="**Multi-Agent:** 3-agent pipeline (Text + Image song song → Sum). "
+                 "**Single LLM:** 1 lần gọi LLM duy nhất với toàn bộ context.",
+        )
+
+        # Hiển thị mô tả ngắn
+        if answer_mode == "multi_agent":
+            st.caption("3 LLM calls: Text + Image (song song) → Sum Agent")
+        else:
+            st.caption("1 LLM call: gửi toàn bộ text + image context cho LLM")
+
+        st.markdown("")
+
         text_top_k = st.slider(
             "Số lượng Text chunks (top-k)",
             min_value=1, max_value=15, value=5,
@@ -267,7 +295,7 @@ def render_sidebar(retriever):
             if st.button(s, key=f"sample_{hash(s)}", use_container_width=True):
                 st.session_state["sample_question"] = s
 
-    return text_top_k, image_top_k
+    return text_top_k, image_top_k, answer_mode
 
 
 # ─────────────────────────────────────────────
@@ -339,14 +367,12 @@ def render_retrieval_results(result: RetrievalResult):
 # ─────────────────────────────────────────────
 
 def render_agent_pipeline(final: dict):
-    """Hiển thị quá trình reasoning của 4-agent pipeline."""
+    """Hiển thị quá trình reasoning của 3-agent pipeline."""
     st.markdown("### 🤖 Multi-Agent Reasoning Pipeline")
 
-    # Pipeline flow diagram
-    cols = st.columns([1, 0.3, 1, 0.3, 1, 0.3, 1])
+    # Pipeline flow diagram: Text + Image (song song) → Sum
+    cols = st.columns([1, 0.3, 1, 0.3, 1])
     stages = [
-        ("🎯", "Critical Agent", "#e74c3c"),
-        ("→", "", ""),
         ("📄", "Text Agent", "#3498db"),
         ("+", "", ""),
         ("🖼️", "Image Agent", "#2ecc71"),
@@ -370,19 +396,9 @@ def render_agent_pipeline(final: dict):
                 </div>
                 """, unsafe_allow_html=True)
 
-    st.markdown("")
+    st.caption("⚡ Text Agent và Image Agent chạy song song (parallel), giảm ~40% latency")
 
-    # Critical Info
-    critical_info = final.get("critical_info", {})
-    if critical_info:
-        with st.expander("🎯 Stage 1: Critical Agent — Xác định thông tin trọng yếu", expanded=False):
-            col1, col2 = st.columns(2)
-            with col1:
-                st.markdown("**Trọng tâm Text:**")
-                st.info(critical_info.get("text", "N/A"))
-            with col2:
-                st.markdown("**Trọng tâm Image:**")
-                st.info(critical_info.get("image", "N/A"))
+    st.markdown("")
 
     # Agent outputs
     agent_outputs = final.get("agent_outputs", {})
@@ -393,7 +409,7 @@ def render_agent_pipeline(final: dict):
     col_text, col_image = st.columns(2)
 
     with col_text:
-        with st.expander("📄 Stage 2a: Text Agent — Phân tích văn bản & bảng", expanded=False):
+        with st.expander("📄 Stage 1a: Text Agent — Phân tích văn bản & bảng", expanded=False):
             if text_out.get("has_data"):
                 render_confidence(text_out.get("confidence", 0), "Text Confidence")
                 st.markdown("**Phân tích:**")
@@ -402,7 +418,7 @@ def render_agent_pipeline(final: dict):
                 st.warning("Text Agent không nhận được dữ liệu.")
 
     with col_image:
-        with st.expander("🖼️ Stage 2b: Image Agent — Phân tích biểu đồ", expanded=False):
+        with st.expander("🖼️ Stage 1b: Image Agent — Phân tích biểu đồ", expanded=False):
             if image_out.get("has_data"):
                 render_confidence(image_out.get("confidence", 0), "Image Confidence")
                 st.markdown("**Phân tích:**")
@@ -412,7 +428,7 @@ def render_agent_pipeline(final: dict):
 
     # Sum Agent reasoning
     if final.get("reasoning"):
-        with st.expander("✏️ Stage 3: Sum Agent — Biên tập & tổng hợp", expanded=False):
+        with st.expander("✏️ Stage 2: Sum Agent — Biên tập & tổng hợp", expanded=False):
             st.markdown(final["reasoning"])
 
 
@@ -480,14 +496,14 @@ def main():
     """, unsafe_allow_html=True)
 
     # Init system
-    retriever, orchestrator, error = init_system()
+    retriever, orchestrator, generator, error = init_system()
 
     if error:
         st.error(f"Lỗi khởi tạo: {error}")
         st.stop()
 
     # Sidebar
-    text_top_k, image_top_k = render_sidebar(retriever)
+    text_top_k, image_top_k, answer_mode = render_sidebar(retriever)
 
     # ── Tabs chính ──
     tab_chat, tab_arch = st.tabs(["💬 Hỏi đáp", "🏗️ Kiến trúc hệ thống"])
@@ -541,28 +557,61 @@ def main():
                         status.update(label="❌ Retrieval thất bại", state="error")
                         st.stop()
 
-                # Step 2: Agent Reasoning
-                with st.status("🧠 Các agent đang phân tích...", expanded=True) as status:
-                    st.write("Stage 1: Critical Agent — xác định trọng tâm...")
-                    st.write("Stage 2: Text Agent + Image Agent — phân tích song song...")
-                    st.write("Stage 3: Sum Agent — tổng hợp & biên tập...")
-                    t0 = time.time()
-                    try:
-                        final = orchestrator.run(question, result)
-                        reasoning_time = time.time() - t0
-                        st.write(f"✅ Hoàn tất reasoning ({reasoning_time:.1f}s)")
-                        status.update(label=f"🧠 Reasoning hoàn tất ({reasoning_time:.1f}s)", state="complete")
-                    except Exception as e:
-                        st.error(f"Lỗi reasoning: {e}")
-                        status.update(label="❌ Reasoning thất bại", state="error")
-                        st.stop()
+                # Step 2: Generation (phân nhánh theo chế độ)
+                if answer_mode == "multi_agent":
+                    # ── Multi-Agent: 3-agent pipeline ──
+                    with st.status("🤖 Multi-Agent đang phân tích...", expanded=True) as status:
+                        st.write("Stage 1: Text Agent + Image Agent — phân tích song song...")
+                        st.write("Stage 2: Sum Agent — tổng hợp & biên tập...")
+                        t0 = time.time()
+                        try:
+                            final = orchestrator.run(question, result)
+                            reasoning_time = time.time() - t0
+                            st.write(f"✅ Hoàn tất 3-agent reasoning ({reasoning_time:.1f}s)")
+                            status.update(label=f"🤖 Multi-Agent hoàn tất ({reasoning_time:.1f}s)", state="complete")
+                        except Exception as e:
+                            st.error(f"Lỗi reasoning: {e}")
+                            status.update(label="❌ Multi-Agent thất bại", state="error")
+                            st.stop()
+                else:
+                    # ── Single LLM: 1 lần gọi duy nhất ──
+                    gen_mode = "full_multimodal" if result.image_chunks else "text_table"
+                    with st.status(f"💬 Single LLM đang sinh câu trả lời ({gen_mode})...", expanded=True) as status:
+                        st.write(f"Gửi {len(result.text_chunks)} text + {len(result.image_chunks)} image chunks cho LLM...")
+                        t0 = time.time()
+                        try:
+                            gen_result = generator.generate(question, result, mode=gen_mode)
+                            reasoning_time = time.time() - t0
+                            # Chuẩn hóa output giống multi-agent để render chung
+                            final = {
+                                "answer": gen_result["answer"],
+                                "model": gen_result["model"],
+                                "has_image": gen_result["has_image"],
+                                "num_images": gen_result["num_images"],
+                                "confidence": 0.0,  # Single LLM không trả confidence
+                                "sources": [
+                                    {"chunk_id": c.chunk_id, "page": c.page, "doc": c.doc}
+                                    for c in result.text_chunks
+                                ] + [
+                                    {"chunk_id": c.chunk_id, "page": c.page, "doc": c.doc, "img_path": c.img_path}
+                                    for c in result.image_chunks
+                                ],
+                                "reasoning": "",
+                                "agent_outputs": {},
+                            }
+                            st.write(f"✅ Hoàn tất ({reasoning_time:.1f}s) — model: {gen_result['model']}")
+                            status.update(label=f"💬 Single LLM hoàn tất ({reasoning_time:.1f}s)", state="complete")
+                        except Exception as e:
+                            st.error(f"Lỗi generation: {e}")
+                            status.update(label="❌ Single LLM thất bại", state="error")
+                            st.stop()
 
                 # Hiển thị câu trả lời
                 answer_text = final.get("answer", "Không thể tạo câu trả lời.")
                 st.markdown(answer_text)
 
-                confidence = final.get("confidence", 0)
-                render_confidence(confidence, "Độ tin cậy")
+                if answer_mode == "multi_agent":
+                    render_confidence(final.get("confidence", 0), "Độ tin cậy")
 
                 # Lưu vào history
                 st.session_state.messages.append({"role": "assistant", "content": answer_text})
@@ -570,6 +619,7 @@ def main():
                     "question": question,
                     "result": result,
                     "final": final,
+                    "answer_mode": answer_mode,
                     "retrieval_time": retrieval_time,
                     "reasoning_time": reasoning_time,
                 })
@@ -579,13 +629,15 @@ def main():
 
             # Render chi tiết
             render_answer(final)
-            render_agent_pipeline(final)
+            if answer_mode == "multi_agent":
+                render_agent_pipeline(final)
             render_retrieval_results(result)
             render_sources(final)
 
             # Timing
+            mode_label = "Multi-Agent" if answer_mode == "multi_agent" else "Single LLM"
             total_time = retrieval_time + reasoning_time
-            st.caption(f"⏱️ Tổng thời gian: {total_time:.1f}s (Retrieval: {retrieval_time:.1f}s | Reasoning: {reasoning_time:.1f}s)")
+            st.caption(f"⏱️ Tổng thời gian: {total_time:.1f}s (Retrieval: {retrieval_time:.1f}s | {mode_label}: {reasoning_time:.1f}s)")
 
     # ═══════════════════════════════════════════
     # Tab 2: Kiến trúc hệ thống
@@ -631,42 +683,46 @@ def main():
             - **Dual Retrieval:**
               - Text: Dense + ticker boost
               - Image: Dense + ticker hard filter
-            - **4-Agent Reasoning:**
-              - Critical → Text + Image → Sum
+            - **3-Agent Reasoning:**
+              - Text + Image (song song) → Sum
             """)
 
         st.markdown("---")
 
         # Multi-Agent detail
-        st.markdown("### 🤖 Multi-Agent Reasoning (4 Agents)")
+        st.markdown("### 🤖 Multi-Agent Reasoning (3 Agents)")
+        st.caption("⚡ Text Agent và Image Agent chạy SONG SONG — giảm ~40% latency")
 
         c1, c2 = st.columns(2)
 
         with c1:
             st.markdown("""
-            #### 🎯 Stage 1: Critical Agent
-            - Xác định thông tin trọng yếu từ câu hỏi + context
-            - Hướng dẫn Text/Image Agent tập trung đúng vấn đề
-            - **FUZZ ENTITY:** Suy luận công ty khi câu hỏi mơ hồ
-
-            #### 📄 Stage 2a: Text Agent
+            #### 📄 Stage 1a: Text Agent
             - Phân tích văn bản và bảng số liệu
-            - **SELF-CORRECTION:** Phát hiện & sửa lỗi dữ kiện
+            - **SELF-CORRECTION:** Phát hiện & sửa lỗi dữ kiện trong câu hỏi
+            - **FUZZ ENTITY:** Suy luận công ty khi câu hỏi mơ hồ
             - Trích xuất key facts, metrics, reasoning
+
+            #### 🖼️ Stage 1b: Image Agent
+            - Phân tích biểu đồ bằng Vision LLM
+            - OCR text, đọc trục, đọc số liệu
+            - Nhận diện xu hướng (tăng/giảm/ổn định)
+            - Trả về tín hiệu xấp xỉ khi không có số chính xác
             """)
 
         with c2:
             st.markdown("""
-            #### 🖼️ Stage 2b: Image Agent
-            - Phân tích biểu đồ bằng Vision LLM
-            - OCR text, đọc trục, nhận diện xu hướng
-            - Hỗ trợ: đường, cột, tròn, hỗn hợp
-
-            #### ✏️ Stage 3: Sum Agent (Editor)
+            #### ✏️ Stage 2: Sum Agent (Editor)
             - Nhận bản nháp ghép từ Text + Image Agent
             - **Chỉ chỉnh sửa**, không viết lại
-            - Xử lý mâu thuẫn, loại trùng lặp
+            - Xử lý mâu thuẫn (giữ cả 2 nguồn, ghi chú rõ)
+            - Loại trùng lặp giữa 2 agents
             - Giữ nguyên mọi dữ kiện & con số
+
+            #### ⚡ Tối ưu hiệu năng
+            - 2 agents Stage 1 chạy parallel (`ThreadPoolExecutor`)
+            - Resize ảnh max 1280px → giảm ~50% token cost
+            - Tổng: 3 LLM calls/câu hỏi
             """)
 
         st.markdown("---")

@@ -52,7 +52,7 @@ def run_comparison(
     text_top_k: int = 5,
     image_top_k: int = 3,
     use_judge: bool = False,
-    judge_model: str = "google/gemini-2.5-flash",
+    judge_model: str = "openai/gpt-4o-mini",
     skip_baselines: bool = False,
     skip_multi_agent: bool = False,
     judge_target: str = "all",
@@ -375,7 +375,7 @@ if __name__ == "__main__":
     parser.add_argument("--judge", action="store_true",
                         help="Bật LLM-as-a-Judge chấm điểm tự động")
     parser.add_argument("--judge_model", type=str,
-                        default="google/gemini-2.5-flash",
+                        default="openai/gpt-4o-mini",
                         help="Model dùng làm judge")
     parser.add_argument("--skip_baselines", action="store_true",
                         help="Bỏ qua việc chạy 3 mode baselines (text_only, text_table, full_multimodal)")

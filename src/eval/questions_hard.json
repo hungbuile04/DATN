@@ -1,0 +1,1245 @@
+[
+  {
+    "id": "q001",
+    "question": "Cơ cấu tín dụng của MBB thay đổi thế nào từ 2022 đến Q3/2025, và sự dịch chuyển tỷ trọng giữa các ngành cho vay kết hợp với NPL tăng lên 1,87% phản ánh rủi ro danh mục gì?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Biểu đồ cơ cấu tín dụng cho thấy tỷ trọng sản xuất chế biến và BĐS & xây dựng tăng mạnh từ 2022 đến Q3/2025, trong khi trái phiếu doanh nghiệp giảm dần. Vay cá nhân, chứng khoán (qua MBS) cũng tăng. NPL tăng từ 1,62% lên 1,87% chủ yếu do khoản vay năng lượng tái tạo (PPA EVN) tạm chuyển nhóm + nợ quá hạn tăng 18% svck. Rủi ro tập trung vào BĐS và sản xuất — hai ngành nhạy cảm với chu kỳ kinh tế",
+    "source_page": "2-3",
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 1 trang 3: Cơ cấu tín dụng 2022-Q3/2025 (stacked bar ngang)"
+  },
+  {
+    "id": "q002",
+    "question": "Giá vonfram tăng từ mức ~300 USD/tấn giai đoạn 2020-2023 lên gần 1.700 USD/tấn đầu 2026. Mức tăng phi tuyến này tác động thế nào đến LNST của Masan Resources và tổng lợi nhuận hợp nhất MSN?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "image",
+      "table"
+    ],
+    "expected_answer_hint": "Biểu đồ giá vonfram cho thấy giai đoạn 2020-2024 giá sideway 200-500 USD/tấn, rồi tăng thẳng đứng lên 1.685 USD/tấn (2/2026) do Trung Quốc hạn chế xuất khẩu. MSR đảo chiều từ lỗ 1.587 tỷ (2024) → lãi 11 tỷ (2025) → 2.150 tỷ (2026F). MSR đóng góp 13% DT hợp nhất (vs 9,1% năm 2025). SSI điều chỉnh tăng LNST MSN từ 7,13 lên 9,58 nghìn tỷ chủ yếu nhờ giá vonfram vượt xa giả định 900 USD/tấn",
+    "source_page": "4-5",
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ diễn biến giá vonfram 2020-2026 trang 4"
+  },
+  {
+    "id": "q003",
+    "question": "Xu hướng biên lợi nhuận gộp (GPM) và biên lợi nhuận ròng (NPM) của VNM qua các quý gần đây có đồng pha không, và khoảng cách giữa hai chỉ số này phản ánh điều gì về hiệu quả kiểm soát chi phí?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Biểu đồ biên lợi nhuận theo quý cho thấy GPM và NPM không hoàn toàn đồng pha: GPM cải thiện nhẹ (+30 điểm cơ bản svck Q4/2025 nhờ giá sữa WMP/SMP giảm) nhưng NPM cải thiện mạnh hơn nhiều (+270 điểm cơ bản) nhờ chi phí bán hàng (Selling/DTT) giảm 5% svck. Khoảng cách GPM-NPM thu hẹp cho thấy VNM tiết kiệm marketing hiệu quả. Tuy nhiên SSI dự báo chi phí marketing sẽ tăng trở lại 2026 để hỗ trợ tăng trưởng",
+    "source_page": "2-3",
+    "doc": "VNM_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ biên lợi nhuận theo quý VNM (GPM + NPM) trang 2"
+  },
+  {
+    "id": "q004",
+    "question": "Doanh số bán hàng của NLG trong Q4/2025 đạt đỉnh kỷ lục nhưng doanh thu kế toán cùng quý chỉ bằng ~25% doanh số. Xu hướng doanh số theo quý từ 2023 đến 2025 cho thấy dự án nào đang là động lực chính?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "image",
+      "table"
+    ],
+    "expected_answer_hint": "Biểu đồ doanh số bán hàng theo quý (stacked bar) cho thấy Q4/2025 đạt ~5.000 tỷ — cao nhất cả giai đoạn. Southgate (màu nổi bật) chiếm tỷ trọng lớn nhất (44% lũy kế 2025), tiếp theo là Izumi City (17%), Central Lake (14%). Doanh số Q4 tăng đột biến nhờ NLG nhận giấy phép bán hàng nhiều phân khu mới + hỗ trợ lãi suất 9%. Tỷ lệ chuyển hóa 25% (1.704/6.851 tỷ) phản ánh độ trễ 2-3 năm BĐS ghi nhận khi bàn giao",
+    "source_page": "1-2",
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 1 trang 2: Doanh số bán hàng NLG theo quý 2023-2025 (stacked bar)"
+  },
+  {
+    "id": "q005",
+    "question": "Tỷ lệ hình thành nợ xấu và chi phí tín dụng của MBB biến động thế nào qua các quý từ 2019 đến Q3/2025, và giai đoạn nào cho thấy rủi ro tín dụng cao nhất?",
+    "category": "trick",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Biểu đồ 4 cho thấy tỷ lệ hình thành nợ xấu (đường đỏ) đạt đỉnh giai đoạn 2020-2021 (Covid, ~1,0-1,2%) rồi giảm mạnh về ~0,2-0,4% (2022-2024). Tuy nhiên Q2-Q3/2025 tăng vọt lên 0,65% — gấp đôi Q2. Chi phí tín dụng (đường nâu) cũng tăng theo nhưng có độ trễ. Bẫy: nhìn NPL tuyệt đối (1,87%) có vẻ thấp, nhưng tốc độ hình thành nợ xấu gấp đôi mới là chỉ báo leading đáng lo ngại hơn. Giai đoạn hiện tại rủi ro cao thứ hai sau Covid",
+    "source_page": "3",
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 4 trang 3: Tỷ lệ hình thành nợ xấu và chi phí tín dụng theo quý 2019-Q3/2025"
+  },
+  {
+    "id": "q006",
+    "question": "So sánh ROE của VNM (~27-29%), VHM (~16-17%) và VEA (tính từ LNST/VCSH). Doanh nghiệp nào có hiệu quả sinh lời trên vốn chủ tốt nhất, và mức ROE đó có phản ánh đúng chất lượng kinh doanh khi xét thêm tỷ lệ Nợ/VCSH?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VNM có ROE cao nhất (~27-29%) với đòn bẩy rất thấp (Nợ/VCSH 0,24-0,27x), cho thấy hiệu quả thực sự cao. VHM có ROE 16-17% nhưng Nợ/VCSH tăng từ 0,24 lên 0,5x — ROE được hỗ trợ bởi đòn bẩy. VEA có biên lợi nhuận hoạt động >149% (do thu nhập liên kết) nhưng quy mô nhỏ",
+    "source_page": "1",
+    "doc": [
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q007",
+    "question": "VEA có lợi nhuận hoạt động đạt 1,63 nghìn tỷ đồng trong Q3/2025, gấp ~1,5 lần doanh thu thuần (1,09 nghìn tỷ). Điều này có hợp lý không, và cấu trúc lợi nhuận đặc biệt này phản ánh điều gì về mô hình kinh doanh của VEA?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Hoàn toàn hợp lý — VEA là holding company, thu nhập chính đến từ cổ tức và lợi nhuận từ công ty liên kết (Honda VN 30%, Toyota VN 20%, Ford VN 25%). Thu nhập liên kết (~1,45 nghìn tỷ) vượt xa doanh thu hoạt động tự thân, tạo biên lợi nhuận hoạt động >100%",
+    "source_page": "1-2",
+    "doc": "VEA_2025_12_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q008",
+    "question": "Doanh số xe máy Honda giảm 7% svck trong Q3/2025 do quy định hạn chế xe máy xăng tại Hà Nội từ 1/7/2026. Nếu xu hướng điện hóa tiếp tục và Honda chuyển sang xe máy điện với giá bán cao hơn 18-20% so với VinFast/Yadea, điều này ảnh hưởng thế nào đến cổ tức mà VEA nhận được từ Honda?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Xe máy điện Honda giá cao hơn 18-20% có thể giảm thị phần trước VinFast và Yadea. Nếu doanh số giảm, lợi nhuận Honda VN giảm → cổ tức cho VEA (sở hữu 30%) giảm theo. SSI dự báo LNST 2026 giảm 14% svck, cổ tức kỳ vọng ~5.390 đồng/cp",
+    "source_page": "2-3",
+    "doc": "VEA_2025_12_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q009",
+    "question": "So sánh chiến lược tăng trưởng của VPB (tăng trưởng tín dụng +29%, tập trung BĐS) với VHM (doanh số bán hàng +75% svck, mở bán đại dự án). Hai doanh nghiệp này đang đặt cược vào cùng một xu hướng bất động sản — nếu thị trường BĐS đảo chiều, doanh nghiệp nào chịu rủi ro lớn hơn?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "VPB chịu rủi ro lớn hơn vì: (1) cho vay BĐS chiếm tỷ trọng lớn trong tăng trưởng tín dụng, (2) tài sản bảo đảm chất lượng giảm (70% là 'Tài sản khác'), (3) LLC chỉ 13%. VHM có quỹ đất lớn và backlog cao, có thể điều chỉnh tốc độ bàn giao linh hoạt hơn",
+    "source_page": "1-3",
+    "doc": [
+      "VPB_2025_12_05_SSIResearch(1)",
+      "VHM_2025_12_15_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q010",
+    "question": "VNM dự báo tăng trưởng LNST năm 2026 chỉ +6,3% svck, trong khi VHM dự báo NPATMI tăng +8% svck. Tuy nhiên P/E 2026F của VNM (~17x) cao gấp 1,6 lần VHM (~10,6x). Giải thích tại sao thị trường sẵn sàng trả premium cao hơn cho VNM dù tăng trưởng thấp hơn?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VNM có: (1) dòng tiền ổn định và dự đoán được (FMCG), (2) tỷ suất cổ tức 6%, (3) ROE 27-29% với đòn bẩy thấp, (4) rủi ro thấp hơn. VHM có tính chu kỳ cao, doanh thu phụ thuộc thời điểm bàn giao, và rủi ro BĐS lớn → thị trường yêu cầu risk discount",
+    "source_page": "1",
+    "doc": [
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q011",
+    "question": "Tỷ lệ CIR (Chi phí trên thu nhập) của VPB đạt 24,9% trong Q3/2025, tăng từ 22,0% trong Q2/2025. Đồng thời chi phí dự phòng rủi ro tín dụng đạt 6.125 tỷ đồng. Nếu CIR tiếp tục tăng trong khi chi phí dự phòng không giảm, LNTT dự phóng 2026 của VPB có khả thi không?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "CIR tăng 2,9 điểm % là dấu hiệu hiệu quả hoạt động giảm. Với LNTT Q3 đạt 5.187 tỷ và lũy kế 9T đạt 20.396 tỷ (81% kế hoạch), VPB cần Q4 đạt ~4.800 tỷ. Nếu CIR tiếp tục tăng + chi phí dự phòng cao, mục tiêu sẽ bị đe dọa nhưng vẫn khả thi do LNTT Q3 đã tăng 77% svck",
+    "source_page": "2",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": false
+  },
+  {
+    "id": "q012",
+    "question": "VNM có doanh thu xuất khẩu tăng 26% svck trong Q4/2025, trong khi doanh thu nội địa chỉ tăng 8%. Phân khúc cao cấp/siêu cao cấp chiếm ~10% doanh thu. Nếu VNM tiếp tục đẩy mạnh xuất khẩu và phân khúc cao cấp, biên lợi nhuận gộp dự phóng 42,6% cho 2026 có hợp lý không?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Hợp lý vì: (1) xuất khẩu tăng nhanh giúp tối ưu công suất, (2) phân khúc cao cấp có biên cao hơn, (3) giá nguyên liệu sữa duy trì thấp trong 2026. Tuy nhiên, rủi ro là chi phí marketing sẽ tăng mạnh để hỗ trợ mở rộng, có thể ăn vào biên ròng",
+    "source_page": "1-2",
+    "doc": "VNM_2026_02_24_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q013",
+    "question": "VHM có biên lợi nhuận gộp Q3/2025 chỉ đạt 15,0%, giảm mạnh từ 29,3% (Q3/2024) và 22,1% (Q2/2025). Tuy nhiên SSI dự báo biên gộp cả năm 2025 đạt 38% và 2026 đạt 41%. Sự chênh lệch lớn này có hợp lý không?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Hợp lý vì biên gộp quý đơn lẻ phụ thuộc vào cơ cấu sản phẩm bàn giao. Q3 có thể bàn giao chủ yếu sản phẩm biên thấp. Doanh thu cả năm sẽ bao gồm các dự án biên cao hơn (từ backlog 182 nghìn tỷ doanh số), đẩy biên trung bình lên. VHM đã từng có biên 49% năm 2022",
+    "source_page": "1-2",
+    "doc": "VHM_2025_12_15_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q014",
+    "question": "Trong 4 doanh nghiệp VPB, VNM, VHM, VEA — SSI đưa ra khuyến nghị MUA cho doanh nghiệp nào, và TRUNG LẬP cho doanh nghiệp nào? Phân tích lý do khuyến nghị khác nhau khi xét đến tiềm năng tăng giá và rủi ro của từng cổ phiếu.",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Tất cả 4 đều được khuyến nghị TRUNG LẬP hoặc tương đương. VPB: KHẢ QUAN (giá mục tiêu 22.700, tiềm năng +14,8%). VNM: TRUNG LẬP (72.000 đồng, +8%). VHM: TRUNG LẬP (105.600 đồng, +14,2%). VEA: TRUNG LẬP (34.000 đồng, -2,9%). VPB được đánh giá tích cực nhất nhờ đà cải thiện chất lượng tài sản",
+    "source_page": "1",
+    "doc": [
+      "VPB_2025_12_05_SSIResearch(1)",
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": true
+  },
+  {
+    "id": "q015",
+    "question": "VEA có EPS dự phóng 2026F đạt 4.635 VND và cổ tức dự kiến 5.392 đồng/cp. Cổ tức cao hơn EPS — điều này có bất thường không, và nguồn tiền chi trả cổ tức đến từ đâu?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Có vẻ bất thường nhưng hợp lý — VEA là holding company, EPS tính trên BCTC riêng (cty mẹ) trong khi nguồn cổ tức chính đến từ lợi nhuận chưa phân phối tích lũy và cổ tức từ các công ty liên kết (Honda 30%, Toyota 20%, Ford 25%). Tiền mặt và đầu tư ngắn hạn dồi dào (~13-14 nghìn tỷ đồng)",
+    "source_page": "1,5",
+    "doc": "VEA_2025_12_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q016",
+    "question": "Tỷ lệ 'Tài sản khác' trong cơ cấu tài sản bảo đảm của VPB tăng từ 31% (cuối 2022) lên 70% (hiện tại). Nếu kết hợp thông tin này với tăng trưởng cho vay BĐS +34 nghìn tỷ đồng, điều gì có thể suy ra về loại tài sản đảm bảo mà VPB đang nhận?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "VPB đang nhận nhiều tài sản hình thành trong tương lai hoặc quyền phát triển dự án BĐS (chưa đủ điều kiện ghi nhận là BĐS hữu hình) làm tài sản đảm bảo. Đây là rủi ro cao vì tài sản này phụ thuộc vào tiến độ dự án và khó thanh lý khi thị trường suy giảm",
+    "source_page": "3",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": true
+  },
+  {
+    "id": "q017",
+    "question": "VHM có Nợ/VCSH tăng từ 0,24x (2022) lên 0,5x dự phóng 2025F. Cùng lúc, doanh số bán hàng 2025 dự kiến đạt 182 nghìn tỷ đồng (+75% svck). Việc tăng đòn bẩy tài chính đồng thời với tăng trưởng doanh số mạnh phản ánh chiến lược gì, và rủi ro ra sao?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VHM đang tăng vay nợ để đầu tư phát triển quỹ đất và triển khai đại dự án mới, đặt cược vào chu kỳ phục hồi BĐS. Rủi ro: nếu thị trường hấp thụ yếu tại các thị trường cấp 2 hoặc triển khai chậm, đòn bẩy cao sẽ tạo áp lực tài chính lớn, trong khi ROE đang giảm từ 21% về 16%",
+    "source_page": "1-2",
+    "doc": "VHM_2025_12_15_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q018",
+    "question": "VNM có tỷ suất cổ tức ổn định ~6% trong giai đoạn 2023-2027F, trong khi VEA có tỷ suất cổ tức ~15%. Nếu nhà đầu tư ưu tiên thu nhập cổ tức, VEA có thực sự hấp dẫn hơn khi xét đến rủi ro giảm LNST 14% trong 2026?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "VEA có tỷ suất cổ tức cao hơn nhiều (15% vs 6%) nhưng LNST dự báo giảm 14% do xu hướng điện hóa xe máy. VNM có tỷ suất thấp hơn nhưng ổn định hơn và ít rủi ro ngành hơn. VEA hấp dẫn trong ngắn hạn nhưng bền vững kém hơn nếu Honda mất thị phần xe máy",
+    "source_page": "1",
+    "doc": [
+      "VNM_2026_02_24_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q019",
+    "question": "LDR theo quy định của VPB đã tăng lên 83%, tiến sát mức trần 85%, và tỷ lệ cho vay trung dài hạn (MLTL) đạt 26,5% (trần 30%). Nếu cả hai tỷ lệ chạm trần, VPB sẽ phải thay đổi chiến lược tăng trưởng như thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "VPB sẽ phải: (1) chậm lại tốc độ tăng trưởng tín dụng, (2) tăng cường huy động tiền gửi dài hạn thay vì vay nước ngoài ngắn hạn, (3) phát hành trái phiếu để tăng vốn trung dài hạn. SSI nhận định tăng cường nguồn vốn trung dài hạn sẽ là trọng tâm chiến lược",
+    "source_page": "2-3",
+    "doc": "VPB_2025_12_05_SSIResearch(1)",
+    "answer_in_text": true
+  },
+  {
+    "id": "q020",
+    "question": "Xét 4 cổ phiếu VPB, VNM, VHM, VEA — nếu xếp hạng theo mức độ rủi ro từ cao đến thấp dựa trên đòn bẩy tài chính, tính chu kỳ ngành, và xu hướng lợi nhuận, thứ tự sẽ như thế nào và tại sao?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Rủi ro cao → thấp: (1) VPB — ngân hàng có đòn bẩy cao nhất, NPL + tập trung cho vay BĐS/chứng khoán; (2) VHM — BĐS chu kỳ cao, đòn bẩy tăng mạnh, phụ thuộc thời điểm bàn giao; (3) VEA — rủi ro chuyển đổi xe điện nhưng mô hình holding ổn định; (4) VNM — FMCG phòng thủ, đòn bẩy thấp, ROE ổn định",
+    "source_page": "1",
+    "doc": [
+      "VPB_2025_12_05_SSIResearch(1)",
+      "VNM_2026_02_24_SSIResearch",
+      "VHM_2025_12_15_SSIResearch",
+      "VEA_2025_12_03_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q021",
+    "question": "NIM và tỷ lệ nợ xấu của TPB có mối tương quan gì từ 2019 đến 2025, và giai đoạn nào NIM giảm đồng thời nợ xấu tăng mạnh nhất?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "NIM và NPL có tương quan nghịch rõ rệt — khi nợ xấu tăng (2023: NPL ~3,5%) thì NIM giảm mạnh do phải tăng chi phí dự phòng + giảm lợi suất tài sản. Giai đoạn Q2-Q3/2023 là thời điểm NIM giảm sâu nhất đồng thời NPL tăng vọt",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 5 trang 3: NIM (đường xanh) vs NPL Ratios (đường đỏ), dual-axis"
+  },
+  {
+    "id": "q022",
+    "question": "Theo diễn biến các quý, tỷ lệ nợ xấu của TPB thường giảm vào Q4 rồi tăng lại ở các quý sau. Xu hướng này lặp lại bao nhiêu năm liên tiếp, và điều gì khiến SSI cho rằng sự cải thiện Q4/2025 mang tính thời vụ?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Xu hướng lặp lại 3 năm liên tiếp (2022-2024): NPL giảm trong Q4 rồi tăng lại Q1-Q2 năm sau. SSI nghi ngờ tính bền vững vì TPB đẩy mạnh xử lý nợ 1,4 nghìn tỷ và phân loại lại 1,8 nghìn tỷ về Nhóm 1 trong Q4/2025",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 3 trang 3: NPLs (cột xanh) + Group 2 (cột cam) + NPL ratios (đường), seasonal Q4 dip pattern"
+  },
+  {
+    "id": "q023",
+    "question": "Khi xét về tỷ lệ bao phủ nợ xấu (LLCR) giữa các ngân hàng, TPB đứng ở đâu so với VCB và các NHTMCP khác?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "VCB có LLCR cao nhất (~200-250%), TPB thuộc nhóm trung bình-cao trong NHTMCP (~92-100%), cao hơn STB, VIB, OCB, MSB. Các NHTMNN (VCB, CTG, BID) nhìn chung có bộ đệm dự phòng dày hơn NHTMCP",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 4 trang 3: NPL ratios (cột trái) và Loss coverage ratios (cột phải) cho 13 ngân hàng"
+  },
+  {
+    "id": "q024",
+    "question": "Các dữ liệu về nợ xấu, nợ cần chú ý, khoản vay tái cơ cấu và tổng dự phòng của VCB từ 2015 đến 2025 cho thấy xu hướng gì về chất lượng tài sản dài hạn?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Tổng dự phòng (aggregate provision) tăng liên tục từ ~10.000 tỷ (2015) lên ~30.000+ tỷ (2025), luôn vượt xa tổng nợ xấu + nợ cần chú ý + khoản vay tái cơ cấu. Cho thấy VCB xây dựng bộ đệm dự phòng ngày càng dày, chất lượng tài sản tốt nhất hệ thống",
+    "source_page": "3",
+    "doc": "VCB_2026_02_26_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ stacked bar trang 3: NPLs + SMLs + Restructured loan + Aggregate provision 2015-2025"
+  },
+  {
+    "id": "q025",
+    "question": "Về thu nhập từ phí trên tổng tài sản, VCB đứng ở vị trí nào so với các ngân hàng tư nhân như TPB, VPB, TCB?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "VCB có tỷ lệ thu nhập phí/tổng tài sản thấp hơn nhóm ngân hàng tư nhân (TCB, VPB dẫn đầu ~0,7-0,8%). VCB khoảng 0,3-0,4%. Tuy nhiên giá trị tuyệt đối thu nhập phí (cột phải) của VCB vẫn thuộc top nhờ quy mô tài sản lớn",
+    "source_page": "3",
+    "doc": "VCB_2026_02_26_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ bar+line trang 3: Fee income to Total assets (cột trái %) và Fee income RHS (nghìn tỷ) cho 13 NH"
+  },
+  {
+    "id": "q026",
+    "question": "Biên lợi nhuận gộp và biên lợi nhuận ròng của TNG biến động thế nào từ Q1/2024 đến Q4/2025, và quý nào đạt đỉnh biên gộp?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Biên gộp (gross margin) dao động 13-16%, đạt đỉnh ~16% vào Q1/2025. Biên ròng (net margin) dao động 3-6%, cải thiện rõ rệt từ Q4/2024 (~4%) lên Q4/2025 (~5,5%). Xu hướng cho thấy TNG đang cải thiện hiệu quả hoạt động",
+    "source_page": "2",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 2 đường trang 2: Gross margin và Net margin theo quý Q1/24-Q4/25"
+  },
+  {
+    "id": "q027",
+    "question": "Cơ cấu vốn vay của TNG (Equity, Current Liabilities, Long-term Liabilities, D/E) thay đổi thế nào từ 2020 đến 2025, và tỷ lệ D/E có xu hướng tăng hay giảm?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "D/E giảm từ ~4,5x (2020) xuống khoảng 1,5-1,7x (2025). Vốn chủ sở hữu tăng đều trong khi nợ ngắn hạn tăng chậm hơn. Cho thấy TNG đang giảm đòn bẩy tài chính, cải thiện cơ cấu vốn",
+    "source_page": "3",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ stacked bar + line trang 3: Equity/Current L/Long-term L (bar) + D/E ratio (line) 2020-2025"
+  },
+  {
+    "id": "q028",
+    "question": "Lợi suất tài sản, chi phí vốn và NIM của TPB cho thấy NIM đang phục hồi hay tiếp tục giảm trong Q4/2025? Nguyên nhân chính là gì?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "NIM phục hồi nhẹ +7 điểm cơ bản QoQ lên 3,18% trong Q4/2025. Nguyên nhân: lợi suất tài sản tăng +39 bps (tăng cho vay trung dài hạn + điều chỉnh lãi suất cho vay) nhanh hơn chi phí vốn tăng +33 bps. Chất lượng tài sản cải thiện cũng hỗ trợ NIM",
+    "source_page": "3",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 6 trang 3: Asset yields (đường xanh), Funding costs (đường cam), NIM (đường đỏ, trục phải)"
+  },
+  {
+    "id": "q029",
+    "question": "So sánh tỷ lệ nợ xấu (NPL) của VCB và STB — ngân hàng nào có chất lượng tài sản tốt hơn, và STB đã cải thiện được bao nhiêu so với giai đoạn tái cơ cấu?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "VCB có NPL thấp nhất hệ thống (~0,8-1,0%). STB đã cải thiện mạnh từ mức NPL rất cao trong giai đoạn tái cơ cấu xuống ~1,5-2% hiện tại, nhưng vẫn cao hơn VCB. STB phải xử lý tài sản tồn đọng từ việc sáp nhập Southern Bank",
+    "source_page": "1-2",
+    "doc": [
+      "VCB_2026_02_26_SSIResearch",
+      "STB_2025_12_08_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q030",
+    "question": "Thuế suất bình quân của Mỹ (tính đến tháng 11/2025) thay đổi thế nào, và điều này ảnh hưởng thế nào đến biên lợi nhuận xuất khẩu của TNG?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Thuế suất bình quân Mỹ tăng từ ~2% lên ~20% (theo biểu đồ trang 3). TNG đã chuyển hướng tăng tỷ trọng xuất khẩu sang Châu Âu (từ 34% lên ~50% doanh thu) để giảm rủi ro thuế quan Mỹ. Tuy nhiên biên lợi nhuận gộp dự kiến bị thu hẹp do phải chia sẻ chi phí thuế đối ứng",
+    "source_page": "3",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ bar trang 3: US average tariff rate, tăng mạnh đến 2025"
+  },
+  {
+    "id": "q031",
+    "question": "Trong cơ cấu thu nhập hoạt động của TPB (NII, NFI, Trading income, Others), mảng nào đóng góp lớn nhất và mảng nào biến động mạnh nhất theo quý?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "NII (thu nhập lãi thuần) đóng góp lớn nhất (~3.000-3.500 tỷ/quý), tăng ổn định. Mảng 'Others' (chủ yếu thu hồi nợ xấu đã xử lý) biến động mạnh nhất, có thời điểm âm. NFI (thu nhập phí) tăng dần. Trading income nhỏ và hay biến động",
+    "source_page": "4",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 7 trang 4: stacked bar NII, NFI, Trading income, Others theo quý"
+  },
+  {
+    "id": "q032",
+    "question": "Chi phí hoạt động (OPEX) và tỷ lệ CIR của TPB biến động thế nào theo quý, và tại sao Q4/2025 CIR giảm đột ngột xuống 22,8%?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "CIR Q4/2025 giảm mạnh xuống 22,8% (từ 37,9% Q3) nhờ chi phí nhân sự giảm 40% svck do tái cơ cấu tổ chức và sắp xếp lại nhân sự. Tuy nhiên pattern lịch sử cho thấy CIR thường tăng mạnh vào Q4 do chi thưởng — nên Q4/2025 là ngoại lệ đáng chú ý",
+    "source_page": "4",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 8 trang 4: OPEX (cột, nghìn tỷ) + CIR (đường, %, trục phải)"
+  },
+  {
+    "id": "q033",
+    "question": "Tăng trưởng doanh thu xuất khẩu dệt may Việt Nam thường mạnh hơn vào những năm có nhiều sự kiện thể thao lớn. Mức tăng trưởng trung bình của những năm có sự kiện thể thao là bao nhiêu?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Tăng trưởng xuất khẩu dệt may vào những năm có sự kiện thể thao lớn (World Cup, Olympic) đạt 13-17%. Năm 2021 là ngoại lệ do ảnh hưởng Covid 2020. Năm 2026 kỳ vọng tăng trưởng nhờ FIFA World Cup",
+    "source_page": "3",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ bar trang 3: Xuất khẩu dệt may VN, highlight năm có sự kiện thể thao tăng 13-17%"
+  },
+  {
+    "id": "q034",
+    "question": "So sánh ROE và P/B của VCB, TPB và STB — ngân hàng nào có mức định giá hấp dẫn nhất khi xét tương quan giữa hiệu quả sinh lời và giá thị trường?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "TPB có P/B thấp nhất (~0,79x) với ROE ~18% → tương quan hấp dẫn nhất (giao dịch dưới book value). VCB có ROE thấp hơn (~18-20%) nhưng P/B cao nhất (~2,0-2,2x) do premium ngân hàng nhà nước. STB có ROE cải thiện nhưng P/B trung bình. TPB rẻ nhất theo P/B vs ROE",
+    "source_page": "1",
+    "doc": [
+      "VCB_2026_02_26_SSIResearch",
+      "TPB_2026_03_23_SSIResearch",
+      "STB_2025_12_08_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q035",
+    "question": "TNG có tỷ lệ Nợ/VCSH giảm từ 1,66x (2024) xuống 1,52x (2025F), trong khi ROE duy trì 20%. Nếu TNG tiếp tục giảm đòn bẩy, ROE có thể bị ảnh hưởng thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table",
+      "text"
+    ],
+    "expected_answer_hint": "Giảm đòn bẩy thường kéo ROE giảm theo (công thức DuPont: ROE = Net margin × Asset turnover × Equity multiplier). SSI dự báo ROE 2026F giảm nhẹ xuống 19%. Tuy nhiên nếu biên ròng cải thiện (từ 4,1% lên 4,5%) có thể bù đắp bớt ảnh hưởng",
+    "source_page": "1-2",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q036",
+    "question": "VCB được SSI khuyến nghị MUA với giá mục tiêu bao nhiêu, và đâu là yếu tố chính tạo premium cho VCB so với các ngân hàng tư nhân như TPB hay STB?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "VCB khuyến nghị MUA với giá mục tiêu ~107.000 đồng/cp. Premium đến từ: (1) chất lượng tài sản tốt nhất hệ thống (NPL thấp nhất, LLCR cao nhất), (2) vị thế ngân hàng nhà nước dẫn đầu, (3) tiềm năng tăng vốn và thu nhập phí từ bancassurance, (4) dự phòng dồi dào tạo room giải phóng lợi nhuận tương lai",
+    "source_page": "1,3",
+    "doc": [
+      "VCB_2026_02_26_SSIResearch",
+      "TPB_2026_03_23_SSIResearch",
+      "STB_2025_12_08_SSIResearch"
+    ],
+    "answer_in_text": true
+  },
+  {
+    "id": "q037",
+    "question": "TPB dự báo tỷ lệ nợ xấu tăng từ 1,28% lên 1,4% năm 2026 nhưng vẫn duy trì khuyến nghị KHẢ QUAN. Lý do nào khiến SSI lạc quan dù chất lượng tài sản dự kiến xấu đi?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "SSI vẫn lạc quan vì: (1) LLCR duy trì 100% — bộ đệm đủ dày, (2) LNTT dự báo tăng 14% svck lên 10,5 nghìn tỷ, (3) P/B chỉ 0,79x — dưới book value với ROE 18%, (4) tăng trưởng tín dụng 13,6% ổn định, (5) thu nhập phí tăng 16,3% từ thẻ và ngân hàng điện tử",
+    "source_page": "1,4",
+    "doc": "TPB_2026_03_23_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q038",
+    "question": "Trong 4 công ty VCB, TPB, TNG, STB — so sánh tăng trưởng lợi nhuận năm 2025 svck. Doanh nghiệp nào đạt tốc độ tăng trưởng cao nhất?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "TNG tăng trưởng LNST cao nhất (+24,2% svck lên 392 tỷ), tiếp theo TPB (+21,1% LNTT lên 9,2 nghìn tỷ). VCB và STB có tốc độ tăng chậm hơn. TNG nổi bật nhờ đơn hàng xuất khẩu tăng mạnh và kiểm soát chi phí tốt",
+    "source_page": "1-2",
+    "doc": [
+      "VCB_2026_02_26_SSIResearch",
+      "TPB_2026_03_23_SSIResearch",
+      "TNG_2026_01_27_SSIResearch",
+      "STB_2025_12_08_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q039",
+    "question": "Chi phí bán hàng (S margin) và chi phí quản lý (GA margin) của TNG biến động thế nào từ Q1/2024 đến Q4/2025? Xu hướng nào đáng chú ý nhất?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Cả S margin và GA margin đều có xu hướng giảm từ 2024 sang 2025, đặc biệt GA margin giảm rõ rệt từ ~7% xuống ~4-5%. Xu hướng đáng chú ý nhất là chi phí quản lý giảm mạnh nhờ tự động hóa và tăng năng suất lao động",
+    "source_page": "2",
+    "doc": "TNG_2026_01_27_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 2 đường trang 2: S margin và GA margin theo quý Q1/24-Q4/25"
+  },
+  {
+    "id": "q040",
+    "question": "Nếu xếp hạng 4 cổ phiếu VCB, TPB, TNG, STB theo mức định giá từ rẻ nhất đến đắt nhất (dựa trên P/E và P/B), thứ tự sẽ như thế nào và đâu là lựa chọn giá trị tốt nhất?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Rẻ nhất → đắt nhất (P/B): TPB (0,79x) → STB (~0,9x) → TNG (~1,06x) → VCB (~2,0x). Theo P/E: TPB (~5,1x) → TNG (~6,2x) → STB → VCB (cao nhất ~14-15x). TPB là lựa chọn giá trị tốt nhất với P/B dưới 1x và ROE 18%, tiềm năng tăng giá 23,8%",
+    "source_page": "1",
+    "doc": [
+      "VCB_2026_02_26_SSIResearch",
+      "TPB_2026_03_23_SSIResearch",
+      "TNG_2026_01_27_SSIResearch",
+      "STB_2025_12_08_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q041",
+    "question": "Sản lượng bia của SAB thể hiện xu hướng gì từ 2019 đến 2025, và năm nào chạm đáy sản lượng?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Sản lượng bia giảm mạnh trong 2020-2021 do Covid, chạm đáy năm 2021. Phục hồi từ 2022 nhưng năm 2025 doanh thu giảm 18,8% svck — cho thấy sức mua người tiêu dùng vẫn yếu",
+    "source_page": "2-3",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ cột sản lượng bia SAB 2019-2025"
+  },
+  {
+    "id": "q042",
+    "question": "Biên lợi nhuận gộp của SAB cải thiện từ 29,2% (2024) lên 35,9% (2025) dù doanh thu giảm 18,8%. Cơ cấu chi phí giải thích điều này như thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "table"
+    ],
+    "expected_answer_hint": "Giá vốn hàng bán giảm mạnh hơn doanh thu (từ 22.554 tỷ xuống 16.588 tỷ, giảm 26%) do giá nguyên liệu đầu vào (đại mạch, nhôm) giảm. Doanh thu giảm 18,8% nhưng GVHB giảm 26% → biên gộp cải thiện mạnh",
+    "source_page": "2-4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q043",
+    "question": "Mảng vận tải và mảng thương mại đóng góp thế nào vào cơ cấu doanh thu và lợi nhuận gộp của PVT, và tại sao biên lợi nhuận hợp nhất bị kéo xuống?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Mảng vận tải có biên gộp cao (~22%) nhưng mảng thương mại (biên rất thấp ~1-2%) ngày càng đóng góp lớn vào doanh thu, kéo biên hợp nhất từ 20,8% (2024) xuống 14,6% (2025). Biểu đồ cho thấy cột thương mại tăng nhanh nhưng lợi nhuận gộp rất mỏng",
+    "source_page": "2",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "2 biểu đồ stacked bar trang 2: Cơ cấu doanh thu và Cơ cấu lợi nhuận gộp theo mảng"
+  },
+  {
+    "id": "q044",
+    "question": "REE đặt mục tiêu nâng tổng công suất điện lên 3GW vào năm 2030 từ mức 1,2GW hiện tại. Dựa trên bảng SOTP, mảng điện chiếm bao nhiêu phần trăm tổng giá trị doanh nghiệp?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table",
+      "text"
+    ],
+    "expected_answer_hint": "Mảng Điện có giá trị 30.789 tỷ đồng / tổng 43.617 tỷ = ~70,6% tổng giá trị doanh nghiệp. Trong đó thủy điện và năng lượng tái tạo (điện gió, điện mặt trời) chiếm phần lớn. BĐS chỉ chiếm ~17,7%",
+    "source_page": "5",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q045",
+    "question": "PVS ghi nhận backlog giá trị hợp đồng chưa thực hiện ở mức nào, và điều này hỗ trợ triển vọng doanh thu 2026 như thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "PVS có backlog hợp đồng chưa thực hiện lớn nhờ các dự án dầu khí mới (Lô B, Cá Voi Xanh). Backlog tạo nền tảng doanh thu ổn định cho 2026-2027. PVS được hưởng lợi từ chu kỳ đầu tư thượng nguồn dầu khí Việt Nam",
+    "source_page": "1-2",
+    "doc": "PVS_2025_12_22_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q046",
+    "question": "So sánh tỷ suất cổ tức của SAB (~8%) với REE (~1,5% tiền mặt + 15% cổ phiếu). Đối với nhà đầu tư ưu tiên thu nhập, cổ phiếu nào hấp dẫn hơn và tại sao?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table",
+      "text"
+    ],
+    "expected_answer_hint": "SAB hấp dẫn hơn với tỷ suất cổ tức tiền mặt ~8% (4.000 đồng/cp), ổn định và không pha loãng. REE chỉ chi 1.000 đồng tiền mặt + 15% cổ phiếu → pha loãng EPS liên tục 5 năm. REE đang xem xét tạm dừng cổ tức cổ phiếu từ 2026",
+    "source_page": "1,3-4",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q047",
+    "question": "Giá thuê tàu định hạn (time charter) có xu hướng gì trong giai đoạn 2023-2025, và PVT có được hưởng lợi từ xu hướng này không?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Giá thuê tàu định hạn phục hồi từ đáy 2023, tăng dần trong 2024-2025. PVT được hưởng lợi vì các tàu mới bàn giao được hưởng mức giá thuê thuận lợi hơn, giúp biên lợi nhuận mảng vận tải cải thiện lên 22,1%",
+    "source_page": "2-3",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ giá thuê tàu time charter theo quý/năm"
+  },
+  {
+    "id": "q048",
+    "question": "SAB có ROE tăng từ 18% (2024) lên 21,6% (2027F) dù doanh thu gần như không tăng (+2,9%/năm). Điều gì giải thích sự cải thiện ROE mà không cần tăng trưởng doanh thu mạnh?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "ROE tăng nhờ: (1) Biên lợi nhuận cải thiện mạnh (biên gộp từ 29,2% lên 36,5%, biên ròng từ 14,1% lên 17,3%) do giá nguyên liệu giảm; (2) Vốn chủ sở hữu giảm dần (từ 24.437 tỷ xuống 22.041 tỷ) do chi trả cổ tức lớn hơn lợi nhuận giữ lại → equity multiplier tăng",
+    "source_page": "4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q049",
+    "question": "PVT mở rộng đội tàu bằng cách mua tàu mới — chi phí quản lý doanh nghiệp tăng cao do chi phí ban đầu. Biên lợi nhuận gộp mảng vận tải có xu hướng phục hồi thế nào từ đáy?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image",
+      "text"
+    ],
+    "expected_answer_hint": "Biên gộp mảng vận tải chạm đáy đầu năm 2025, sau đó phục hồi lên 22,1% trong Q4/2025 (+0,9 điểm % svck). Xu hướng phục hồi nhờ tàu mới đi vào vận hành ổn định + giá thuê thuận lợi. Chi phí quản lý cao là tạm thời do đưa tàu mới vào khai thác",
+    "source_page": "2-3",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ biên LN gộp mảng vận tải theo quý"
+  },
+  {
+    "id": "q050",
+    "question": "So sánh P/E 2026F của SAB (~13,9x), REE (~14x) và PVT. Doanh nghiệp nào có định giá hấp dẫn nhất khi xét đến tốc độ tăng trưởng lợi nhuận?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "PVT có P/E thấp nhất (~5-7x) với tốc độ tăng trưởng LNST cao (doanh thu +36,8% svck). SAB P/E 13,9x nhưng tăng trưởng chỉ 3,6%. REE P/E 14x, tăng trưởng bị áp lực ngắn hạn. PVT hấp dẫn nhất về tương quan P/E vs growth",
+    "source_page": "1",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch",
+      "PVT_2026_03_30_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q051",
+    "question": "REE sử dụng phương pháp định giá kết hợp P/E (40%) và SOTP (60%). Tại sao SOTP được gán tỷ trọng cao hơn, và chiết khấu tập đoàn 10% phản ánh điều gì?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "table",
+      "text"
+    ],
+    "expected_answer_hint": "SOTP được ưu tiên vì REE là tập đoàn đa ngành (điện, BĐS, M&E, nước) — mỗi mảng có đặc thù định giá khác nhau (DCF cho thủy điện, RNAV cho BĐS). Chiết khấu 10% phản ánh rủi ro phức tạp cấu trúc tập đoàn, khó giám sát dòng tiền giữa các công ty con",
+    "source_page": "4-5",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q052",
+    "question": "PVS và PVT đều hoạt động trong lĩnh vực dầu khí nhưng ở phân khúc khác nhau. So sánh mô hình kinh doanh và rủi ro chính của hai doanh nghiệp này.",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "PVS: dịch vụ kỹ thuật dầu khí (EPC, M&C) — phụ thuộc vào chu kỳ đầu tư thượng nguồn, backlog hợp đồng lớn từ Lô B/Cá Voi Xanh. PVT: vận tải dầu khí — phụ thuộc vào giá thuê tàu và sản lượng vận chuyển. PVS rủi ro cao hơn do biến động dự án, PVT ổn định hơn nhờ hợp đồng dài hạn",
+    "source_page": "1-2",
+    "doc": [
+      "PVS_2025_12_22_SSIResearch",
+      "PVT_2026_03_30_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q053",
+    "question": "SAB có Nợ ròng/EBITDA âm (-0,60 đến -0,67x) trong giai đoạn 2024-2027. Điều này phản ánh gì về vị thế tài chính của SAB so với các doanh nghiệp có đòn bẩy cao?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Nợ ròng/EBITDA âm nghĩa là SAB có tiền mặt nhiều hơn nợ vay — vị thế 'net cash'. SAB gần như không dùng đòn bẩy (vay ngắn hạn chỉ ~268 tỷ, tiền mặt + đầu tư ngắn hạn ~19.000 tỷ). Điều này cho thấy SAB cực kỳ an toàn về tài chính nhưng có thể chưa tối ưu cơ cấu vốn",
+    "source_page": "4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q054",
+    "question": "Trong cơ cấu công suất điện của REE theo loại nguồn (thủy điện, điện gió, điện mặt trời, nhiệt điện), tỷ trọng năng lượng tái tạo hiện đạt bao nhiêu phần trăm?",
+    "category": "numerical_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Năng lượng tái tạo (điện gió + điện mặt trời) chiếm khoảng 40-50% tổng công suất 1,2GW hiện tại. Thủy điện vẫn là nguồn lớn nhất. Mục tiêu 3GW đến 2030 sẽ tập trung mở rộng điện gió ngoài khơi và điện mặt trời",
+    "source_page": "2-3",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ cơ cấu công suất điện REE theo loại nguồn"
+  },
+  {
+    "id": "q055",
+    "question": "SSI khuyến nghị SAB là TRUNG LẬP với giá mục tiêu dựa trên DCF + P/E 13x, trong khi REE cũng TRUNG LẬP với P/E 14x + SOTP. Nếu chỉ so P/E mục tiêu, doanh nghiệp nào được kỳ vọng tăng trưởng cao hơn?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "REE được gán P/E mục tiêu 14x (cao hơn SAB 13x), phản ánh kỳ vọng tăng trưởng cao hơn nhờ chiến lược mở rộng năng lượng tái tạo (mục tiêu 3GW). SAB P/E thấp hơn vì tăng trưởng lợi nhuận chỉ một chữ số, ngành bia đã bão hòa",
+    "source_page": "3-5",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch"
+    ],
+    "answer_in_text": true
+  },
+  {
+    "id": "q056",
+    "question": "PVT bổ sung thêm tàu mới vào đội tàu trong năm 2025. Quy mô số lượng và tổng trọng tải đội tàu của PVT thay đổi thế nào trong 3 năm gần đây?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Đội tàu PVT mở rộng đáng kể, tổng trọng tải tăng nhờ bổ sung tàu mới có trọng tải lớn hơn. Số lượng tàu tăng đều qua các năm 2023-2025, hỗ trợ tăng trưởng doanh thu mảng vận tải +9,3% svck",
+    "source_page": "2-3",
+    "doc": "PVT_2026_03_30_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ đội tàu PVT (số lượng + trọng tải DWT)"
+  },
+  {
+    "id": "q057",
+    "question": "SAB có vốn chủ sở hữu giảm liên tục từ 24.437 tỷ (2024) xuống 22.041 tỷ (2027F) dù vẫn có lãi. Nguyên nhân chính là gì?",
+    "category": "trick",
+    "requires": [
+      "table"
+    ],
+    "expected_answer_hint": "Vốn chủ giảm vì SAB chi trả cổ tức lớn hơn lợi nhuận giữ lại. Cổ tức 3.500-4.000 đồng/cp × 1,32 tỷ cp = ~4.600-5.280 tỷ/năm, trong khi LNST chỉ ~4.500-4.800 tỷ. Lợi nhuận chưa phân phối giảm từ 9.218 tỷ xuống 5.776 tỷ. Đây là chiến lược chia hết lợi nhuận cho cổ đông",
+    "source_page": "4",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q058",
+    "question": "Xếp hạng 4 cổ phiếu SAB, REE, PVT, PVS theo mức độ phòng thủ (defensive) từ cao đến thấp. Tiêu chí nào được sử dụng?",
+    "category": "multi_doc_comparison",
+    "requires": [
+      "text",
+      "table"
+    ],
+    "expected_answer_hint": "Phòng thủ cao → thấp: (1) SAB — FMCG, net cash, cổ tức 8%, nhu cầu bia ổn định; (2) REE — danh mục đa dạng, thủy điện có doanh thu recurring; (3) PVT — vận tải dầu khí, hợp đồng dài hạn nhưng phụ thuộc giá thuê tàu; (4) PVS — dịch vụ EPC dầu khí, biến động theo chu kỳ đầu tư",
+    "source_page": "1",
+    "doc": [
+      "SAB_2026_03_03_SSIResearch",
+      "REE_2026_04_02_SSIResearch",
+      "PVT_2026_03_30_SSIResearch",
+      "PVS_2025_12_22_SSIResearch"
+    ],
+    "answer_in_text": false
+  },
+  {
+    "id": "q059",
+    "question": "SSI đã duy trì khuyến nghị gì đối với SAB trong đa phần thời gian, và có thời điểm nào nâng lên MUA không?",
+    "category": "trick",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "SSI duy trì khuyến nghị TRUNG LẬP (MP) đối với SAB trong phần lớn thời gian. Giá mục tiêu và giá thực tế dao động gần nhau, cho thấy SAB là cổ phiếu ổn định, ít có catalyst để nâng khuyến nghị lên MUA",
+    "source_page": "3",
+    "doc": "SAB_2026_03_03_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ lịch sử khuyến nghị trang 3: đường giá CP + đường Target Price + nhãn MP"
+  },
+  {
+    "id": "q060",
+    "question": "REE đang xem xét tạm dừng cổ tức bằng cổ phiếu từ năm 2026 sau 5 năm liên tục phát hành. Nếu dừng, EPS sẽ bị ảnh hưởng thế nào so với việc tiếp tục pha loãng?",
+    "category": "multi_hop_reasoning",
+    "requires": [
+      "text"
+    ],
+    "expected_answer_hint": "Nếu dừng cổ tức cổ phiếu, số CP lưu hành không tăng thêm → EPS được bảo toàn và có thể tăng theo tốc độ tăng lợi nhuận. Nếu tiếp tục 15%/năm, số CP tăng ~80 triệu/năm → EPS bị pha loãng khoảng 13-15%. Việc dừng là tín hiệu tích cực cho nhà đầu tư",
+    "source_page": "3-4",
+    "doc": "REE_2026_04_02_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q061",
+    "question": "PVD dự báo giá thuê ngày giàn khoan 2026 ở mức 95.000 USD/ngày, thấp hơn ~5% so với giá đỉnh 2025. Tuy nhiên triển vọng dài hạn được cho là tích cực hơn. Hai quan điểm này có mâu thuẫn không, và yếu tố nào sẽ quyết định hướng đi của giá thuê ngày?",
+    "category": "multi_hop_reasoning",
+    "requires": ["text", "image"],
+    "expected_answer_hint": "Không mâu thuẫn — giá thuê ngắn hạn giảm do nhu cầu tạm yếu tại Trung Đông, nhưng dài hạn vẫn tích cực vì: (1) số lượng giàn jack-up mới đóng chỉ ~13 chiếc (~3% tổng đội giàn toàn cầu), (2) tỷ lệ sử dụng ĐNA đạt 89%, (3) biểu đồ giá thuê 361-400ft IC cho thấy xu hướng tăng từ 40.000 lên trên 100.000 USD/ngày từ 2020. Yếu tố quyết định: hoạt động thăm dò mới của OPEC+ và Mỹ",
+    "source_page": "3-4",
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q062",
+    "question": "Lợi nhuận gộp mảng Khoan và mảng Dịch vụ giếng khoan của PVD đang thu hẹp khoảng cách hay phân hóa mạnh hơn? Điều này có ý nghĩa gì cho cơ cấu lợi nhuận?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image"],
+    "expected_answer_hint": "Mảng Dịch vụ giếng khoan (đường dưới) tăng mạnh từ ~60 tỷ (Q1/2024) lên ~236 tỷ (Q3/2025), dần thu hẹp khoảng cách với mảng Khoan (~360 tỷ). Nghĩa là Dịch vụ giếng khoan đang trở thành cột trụ lợi nhuận thứ hai quan trọng, giúp PVD đa dạng hóa nguồn thu thay vì phụ thuộc hoàn toàn vào mảng Khoan",
+    "source_page": "3",
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q063",
+    "question": "POW dự báo NPATMI 2026 giảm 79% svck xuống 449 tỷ đồng dù doanh thu tăng 24%. Đây là hiện tượng bất thường — nguyên nhân cốt lõi nằm ở đâu và liệu đây có phải rủi ro thực sự hay chỉ là vấn đề kế toán?",
+    "category": "trick",
+    "requires": ["text", "table", "image"],
+    "expected_answer_hint": "Không phải rủi ro kinh doanh thực sự — đây là đặc thù kế toán năm đầu vận hành dự án lớn: Nhơn Trạch 3&4 (1.624 MW, vốn đầu tư ~32.600 tỷ) sẽ ghi nhận chi phí khấu hao + lãi vay ngay từ ngày vận hành, nhưng doanh thu chưa đạt công suất tối ưu (Qc chỉ 65% sản lượng). Chi phí tài chính tăng 61% lên 1.649 tỷ. Thời gian hoàn vốn dự kiến 16 năm",
+    "source_page": "1-2",
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q064",
+    "question": "P/E dự phóng 2026 của POW lên đến 90,4x — mức cao bất thường. Nếu một nhà đầu tư chỉ sàng lọc P/E < 15x, họ sẽ loại bỏ POW. Đây có phải sai lầm không?",
+    "category": "trick",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "Có khả năng là sai lầm — P/E 90x phản ánh năm đầu vận hành dự án mới (chi phí khấu hao + lãi vay cao nhất, doanh thu chưa tối ưu), KHÔNG phản ánh năng lực kinh doanh bình thường. EV/EBITDA 2026F chỉ 6,6x (hợp lý cho ngành điện). Từ 2027 trở đi lợi nhuận sẽ phục hồi khi Nhơn Trạch 3&4 đạt công suất. Dùng P/E cho năm bất thường sẽ mislead",
+    "source_page": "1,5",
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q065",
+    "question": "PNJ ghi nhận biên lợi nhuận gộp Q4/2025 đạt 25,1% — cao kỷ lục — dù giá vàng tăng 62% svck làm sản lượng tiêu thụ giảm. Giải thích nghịch lý giữa giá vàng tăng, sản lượng giảm nhưng biên lợi nhuận lại tăng mạnh.",
+    "category": "multi_hop_reasoning",
+    "requires": ["text", "image"],
+    "expected_answer_hint": "Nghịch lý được giải thích bởi 3 yếu tố: (1) PNJ chuyển hướng ưu tiên nguồn vàng NVL sang mảng bán lẻ (biên cao 30-35%) thay vì vàng miếng/bán buôn (biên thấp 1-3%); (2) tăng tần suất điều chỉnh giá bán (trước đây 1-2 lần/năm → nay thường xuyên hơn); (3) cơ cấu doanh thu dịch chuyển — bán lẻ chiếm ~55% tổng DT trong Q4 (từ ~45% Q3). Biểu đồ cho thấy tỷ trọng bán lẻ tăng mạnh, vàng miếng giảm",
+    "source_page": "2",
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q066",
+    "question": "Nếu xét cả 3 doanh nghiệp PVD, POW và PNJ — SSI đưa khuyến nghị khác nhau ra sao? Doanh nghiệp nào có tiềm năng tăng giá cao nhất và thấp nhất?",
+    "category": "multi_doc_comparison",
+    "requires": ["text"],
+    "expected_answer_hint": "PNJ: MUA (+25,1% tiềm năng), PVD: TRUNG LẬP (+2,6%), POW: TRUNG LẬP (-4,9% — giá mục tiêu THẤP hơn giá hiện tại). PNJ hấp dẫn nhất nhờ P/E 11,6x thấp hơn TB lịch sử 18x + tăng trưởng LNST +26% svck. POW kém hấp dẫn nhất do năm đầu vận hành dự án mới gây áp lực lợi nhuận",
+    "source_page": "1",
+    "doc": ["PVD_2025_11_17_SSIResearch", "POW_2025_12_01_SSIResearch", "PNJ_2026_02_12_SSIResearch"],
+    "answer_in_text": true
+  },
+  {
+    "id": "q067",
+    "question": "Giá thuê ngày giàn khoan 301-360 feet IC và 361-400 feet IC có xu hướng đồng pha hay phân hóa trong giai đoạn 2020-2025? Phân khúc nào có biên độ tăng mạnh hơn?",
+    "category": "numerical_reasoning",
+    "requires": ["image"],
+    "expected_answer_hint": "Hai phân khúc đồng pha nhưng biên độ khác nhau: giàn 361-400ft tăng mạnh hơn (từ ~40.000 lên >100.000 USD/ngày = +150%), trong khi giàn 301-360ft tăng chậm hơn (từ ~55.000 lên ~90.000 USD/ngày = +64%). Phân khúc lớn hơn có premium cao hơn do nhu cầu khoan nước sâu tăng. PVD có 4 giàn đang hoạt động ở mức 94.000 USD/ngày",
+    "source_page": "4",
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q068",
+    "question": "PNJ thay đổi chính sách thu mua vàng từ 'theo giá gốc hóa đơn' sang 'theo giá thị trường'. Tác động kép của chính sách này đối với cả cung và cầu vàng trang sức là gì, và điều này có thể thay thế vai trò của vàng miếng không?",
+    "category": "multi_hop_reasoning",
+    "requires": ["text", "image"],
+    "expected_answer_hint": "Tác động cung: khuyến khích khách hàng bán lại trang sức khi giá vàng tăng → tăng NVL (đã tăng lên 4,8 nghìn tỷ vs TB 3 năm 1,1 nghìn tỷ). Tác động cầu: vàng trang sức trở thành sản phẩm thay thế gần nhất cho vàng miếng vì giờ đây cũng được giao dịch theo giá thị trường. Trong bối cảnh thiếu hụt vàng miếng, người tiêu dùng có thể chuyển sang mua trang sức → nhu cầu trang sức tăng 2026",
+    "source_page": "2-3",
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q069",
+    "question": "POW dự kiến nguồn cung khí miền Nam 2026 đạt 2,81-2,98 tỷ m³ (vs 2,43 tỷ m³ năm 2025). Nếu Sư Tử Trắng Giai đoạn 2B bị chậm tiến độ, POW sẽ chịu ảnh hưởng thế nào và có giải pháp thay thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": ["text", "table", "image"],
+    "expected_answer_hint": "Nếu STT 2B chậm: (1) nguồn khí thiếu hụt → nhà máy điện khí hiện hữu giảm huy động, (2) POW đã ký hợp đồng khí từ mỏ Nam Du-U Minh (0,7 tỷ m³/năm từ Q4/2028) và đàm phán Khánh Mỹ-Đầm Dơi + Hoa Mai (0,4 tỷ m³/năm cuối 2028) làm giải pháp thay thế. (3) Nhơn Trạch 1 không có cam kết khí nhưng POW kỳ vọng vẫn duy trì mức vận hành hiện nay",
+    "source_page": "3",
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q070",
+    "question": "So sánh ROE và P/E dự phóng 2026 của PNJ (24,5%; 11,6x), PVD (tính từ dữ liệu), và POW (2,5%; 90,4x). Tương quan giữa hiệu quả sinh lời và định giá thị trường cho thấy doanh nghiệp nào bị undervalue rõ ràng nhất?",
+    "category": "multi_doc_comparison",
+    "requires": ["table"],
+    "expected_answer_hint": "PNJ bị undervalue rõ nhất: ROE 24,5% (cao nhất) nhưng P/E chỉ 11,6x (thấp nhất, dưới TB lịch sử 18x). PVD có ROE ~17% với P/E ~7x — hấp dẫn nhưng ngành chu kỳ hơn. POW P/E 90,4x là distorted do năm bất thường. Nếu xét PEG ratio: PNJ = 11,6/25,6 = 0,45 (hấp dẫn), PVD ≈ 7/37 = 0,19 (rất rẻ nếu tăng trưởng EPS đúng dự báo)",
+    "source_page": "1",
+    "doc": ["PVD_2025_11_17_SSIResearch", "POW_2025_12_01_SSIResearch", "PNJ_2026_02_12_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q071",
+    "question": "PVD có tỷ lệ sử dụng giàn khoan 2026 giả định ở mức 93,67%, tăng mạnh so với mức bình quân ~80% năm 2025 (do PVD VI bảo trì Q1/2025). Nếu tỷ lệ sử dụng thực tế chỉ đạt 85%, LNST 2026 sẽ giảm khoảng bao nhiêu %?",
+    "category": "numerical_reasoning",
+    "requires": ["text", "table"],
+    "expected_answer_hint": "Tỷ lệ sử dụng giảm từ 93,67% xuống 85% = giảm ~8,67 điểm %. Mảng Khoan chiếm ~50% doanh thu → doanh thu Khoan giảm ~9,3% (8,67/93,67). Với biên ròng Khoan ~10%, LNST có thể giảm ~15-20% so với dự báo (từ 1.217 tỷ xuống ~970-1.030 tỷ). Tuy nhiên, mảng Dịch vụ giếng khoan (+67% svck) có thể bù đắp một phần",
+    "source_page": "5",
+    "doc": "PVD_2025_11_17_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q072",
+    "question": "PNJ có doanh thu vàng miếng giảm 43% svck năm 2025 nhưng dự báo phục hồi +50% svck năm 2026. Giả định này có hợp lý không khi xét đến Nghị định 232 và chính sách thu mua mới?",
+    "category": "multi_hop_reasoning",
+    "requires": ["text", "table"],
+    "expected_answer_hint": "Hợp lý vì Nghị định 232/2025 cho phép tư nhân sản xuất vàng miếng và nhập khẩu vàng nguyên liệu — giải quyết gốc rễ vấn đề thiếu hụt nguồn cung. PNJ với vốn điều lệ lớn nhất ngành có lợi thế được phân bổ hạn ngạch nhập khẩu cao hơn. Thêm vào đó, chính sách thu mua mới tăng NVL vàng lên 4,8 nghìn tỷ (gấp 4,4 lần TB). Tuy nhiên, rủi ro là hạn ngạch thực tế có thể thấp nếu NHNN ưu tiên ổn định tỷ giá",
+    "source_page": "2-3",
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q073",
+    "question": "POW có tổng cộng 15 dự án điện LNG sẽ phát triển đến 2030 với tổng công suất 25.624 MW, nhưng chỉ Nhơn Trạch 3&4 (1.624 MW) đã vận hành. Tỷ lệ hoàn thành thực tế so với kế hoạch là bao nhiêu % và điều này phản ánh gì về rủi ro triển khai các dự án điện LNG còn lại?",
+    "category": "numerical_reasoning",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "Chỉ 1.624/25.624 MW = 6,3% đã vận hành. 93,7% còn lại đối mặt 2 thách thức lớn theo POW: (1) vấn đề mua sắm thiết bị và (2) lo ngại hiệu quả đầu tư. Hiệp Phước GĐ1 (1.200 MW) chưa có PPA tính đến 11/2025. Điều này cho thấy Nhơn Trạch 3&4 có vị thế chiến lược độc quyền trong trung hạn, và lợi nhuận sẽ cải thiện mạnh từ 2027-2028 khi là nguồn điện LNG hiếm hoi",
+    "source_page": "2",
+    "doc": "POW_2025_12_01_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q074",
+    "question": "Tăng trưởng doanh số bán lẻ của PNJ diễn biến thế nào từ Q1/2024 đến Q4/2025 — có quý nào giảm svck không, và đỉnh tăng trưởng rơi vào quý nào?",
+    "category": "numerical_reasoning",
+    "requires": ["image"],
+    "expected_answer_hint": "Bán lẻ: Q1-Q3/2024 tăng mạnh (đỉnh ~100% svck khoảng Q3/2024), sau đó giảm tốc. Q1-Q3/2025 tăng trưởng âm hoặc rất thấp (do nền cao + giá vàng tăng mạnh giảm sản lượng). Q4/2025 phục hồi +27% svck. Doanh số bán buôn và vàng 24K biến động mạnh hơn, có nhiều quý âm sâu (-60% đến -80%). Q4/2025 vàng 24K vẫn giảm -31%",
+    "source_page": "2",
+    "doc": "PNJ_2026_02_12_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q075",
+    "question": "Cả PVD và POW đều liên quan đến ngành dầu khí nhưng ở hai đầu chuỗi giá trị khác nhau. Nếu giá dầu tăng mạnh, doanh nghiệp nào hưởng lợi và doanh nghiệp nào chịu thiệt, xét đến cơ chế giá của từng doanh nghiệp?",
+    "category": "multi_doc_comparison",
+    "requires": ["text"],
+    "expected_answer_hint": "PVD HƯỞNG LỢI: giá dầu tăng → tăng hoạt động thăm dò khai thác → nhu cầu thuê giàn khoan tăng → giá thuê ngày tăng (giá thuê ngày tương quan dương với giá dầu). POW THIỆT HẠI ở mảng Vũng Áng 1 (than): giá dầu tăng thường kéo giá than tăng → chi phí đầu vào tăng. Tuy nhiên POW hưởng lợi ở mảng điện khí vì giá khí đầu vào được pass-through qua công thức giá EVN. Net effect: PVD hưởng lợi rõ hơn",
+    "source_page": "1-3",
+    "doc": ["PVD_2025_11_17_SSIResearch", "POW_2025_12_01_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q076",
+    "question": "NLG ghi nhận doanh số bán hàng Q4/2025 đạt 6.851 tỷ đồng nhưng doanh thu kế toán cùng quý chỉ 1.704 tỷ. Tỷ lệ chuyển hóa doanh số thành doanh thu là bao nhiêu, và con số doanh thu chưa ghi nhận 10.878 tỷ cuối 2025 sẽ phủ được bao nhiêu năm doanh thu dự phóng 2026?",
+    "category": "numerical_reasoning",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "Tỷ lệ chuyển hóa Q4/2025: 1.704/6.851 = ~24,9% — cực thấp do BĐS ghi nhận doanh thu khi bàn giao, không phải khi ký hợp đồng. Doanh thu chưa ghi nhận 10.878 tỷ / DT dự phóng 2026F 4.417 tỷ = ~2,5 năm backlog. Biểu đồ doanh số bán hàng cho thấy Q4/2025 đạt ~5.000 tỷ (Southgate + Paragon chiếm phần lớn) — cao nhất trong cả giai đoạn 2023-2025",
+    "source_page": "1-2",
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 1 trang 2: Doanh số bán hàng NLG theo quý 2023-2025 (stacked bar)"
+  },
+  {
+    "id": "q077",
+    "question": "BHX đang mở rộng rất mạnh với kế hoạch thêm 1.000 cửa hàng mới năm 2026, nhưng biên lợi nhuận ròng chỉ mới đạt 1,7% (2025). Nếu biên LN ròng 2026 không đạt mục tiêu 3,1%, chiến lược mở rộng sẽ gặp rủi ro gì?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "Rủi ro kép: (1) 1.000 cửa hàng mới cần thời gian 12-18 tháng để hòa vốn, gánh chi phí mở mới (thuê mặt bằng, nhân sự, tồn kho ban đầu) trong khi chưa đạt doanh thu tối ưu; (2) BHX được định giá theo DCF với giá trị 72.157 tỷ — chiếm 40,7% tổng SOTP của MWG — nên nếu biên LN không cải thiện, giá mục tiêu bị ảnh hưởng đáng kể. Biểu đồ KQKD BHX cho thấy biên LN ròng chỉ mới chuyển dương từ Q2/2025 (~0,5%) lên 2,5% Q4/2025",
+    "source_page": "3-4",
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ KQKD BHX theo quý (doanh thu + biên LN ròng) trang 3"
+  },
+  {
+    "id": "q078",
+    "question": "NLG giảm nợ ròng/vốn từ 22% xuống 18% nhờ bán hàng mạnh trong 2025, còn MWG có nợ ròng/EBITDA giảm từ 2,33x xuống 1,66x. Chiến lược giảm đòn bẩy của hai doanh nghiệp khác nhau về bản chất thế nào?",
+    "category": "multi_doc_comparison",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "NLG giảm nợ chủ động: thoái 15% vốn Izumi City (Q4/2025), phát hành cổ phiếu cho cổ đông hiện hữu thu về 2.500 tỷ, dòng tiền bán hàng tăng mạnh → trả bớt nợ vay. MWG giảm nợ thụ động: EBITDA tăng mạnh (+35,2% svck lên 11.998 tỷ 2025) nhờ biên LN cải thiện ở cả 3 mảng, trong khi nợ vay gần như không đổi (~27-29 nghìn tỷ). NLG giảm nợ bằng cách thu hẹp bảng cân đối, MWG giảm bằng cách tăng mẫu số",
+    "source_page": "1,3-5",
+    "doc": ["NLG_2026_02_24_SSIResearch", "MWG_2026_02_10_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q079",
+    "question": "Masan MeatLife (MML) báo lợi nhuận ròng tăng 2.342% năm 2025 (từ 25 tỷ lên 619 tỷ), nhưng dự báo 2026 lại giảm 64% còn 226 tỷ. Con số tăng trưởng nghìn phần trăm có phản ánh đúng sức khỏe kinh doanh thực sự không?",
+    "category": "trick",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "Không — đây là bẫy nền thấp (base effect). LN ròng 2024 chỉ 25 tỷ (gần breakeven), nên bất kỳ cải thiện nào cũng cho % tăng trưởng cực lớn. Thực tế, LN 619 tỷ năm 2025 nhờ giá heo tăng mạnh và tỷ trọng thịt chế biến cải thiện (từ ~28% lên ~34% tổng DT). Năm 2026 giảm 64% vì giả định giá heo hạ nhiệt khi nguồn cung phục hồi (dịch tả heo châu Phi không bùng phát). Con số đúng để đánh giá MML là biên LN tuyệt đối, không phải % tăng trưởng",
+    "source_page": "4-5",
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q080",
+    "question": "Giá vonfram tăng từ mức bình quân 500 USD/tấn năm 2025 lên gần 1.700 USD/tấn vào cuối tháng 2/2026. Với doanh thu MSR dự báo 2026 đạt ~14 nghìn tỷ (+87% svck), tính tỷ trọng đóng góp của MSR vào tổng doanh thu hợp nhất MSN và so với năm 2025.",
+    "category": "numerical_reasoning",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "MSR 2026F: 13.944 tỷ / tổng DT hợp nhất 107.470 tỷ = ~13%. Năm 2025: 7.443 tỷ / 81.621 tỷ = ~9,1%. Tỷ trọng MSR tăng gần gấp rưỡi. Biểu đồ giá vonfram cho thấy mức tăng phi tuyến — từ ~300 USD/tấn (2020-2023) lên 1.685 USD/tấn (2/2026) do Trung Quốc hạn chế xuất khẩu trong bối cảnh chiến tranh thương mại Mỹ-Trung. LNST MSR đảo chiều từ lỗ 1.587 tỷ (2024) → lãi 11 tỷ (2025) → 2.150 tỷ (2026F)",
+    "source_page": "1,4-5",
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ diễn biến giá vonfram 2020-2026 trang 4"
+  },
+  {
+    "id": "q081",
+    "question": "NLG có doanh số bán hàng năm 2025 tăng 128% svck nhưng doanh thu kế toán lại giảm 22%. Xu hướng hai đường này trên biểu đồ cho thấy gì về chu kỳ ghi nhận lợi nhuận của doanh nghiệp bất động sản?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "Đặc thù BĐS: doanh số bán hàng (ký hợp đồng) đi trước doanh thu kế toán (bàn giao) 2-3 năm. Biểu đồ 2 (doanh số 2022-2027F) cho thấy đỉnh bán hàng 2025 (~11.855 tỷ) sẽ chuyển thành đỉnh doanh thu khoảng 2027F (3.958 tỷ NPATMI tương ứng DT ~7-8 nghìn tỷ). Biểu đồ 3 cho thấy NPAT-MI 2023-2025 thấp do bàn giao ít, nhưng 2027F phục hồi mạnh. Đây là lý do NLG có P/E cao (23,2x 2026F) nhưng SSI vẫn khuyến nghị KHẢ QUAN — thị trường đang chiết khấu lợi nhuận tương lai",
+    "source_page": "2,4",
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 2: Doanh số bán hàng 2022-2027F và Biểu đồ 3: Lợi nhuận 2022-2027F trang 4"
+  },
+  {
+    "id": "q082",
+    "question": "WinCommerce (dưới MSN) và Bách Hóa Xanh (dưới MWG) đều lên kế hoạch mở thêm ~1.000 cửa hàng năm 2026. So sánh hiệu quả hoạt động hiện tại và triển vọng của hai chuỗi bán lẻ thực phẩm này.",
+    "category": "multi_doc_comparison",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "BHX vượt trội: biên LN ròng 1,7% (2025) và đang cải thiện nhanh (từ lỗ → 1,7% trong 1 năm), LFL growth dương. WCM: biên LN ròng chỉ ~1,3% (LN ròng 501 tỷ / DT 38.979 tỷ), cải thiện chậm hơn nhờ cải tạo cửa hàng (chỉ 37% siêu thị đã cải tạo). Tuy nhiên, WCM có quy mô lớn hơn (4.462 cửa hàng vs 2.559 BHX cuối 2025) và đa dạng format hơn (Winmart urban, mini, store, large format). BHX tập trung miền Trung-Nam, WCM mạnh miền Bắc",
+    "source_page": "2-3",
+    "doc": ["MWG_2026_02_10_SSIResearch", "MSN_2026_03_04_SSIResearch"],
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ KQKD BHX (MWG trang 3) và Biểu đồ KQKD WCM + số lượng cửa hàng (MSN trang 2-3)"
+  },
+  {
+    "id": "q083",
+    "question": "P/E forward 2026F của NLG là 23,2x, tăng so với P/E trailing 2025 là 21,1x — tức là NLG trở nên 'đắt hơn' dù giá cổ phiếu đã giảm 30% trong 3 tháng. Nghịch lý này giải thích thế nào?",
+    "category": "trick",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "P/E tăng vì EPS 2026F giảm (1.281 đồng vs 1.446 đồng năm 2025), không phải vì giá CP tăng. Doanh thu 2026F giảm 22% svck do Izumi City ghi nhận theo hình thức liên doanh (chỉ hợp nhất, không ghi nhận doanh thu thuần). NPATMI giảm 5% xuống 668 tỷ. Giá CP 28.650 đồng / EPS 1.281 = 22,4x. Bẫy: nhà đầu tư so P/E mà không hiểu đặc thù BĐS sẽ tưởng NLG đắt, nhưng thực chất lợi nhuận cốt lõi (loại bỏ chi phí bất thường Izumi City) tăng 12% svck",
+    "source_page": "1,4",
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q084",
+    "question": "Trong SOTP của MWG, BHX được định giá bằng DCF ở mức 72.157 tỷ đồng (MWG sở hữu 95% = 68.513 tỷ), chiếm bao nhiêu phần trăm tổng giá trị? Nếu biên lợi nhuận ròng BHX chỉ đạt 2% thay vì 3,1% dự phóng, ước tính giá mục tiêu MWG sẽ thay đổi bao nhiêu?",
+    "category": "numerical_reasoning",
+    "requires": ["table"],
+    "expected_answer_hint": "BHX chiếm 68.513 / 168.213 = 40,7% tổng SOTP. Nếu biên LN ròng chỉ 2% (vs 3,1%): LN ròng BHX = 58.700 × 2% = 1.174 tỷ (vs 1.799 tỷ dự phóng), giảm 35%. Giả sử DCF giảm tương ứng ~35%: BHX còn ~46.900 tỷ → 95% = 44.555 tỷ → giảm ~23.958 tỷ → giá mục tiêu giảm ~16.300 đồng/cp (23.958 tỷ / 1.468 triệu CP), từ 115.000 xuống ~98.700 đồng — vẫn là MUA nhưng upside thu hẹp đáng kể",
+    "source_page": "4",
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q085",
+    "question": "Masan Resources (MSR) chuyển từ lỗ 1.587 tỷ (2024) sang lãi 2.150 tỷ (2026F) gần như hoàn toàn nhờ giá vonfram tăng do chiến tranh thương mại Mỹ-Trung. Sự phụ thuộc này bền vững đến mức nào nếu căng thẳng thương mại hạ nhiệt?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "Rủi ro cao: (1) giá vonfram kế hoạch của MSN chỉ 900 USD/tấn nhưng thực tế đã vượt xa (1.700 USD/tấn) → điều chỉnh tăng dự báo LNST từ 7,13 lên 9,58 nghìn tỷ phần lớn nhờ MSR. (2) Biểu đồ giá vonfram cho thấy giai đoạn 2020-2024 giá chỉ dao động 200-500 USD/tấn — mức 1.700 là bất thường. (3) Nếu Trung Quốc dỡ hạn chế xuất khẩu, giá có thể giảm 50-70% về vùng 500-800 USD/tấn → MSR quay lại mức hòa vốn hoặc lỗ. MSN cần đa dạng hóa động lực tăng trưởng ngoài MSR",
+    "source_page": "4-5",
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ diễn biến giá vonfram 2020-2026 trang 4"
+  },
+  {
+    "id": "q086",
+    "question": "SSI khuyến nghị NLG là KHẢ QUAN (+22,8%), MWG là MUA (+28,8%), MSN là MUA (+40,7%). Doanh nghiệp nào có risk/reward hấp dẫn nhất khi xét cả tiềm năng tăng giá lẫn rủi ro đặc thù ngành?",
+    "category": "multi_doc_comparison",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "MWG có risk/reward tốt nhất: (1) tăng trưởng LNST +32% svck với 3 động lực rõ ràng (CN&ĐM chu kỳ nâng cấp, BHX hòa vốn → có lãi, Erablue mở rộng), (2) P/E 2026F 14,2x — thấp hơn TB lịch sử, (3) rủi ro thấp nhờ mô hình bán lẻ dòng tiền ổn định. MSN có upside cao nhất (40,7%) nhưng rủi ro lớn do phụ thuộc giá vonfram + nợ ròng 20.020 tỷ + chiết khấu đa ngành 20%. NLG upside thấp nhất và phụ thuộc vào chu kỳ BĐS + lãi suất",
+    "source_page": "1",
+    "doc": ["NLG_2026_02_24_SSIResearch", "MWG_2026_02_10_SSIResearch", "MSN_2026_03_04_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q087",
+    "question": "MWG sở hữu 45% Erablue (Indonesia) và định giá chuỗi này ở mức 15.300 tỷ đồng theo P/S dù mới có 181 cửa hàng và chưa có lợi nhuận. Tại sao SSI không dùng DCF hay P/E mà lại dùng P/S, và tốc độ mở rộng cửa hàng có hỗ trợ mức định giá này không?",
+    "category": "trick",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "P/S được dùng vì Erablue chưa có lợi nhuận (P/E vô nghĩa) và dòng tiền chưa ổn định (DCF không tin cậy) — đây là cách định giá phổ biến cho startup bán lẻ ở giai đoạn tăng trưởng. Biểu đồ số lượng cửa hàng cho thấy tốc độ mở rộng rất mạnh: từ 87 (Q2/2024) lên 181 (Q4/2025) → mục tiêu 330 (2026F) = gần gấp đôi mỗi năm. Giá trị 15.300 tỷ / DT 2025 cho P/S có thể ~2-3x. Rủi ro: Erablue chỉ chiếm 4,1% SOTP (6.885/168.213) nhưng nếu thất bại sẽ ảnh hưởng ~4.700 đồng/cp",
+    "source_page": "2,4",
+    "doc": "MWG_2026_02_10_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ số lượng cửa hàng Erablue theo quý trang 2"
+  },
+  {
+    "id": "q088",
+    "question": "NLG có quỹ đất 681 ha và doanh thu chưa ghi nhận 10.878 tỷ đồng cuối 2025. Nếu tính P/B 2026F chỉ 1,1x — thấp hơn 30% so với trung bình 5 năm (1,6x), mức chiết khấu này phản ánh rủi ro hay cơ hội khi đặt cạnh xu hướng doanh số bán hàng trên biểu đồ?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "Cơ hội nhiều hơn rủi ro: (1) Biểu đồ doanh số bán hàng 2022-2027F cho thấy xu hướng tăng mạnh — từ ~4.000 tỷ (2022) lên 11.855 tỷ (2025) và dự báo 8.800 tỷ (2026F), chứng tỏ nhu cầu thực vẫn cao; (2) Backlog 10.878 tỷ đảm bảo LN ngắn hạn; (3) Nợ ròng/vốn giảm từ 22% xuống 18% → rủi ro tài chính giảm. P/B thấp do thị trường chiết khấu toàn ngành BĐS vì lãi suất + nguồn cung tăng, không phải vấn đề riêng NLG. Khi tâm lý thị trường cải thiện, P/B có thể mean-revert về 1,4-1,6x",
+    "source_page": "1,4",
+    "doc": "NLG_2026_02_24_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 2 trang 4: Doanh số bán hàng NLG 2022-2027F"
+  },
+  {
+    "id": "q089",
+    "question": "MSN áp dụng chiết khấu đa ngành (conglomerate discount) 20% trong định giá SOTP, với nợ ròng 20.020 tỷ đồng. Tổng giá trị các mảng trước chiết khấu và nợ ròng là bao nhiêu, và mức chiết khấu 20% có hợp lý khi MSN đang đơn giản hóa cấu trúc sở hữu?",
+    "category": "numerical_reasoning",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "Tổng giá trị phần vốn góp/lợi ích kinh tế: MCH 107.932 + WCM 41.299 + MSR 18.420 + MML 5.408 + TCB 47.249 + Khác 3.913 = 224.221 tỷ. Sau chiết khấu 20%: 224.221 × 0,8 = 179.377 tỷ. Trừ nợ ròng 20.020 tỷ → 159.357 tỷ / 1.520 triệu CP = ~104.800 đồng (≈107.000 làm tròn). Chiết khấu 20% cao hơn thông thường (10-15%) vì MSN có cấu trúc phức tạp (nhiều lớp sở hữu chéo). Tuy nhiên, việc MSN đang hoàn tất khoản thu từ bán hàng, giảm nợ → có thể giảm chiết khấu trong tương lai",
+    "source_page": "5",
+    "doc": "MSN_2026_03_04_SSIResearch",
+    "answer_in_text": false
+  },
+  {
+    "id": "q090",
+    "question": "Tăng trưởng cửa hàng cùng (LFL/SSSG) của WinCommerce và Bách Hóa Xanh diễn biến thế nào qua các quý gần đây, và chuỗi nào có momentum tốt hơn khi đặt trong bối cảnh cả hai đều đang mở rộng mạnh?",
+    "category": "multi_doc_comparison",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "BHX có momentum tốt hơn: SSSG dương liên tục và cải thiện qua các quý, nhờ cải tạo cửa hàng hiện hữu + mở rộng mạng lưới có chọn lọc (từ 1.698 lên 2.559 cửa hàng). WCM LFL growth biến động mạnh hơn — biểu đồ cho thấy có quý âm sâu (-5% đến -10% giai đoạn 2023-2024) trước khi phục hồi dương trong 2025. WCM đang chuyển đổi từ mô hình truyền thống sang hiện đại (giảm giá phong), tốc độ cải tạo chậm (chỉ 37% siêu thị). Kết luận: BHX 'chạy' trên nền tảng đã cải tạo xong, WCM đang trong quá trình chuyển đổi",
+    "source_page": "2-3",
+    "doc": ["MWG_2026_02_10_SSIResearch", "MSN_2026_03_04_SSIResearch"],
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ LFL growth WCM (MSN trang 2) và biểu đồ KQKD BHX (MWG trang 3)"
+  },
+  {
+    "id": "q091",
+    "question": "NIM của MBB giảm liên tục từ 5,7% (2022) xuống 4,07% (Q3/2025) — mất gần 1,7 điểm %. Nhưng LNTT vẫn tăng từ 22.729 tỷ lên dự báo 32.138 tỷ (2025). Tăng trưởng tín dụng phải đạt mức nào để bù đắp mức giảm NIM này?",
+    "category": "numerical_reasoning",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "NIM giảm ~30% (từ 5,7% xuống 4,0%). Để LNTT vẫn tăng ~41% (từ 22.729 lên 32.138 tỷ trong 3 năm), tín dụng phải tăng tương ứng: cần bù 30% sụt NIM + tạo thêm 41% tăng trưởng → tổng tài sản sinh lãi cần tăng ~100% (tương đương tăng trưởng tín dụng kép ~25-30%/năm). Biểu đồ 2 xác nhận tăng trưởng tín dụng svck duy trì 25-33%/năm — cao nhất nhóm ngân hàng lớn. Thêm vào đó, CIR cải thiện từ 32,5% xuống 30% cũng đóng góp một phần",
+    "source_page": "1,3",
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 2 trang 3: Tăng trưởng tín dụng và huy động svck 2019-Q3/2025"
+  },
+  {
+    "id": "q092",
+    "question": "KDH ghi nhận biên lợi nhuận gộp Q4/2025 đạt 71% — gần gấp đôi mức 44% cùng kỳ năm trước. Mức biên này có duy trì được không khi các dự án tiếp theo có cơ cấu sản phẩm khác biệt?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "Không duy trì được: biên 71% Q4/2025 đến từ bàn giao ~40 căn biệt thự/nhà phố thấp tầng tại Gladia (sản phẩm cao cấp, giá trị lớn, biên cực cao). Biểu đồ lợi nhuận cho thấy biên LN gộp cả năm 2025 là 59% (mix giữa Q cao và Q thấp). Sang 2026, doanh thu chủ yếu từ 616 căn hộ Gladia (sản phẩm phổ thông hơn, biên thấp hơn biệt thự) + Bình Trưng mở rộng → biên LN gộp 2026F dự kiến giảm về ~55%. Năm 2027 khi Solina 11A và KCN Lê Minh Xuân bắt đầu ghi nhận, biên có thể thay đổi tiếp tùy cơ cấu",
+    "source_page": "1-3",
+    "doc": "KDH_2026_03_16_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 4 trang 3: Dự báo lợi nhuận KDH 2022-2027F"
+  },
+  {
+    "id": "q093",
+    "question": "Lãi suất tăng tác động ngược chiều lên MBB (ngân hàng) và KDH (bất động sản). So sánh cơ chế truyền dẫn: MBB hưởng lợi hay chịu thiệt khi lãi suất tăng, và KDH bị ảnh hưởng qua kênh nào?",
+    "category": "multi_doc_comparison",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "MBB: hưởng lợi ngắn hạn vì lãi suất cho vay tái định giá nhanh hơn lãi suất huy động (biểu đồ 5-6 cho thấy lợi suất tài sản phản ứng nhanh hơn chi phí vốn). Tuy nhiên, lãi suất tăng mạnh → nợ xấu tăng (NPL đã từ 1,1% lên 1,87%) → chi phí dự phòng tăng 132% svck → triệt tiêu lợi ích NIM. KDH: chịu thiệt kép: (1) người mua nhà giảm khả năng vay → tỷ lệ hấp thụ giảm (rủi ro chính SSI nêu), (2) chi phí tài chính KDH tăng (nợ/VCSH 0,48x). KDH phải hỗ trợ lãi suất 0% trong 18-30 tháng cho khách Gladia để kích cầu",
+    "source_page": "1,3-4",
+    "doc": ["MBB_2025_12_04_SSIResearch", "KDH_2026_03_16_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q094",
+    "question": "IMP đang giao dịch ở P/E 2026F khoảng 23x — cao hơn 1 độ lệch chuẩn so với trung bình 5 năm (17x) và cao hơn trung bình ngành dược khu vực (20x). Tuy nhiên ROE ổn định 16% và nợ ròng gần bằng 0. Liệu IMP thực sự đắt hay chỉ đang phản ánh chất lượng doanh nghiệp?",
+    "category": "trick",
+    "requires": ["table", "text"],
+    "expected_answer_hint": "Cả hai — IMP vừa đắt vừa có lý do. Đắt vì: (1) tăng trưởng DT chỉ 8-9%/năm (chậm lại từ 21% năm 2023), (2) LNST tăng 13% svck 2026F — P/E/G ratio = 23/13 = 1,77x (>1 = đắt), (3) SSI hạ từ KHẢ QUAN xuống TRUNG LẬP do giá đã gần giá mục tiêu. Có lý do vì: (1) net cash (nợ ròng/EBITDA âm), (2) ROE 16% ổn định nhất ngành, (3) biên gộp 41% cao nhất ngành dược VN, (4) CAGR DT 10,6% vượt xa ngành 6,8%. Kết luận: premium chính đáng cho chất lượng, nhưng upside hạn chế ở mức giá hiện tại",
+    "source_page": "1-2",
+    "doc": "IMP_2026_02_09_SSIResearch",
+    "answer_in_text": true
+  },
+  {
+    "id": "q095",
+    "question": "IMP đang tái cơ cấu sản phẩm: dòng IMP4 tăng sản lượng 35% nhưng giá trị chỉ tăng 31%, trong khi IMP1 tăng sản lượng 12% nhưng giá trị tăng 25%. Xu hướng giá bán đơn vị của hai dòng sản phẩm này phản ánh chiến lược gì?",
+    "category": "numerical_reasoning",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "IMP4: giá đơn vị giảm nhẹ (giá trị/sản lượng = 31%/35% < 1) → IMP đang đẩy mạnh volume bằng cách giữ hoặc giảm giá, mở rộng thị phần cho dòng sản phẩm biên cao nhất. IMP1: giá đơn vị tăng mạnh (25%/12% > 1, tức tăng giá ~12%) → tận dụng vị thế thương hiệu để tăng giá. Chiến lược tổng thể: volume game ở dòng cao cấp (IMP4) + pricing power ở dòng phổ thông (IMP1). IMP3 giảm sản lượng 4% nhưng giá trị vẫn tăng 7% → cũng tăng giá. Tổng thể dịch chuyển mix sang dòng biên cao",
+    "source_page": "3",
+    "doc": "IMP_2026_02_09_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ tái cơ cấu sản phẩm IMP1-IMP4 trang 3: % sản lượng svck vs % giá trị svck"
+  },
+  {
+    "id": "q096",
+    "question": "MBB mở rộng tín dụng vào sản xuất chế biến (+14 nghìn tỷ svck), BĐS & xây dựng (+14 nghìn tỷ), vay cá nhân (+9 nghìn tỷ) và chứng khoán qua MBS (+6 nghìn tỷ). Đồng thời tỷ lệ nợ xấu tăng từ 1,62% lên 1,87% với tốc độ hình thành nợ xấu gấp đôi. Cơ cấu nào đang gây rủi ro lớn nhất?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "Rủi ro lớn nhất đến từ khoản vay năng lượng tái tạo (nằm trong nhóm sản xuất): MBB có khoản vay cho khách hàng năng lượng tái tạo đang đàm phán lại hợp đồng PPA với EVN — khoản vay này tạm chuyển nhóm nợ xấu nhưng dự kiến được đánh giá lại khi khách hàng trả nợ theo lộ trình mới Q4/2025. Biểu đồ 3 (chất lượng tài sản) cho thấy NPL tăng mạnh từ đáy 1Q23 lên gần 2% Q3/2025, đi kèm tỷ lệ bao phủ nợ xấu (LLCR) giảm từ 238% xuống 79,2%. BĐS cũng là rủi ro nhưng đã có tiền lệ xử lý tốt (hoàn nhập Q2/2024)",
+    "source_page": "2-3",
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": true,
+    "chart_note": "Biểu đồ 1: Cơ cấu tín dụng 2022-Q3/2025 và Biểu đồ 3: Chất lượng tài sản trang 3"
+  },
+  {
+    "id": "q097",
+    "question": "Dòng tiền từ hoạt động kinh doanh của KDH âm liên tục (-4.252 tỷ năm 2024, -3.175 tỷ năm 2025) trong khi IMP luôn dương (+214 tỷ, +54 tỷ). Hai mô hình kinh doanh này khác biệt gì về vòng quay vốn và rủi ro thanh khoản?",
+    "category": "multi_doc_comparison",
+    "requires": ["table"],
+    "expected_answer_hint": "KDH (BĐS): dòng tiền âm vì phải ứng vốn mua đất, xây dựng 2-3 năm trước khi thu tiền bán hàng. Hàng tồn kho khổng lồ (22.180-25.448 tỷ, chiếm ~65% tổng tài sản). Ngày tồn kho lên đến 4.860-3.425 ngày. Phải vay nợ (nợ/VCSH 0,48x) để tài trợ. IMP (dược phẩm): dòng tiền dương ổn định, hàng tồn kho chỉ ~705-776 tỷ (chuyển trong ~170 ngày), gần như không vay nợ (nợ ròng/VCSH ~0). Rủi ro thanh khoản KDH cao hơn rõ rệt — nếu thị trường đóng băng, KDH kẹt hàng tồn kho; IMP vẫn thu tiền đều từ bán thuốc",
+    "source_page": "4-5",
+    "doc": ["KDH_2026_03_16_SSIResearch", "IMP_2026_02_09_SSIResearch"],
+    "answer_in_text": false
+  },
+  {
+    "id": "q098",
+    "question": "Tỷ lệ bao phủ nợ xấu (LLCR) của MBB giảm từ 238% (2022) xuống 79,2% (Q3/2025) — tức dự phòng chỉ đủ phủ ~80% nợ xấu. MBB đang 'ăn' vào bộ đệm an toàn hay đây là hiện tượng bình thường trong chu kỳ tín dụng?",
+    "category": "trick",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "Cả hai — nhưng cần hiểu ngữ cảnh: (1) LLCR 238% năm 2022 là bất thường cao (hậu Covid, ngân hàng trích lập mạnh để 'dọn' bảng cân đối). Biểu đồ 3 cho thấy cột dự phòng đặc biệt rất cao giai đoạn 2020-2022. (2) LLCR giảm về 79-90% là quá trình bình thường hóa — ngân hàng dùng dự phòng để xử lý nợ xấu cũ (write-off). (3) Tuy nhiên, NPL tăng đồng thời (1,87%) làm mẫu số phình to → LLCR giảm nhanh hơn bình thường. SSI kỳ vọng LLCR ổn định ở 89-90% từ 2025F. Rủi ro: nếu NPL tiếp tục tăng mà dự phòng không tăng tương ứng, MBB sẽ phải trích lập bổ sung → ăn vào lợi nhuận",
+    "source_page": "1,3",
+    "doc": "MBB_2025_12_04_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 3 trang 3: Chất lượng tài sản (cột dự phòng đặc biệt + dự phòng chung + đường NPL)"
+  },
+  {
+    "id": "q099",
+    "question": "KDH bàn giao khoảng 40 căn thấp tầng tại Gladia trong Q4/2025 với biên gộp 71%, so với biên gộp cả năm 2024 chỉ 42%. Ước tính giá bán trung bình mỗi căn biệt thự Gladia cao hơn bao nhiêu lần so với sản phẩm bình quân năm 2024?",
+    "category": "numerical_reasoning",
+    "requires": ["image", "table"],
+    "expected_answer_hint": "Q4/2025: DT 1.816 tỷ / ~40 căn = ~45,4 tỷ/căn (biệt thự/nhà phố Gladia). Năm 2024: DT 3.279 tỷ chia cho tổng căn bàn giao (chủ yếu căn hộ The Privia và sản phẩm khác) — với biên gộp 42% thấp hơn nhiều. Giá bình quân 2024 ước tính ~3-5 tỷ/căn hộ. Vậy biệt thự Gladia đắt gấp ~10-15 lần sản phẩm trung bình. Biểu đồ lợi nhuận cho thấy cột DT Q4/2025 cao nhất năm nhưng số lượng sản phẩm ít nhất → giá trị đơn vị cực cao, giải thích biên gộp vượt trội",
+    "source_page": "1-2,5",
+    "doc": "KDH_2026_03_16_SSIResearch",
+    "answer_in_text": false,
+    "chart_note": "Biểu đồ 4 trang 3: Dự báo lợi nhuận KDH (DT + NPAT-MI) 2022-2027F"
+  },
+  {
+    "id": "q100",
+    "question": "IMP có kênh ETC chiếm 75,8% doanh thu nhưng chỉ tăng 12% svck, trong khi kênh OTC chiếm 18% nhưng tăng mạnh hơn (18% svck, chủ yếu nhờ tăng giá). Nếu chính sách đấu thầu thuốc siết chặt hơn, cơ cấu doanh thu sẽ dịch chuyển thế nào?",
+    "category": "multi_hop_reasoning",
+    "requires": ["image", "text"],
+    "expected_answer_hint": "ETC sẽ chịu áp lực: đấu thầu siết chặt → giá trúng thầu có thể giảm hoặc tăng chậm, tỷ trọng ETC giảm tiếp (đã giảm từ 80,1% xuống 75,8%). OTC sẽ tăng tỷ trọng vì: (1) IMP có thể chủ động tăng giá (đã tăng 18% svck), (2) xu hướng người dân mua thuốc ngoài nhà thuốc ngày càng phổ biến. Biểu đồ kênh bán hàng cho thấy cột 'Other' tăng 84% svck — kênh mới (online, xuất khẩu) đang nổi lên. Dài hạn, SSI đánh giá ETC vẫn là động lực chính nhờ mở rộng danh mục trúng thầu, nhưng tăng trưởng chậm hơn OTC",
+    "source_page": "2-3",
+    "doc": "IMP_2026_02_09_SSIResearch",
+    "answer_in_text": true,
+    "chart_note": "Biểu đồ kênh bán hàng ETC vs OTC vs Other trang 3"
+  }
+]
