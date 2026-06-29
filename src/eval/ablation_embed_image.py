@@ -77,8 +77,19 @@ def run(questions_path: str):
     img_data = image_col.get(include=["documents", "metadatas"])
     print(f"Found {len(img_data['ids'])} images in ChromaDB")
 
-    # Build image info list — chỉ VNM và HDB (khớp bộ câu hỏi)
-    TARGET_TICKERS = {"VNM", "HDB"}
+    # Build image info list — 10 mã đa dạng ngành
+    TARGET_TICKERS = {
+        "VNM",  # FMCG
+        "HDB",  # Ngân hàng
+        "HPG",  # Thép
+        "GAS",  # Dầu khí
+        "MWG",  # Bán lẻ
+        "FRT",  # Bán lẻ dược
+        "VCB",  # Ngân hàng nhà nước
+        "PVD",  # Dịch vụ dầu khí
+        "REE",  # Cơ điện
+        "DCM",  # Hoá chất
+    }
     images = []
     for i, chunk_id in enumerate(img_data["ids"]):
         meta = img_data["metadatas"][i]
@@ -94,7 +105,7 @@ def run(questions_path: str):
                 "doc": meta.get("doc", ""),
                 "page": meta.get("page", 0),
             })
-    print(f"Valid images (VNM + HDB): {len(images)} / {len(img_data['ids'])} total")
+    print(f"Valid images ({len(TARGET_TICKERS)} tickers): {len(images)} / {len(img_data['ids'])} total")
 
     # ── Embed tất cả ảnh theo 3 cách (1 lần duy nhất) ──
     print(f"\nEmbedding {len(images)} images × 3 methods...")

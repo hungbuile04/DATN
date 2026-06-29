@@ -14,7 +14,7 @@ extraction:
 
 embedding:
   model: "gemini-embedding-2-preview"
-  embed_dim: 3072
+  embed_dim: 3072          # Gemini Embedding 2 native (Matryoshka: có thể cắt xuống 1536 sau khi re-embed)
   batch_size: 10
   sleep_between_batches: 1.5
   min_token_count: 50
@@ -22,9 +22,11 @@ embedding:
   image_collection: "rag_image"     # image chunks (aggregated caption+image)
 
 retrieval:
-  text_top_k: 5       # top-k cho text pipeline
-  image_top_k: 3      # top-k cho image pipeline
+  text_top_k: 6       # top-k cho text pipeline
+  image_top_k: 4      # top-k cho image pipeline
   rrf_k: 60
+  use_reranker: true                      # bật/tắt Gemini Flash Reranker
+  reranker_model: "google/gemini-2.5-flash"  # model dùng cho reranking
 
 agents:
   llm_model: "google/gemini-2.5-flash"

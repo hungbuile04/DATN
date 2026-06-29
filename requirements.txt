@@ -9,7 +9,6 @@ chromadb==0.5.3
 google-genai>=1.0.0
 
 # Retrieval
-rank-bm25==0.2.2
 openai>=1.30.0          # vẫn dùng cho LLM agents qua OpenRouter
 
 # Config management

@@ -38,6 +38,11 @@ class AgentOutput:
     confidence: float          # 0.0 - 1.0
     sources:    list[dict]     # [{chunk_id, page, doc}]
     has_data:   bool           # True nếu agent nhận được chunks
+    extra:      dict = None    # key_facts, self_correction, entity_resolved
+
+    def __post_init__(self):
+        if self.extra is None:
+            self.extra = {}
 
 
 # ──────────────────────────────────────────────
@@ -50,7 +55,11 @@ Bạn là Text Agent — chuyên phân tích nội dung văn bản và bảng s�
 Nhiệm vụ:
 1. Trích xuất dữ kiện quan trọng: Tập trung vào số liệu, nhận định, khuyến nghị liên quan đến câu hỏi.
 2. Hiểu ngữ cảnh: Chú ý đến ý nghĩa và chi tiết trong văn bản và bảng.
-3. Trả lời rõ ràng: Dùng thông tin đã trích xuất để đưa ra câu trả lời ngắn gọn, chính xác.
+3. Trả lời rõ ràng: Dùng thông tin đã trích xuất để đưa ra câu trả lời chi tiết, đầy đủ, chính xác.
+4. TRÍCH DẪN NGUỒN: Mỗi khi nêu số liệu hoặc nhận định, LUÔN gắn nhãn [X, Trang Y] vào sau
+   (X = số thứ tự chunk trong context, Y = số trang).
+   Ví dụ: "NIM của HDB đạt 4,5% [1, Trang 8] trong khi CTG đạt 3,2% [3, Trang 5]."
+   KHÔNG dùng format khác như [ĐX], [HÌNH X] — chỉ dùng [X, Trang Y].
 
 QUAN TRỌNG — Hai khả năng đặc biệt:
 [SELF-CORRECTION] CHỈ kích hoạt khi bạn CHẮC CHẮN 100% rằng câu hỏi có CON SỐ CỤ THỂ sai.
@@ -75,9 +84,9 @@ Lưu ý: Bạn CHỈ có thông tin từ text/bảng. Các agents khác bổ sun
 
 Trả lời dạng JSON:
 {
-  "analysis": "Phân tích chi tiết từ văn bản và bảng (2-5 câu, nêu con số cụ thể)",
+  "analysis": "Phân tích chi tiết từ văn bản và bảng (2-5 câu, nêu con số cụ thể kèm nhãn [X, Trang Y])",
   "confidence": 0.0-1.0,
-  "key_facts": ["fact1", "fact2"],
+  "key_facts": ["fact1 [X, Trang Y]", "fact2 [X, Trang Y]"],
   "self_correction": "Ghi rõ nếu câu hỏi có thông tin sai, để trống nếu không",
   "entity_resolved": "Tên công ty đã xác định nếu câu hỏi mơ hồ, để trống nếu không cần"
 }
@@ -96,7 +105,8 @@ class TextAgent:
     def analyze(
         self, question: str,
         chunks: list[RetrievedChunk],
-        critical_info: str = "",          # giữ tham số cho backward compat, nhưng bỏ qua
+        critical_info: str = "",
+        image_hints: str = "",             # cross-context: tóm tắt từ image captions
     ) -> AgentOutput:
         if not chunks:
             return AgentOutput(
@@ -105,7 +115,14 @@ class TextAgent:
             )
 
         context = _format_chunks(chunks)
-        user_msg = f"Context:\n{context}\n\nCâu hỏi: {question}"
+        hint_block = ""
+        if image_hints:
+            hint_block = (
+                f"\n\nThông tin bổ sung từ biểu đồ (do Image Agent cung cấp):\n"
+                f"{image_hints}\n"
+                f"Lưu ý: ƯU TIÊN dữ liệu text/bảng. Chỉ tham khảo biểu đồ khi text không đủ."
+            )
+        user_msg = f"Context:\n{context}{hint_block}\n\nCâu hỏi: {question}"
 
         raw = self._call_llm(user_msg)
         parsed = _parse_json(raw)
@@ -119,6 +136,11 @@ class TextAgent:
                 for c in chunks
             ],
             has_data=True,
+            extra={
+                "key_facts": parsed.get("key_facts", []),
+                "self_correction": parsed.get("self_correction", ""),
+                "entity_resolved": parsed.get("entity_resolved", ""),
+            },
         )
 
     def _call_llm(self, user_msg: str) -> str:
@@ -267,12 +289,17 @@ class ImageAgent:
         content: list[dict] = []
 
         caption_text = "\n".join(
-            f"[{i+1}] {c.caption}" for i, c in enumerate(chunks) if c.caption
+            f"[HỊNH {i+1} | {c.doc} | Trang {c.page}] {c.caption}"
+            for i, c in enumerate(chunks) if c.caption
         )
 
         content.append({
             "type": "text",
-            "text": f"Image captions:\n{caption_text}\n\nCâu hỏi: {question}",
+            "text": (
+                f"Biểu đồ/Hình ảnh (caption kèm nguồn):\n{caption_text}\n\n"
+                f"Khi nêu số liệu từ biểu đồ, gấn nhãn [HỊNH X, Trang Y] vào sau.\n\n"
+                f"Câu hỏi: {question}"
+            ),
         })
 
         n_img = 0
@@ -325,36 +352,47 @@ class ImageAgent:
 # ──────────────────────────────────────────────
 
 SUM_AGENT_PROMPT = """\
-Bạn là editor — nhận bản nháp ghép từ nhiều agents và chỉnh sửa thành câu trả lời mạch lạc.
+Bạn là editor — nhận bản nháp từ nhiều agents VÀ context gốc, tổng hợp thành câu trả lời chính xác.
 
-Bạn nhận được BẢN NHÁP đã ghép sẵn từ Text Agent và Image Agent.
-Bản nháp có thể rời rạc, lặp lại, hoặc có mâu thuẫn nhỏ.
+Bạn nhận được:
+- BẢN NHÁP từ Text Agent và Image Agent (đã phân tích sơ bộ)
+- CONTEXT GỐC (raw chunks từ tài liệu — dùng để KIỂM CHỨNG và BỔ SUNG)
 
 Nhiệm vụ:
-1. GIỮ NGUYÊN tất cả thông tin, số liệu, con số cụ thể từ bản nháp.
+1. ĐỌC KỸ cả bản nháp VÀ context gốc trước khi viết.
+2. GIỮ NGUYÊN tất cả thông tin, số liệu, con số cụ thể.
    KHÔNG được bỏ bất kỳ dữ kiện nào — chỉ sắp xếp lại cho mạch lạc.
-2. Loại bỏ phần LẶP LẠI (nếu 2 agents nói cùng 1 điều, giữ 1 lần).
-3. Nếu có MÂU THUẪN, giữ cả 2 phía và ghi chú nguồn
+3. KIỂM CHỨNG: Nếu bản nháp nêu con số, đối chiếu với context gốc.
+   Nếu bản nháp SAI hoặc THIẾU so với context gốc → SỬA/BỔ SUNG từ context.
+4. Loại bỏ phần LẶP LẠI (nếu 2 agents nói cùng 1 điều, giữ 1 lần).
+5. Nếu có MÂU THUẪN, giữ cả 2 phía và ghi chú nguồn
    (VD: "Theo text: 16,6%, theo biểu đồ: ~17%").
-4. Viết lại thành 1 đoạn văn liền mạch, tự nhiên, đầy đủ.
+6. Viết lại thành 1 đoạn văn liền mạch, tự nhiên, đầy đủ.
+
+TRÍCH DẪN NGUỒN — Bắt buộc:
+- GIỮ NGUYÊN các nhãn nguồn [X, Trang Y] từ bản nháp.
+- KHÔNG dùng format khác như [ĐX], [HÌNH X] — chỉ dùng [X, Trang Y].
+- Nếu bản nháp chưa có nhãn nguồn đi kèm một số liệu, thêm vào từ context gốc.
+- Cuối câu trả lời, LUÔN thêm phần:
+  **Nguồn tham khảo:**
+  - [X] Tên tài liệu | Trang Y
+  (chỉ liệt kê các tài liệu thực sự được dùng trong câu trả lời)
 
 QUAN TRỌNG — Kiểm tra trước khi viết câu trả lời:
 [SELF-CORRECTION] CHỈ khi bản nháp có trường self_correction KHÔNG RỖNG
 VÀ nội dung đó nêu rõ CẢ con số sai LẪN con số đúng (VD: "45% vs 40,4%"),
 thì mới đặt lưu ý lên đầu. Nếu self_correction rỗng hoặc mơ hồ → BỎ QUA.
-Ví dụ mở đầu: "Lưu ý: Câu hỏi nêu GPM = 45% nhưng theo tài liệu, con số đúng là 40,4%."
 
 [FUZZ ENTITY] Nếu bản nháp đã xác định được tên công ty (có trường entity_resolved),
 hãy nhắc rõ công ty đó trong câu trả lời cuối.
 
-KHÔNG tóm tắt. KHÔNG rút gọn. KHÔNG thêm thông tin mới.
-Chỉ CHỈNH SỬA cho đọc được — giữ nguyên nội dung.
+KHÔNG tóm tắt quá mức. KHÔNG thêm thông tin NGOÀI context. Chỉ dùng thông tin từ bản nháp + context gốc.
 
 Trả lời dạng JSON:
 {
-  "answer": "Câu trả lời đã chỉnh sửa mạch lạc (tiếng Việt)",
+  "answer": "Câu trả lời đầy đủ, chính xác, mạch lạc (tiếng Việt), kèm nhãn nguồn inline [X, Trang Y] và phần Nguồn tham khảo cuối",
   "confidence": 0.0-1.0,
-  "reasoning": "Ghi chú ngắn về cách chỉnh sửa"
+  "reasoning": "Ghi chú ngắn: đã kiểm chứng/bổ sung gì từ context gốc"
 }
 
 CHỈ trả lời JSON, không thêm gì khác."""
@@ -372,19 +410,48 @@ class SumAgent:
         question: str,
         text_output: AgentOutput,
         image_output: AgentOutput,
+        raw_chunks: list | None = None,
     ) -> dict:
-        # Ghép thô trước
-        draft_parts = []
+        # Build structured input — phân biệt rõ nguồn + extra fields
+        sections = []
         for out in [text_output, image_output]:
             if out.has_data and out.analysis:
-                draft_parts.append(out.analysis)
+                block = (
+                    f"=== {out.agent.upper()} Agent "
+                    f"(confidence={out.confidence:.2f}) ===\n"
+                    f"{out.analysis}"
+                )
+                # Append extra reasoning (key_facts, self_correction, entity)
+                ext = out.extra or {}
+                if ext.get("self_correction"):
+                    block += f"\n[SELF-CORRECTION] {ext['self_correction']}"
+                if ext.get("entity_resolved"):
+                    block += f"\n[ENTITY] {ext['entity_resolved']}"
+                if ext.get("key_facts"):
+                    facts = "; ".join(ext["key_facts"]) if isinstance(ext["key_facts"], list) else str(ext["key_facts"])
+                    block += f"\n[KEY FACTS] {facts}"
+                sections.append(block)
 
-        draft = " ".join(draft_parts) if draft_parts else "Không đủ thông tin."
+        draft = "\n\n".join(sections) if sections else "Không đủ thông tin."
 
-        user_msg = (
-            f"Bản nháp (ghép từ Text Agent và Image Agent):\n{draft}\n\n"
-            f"Câu hỏi gốc: {question}"
-        )
+        # Raw context cho kiểm chứng (truncate mỗi chunk 300 chars)
+        raw_ctx = ""
+        if raw_chunks:
+            raw_parts = []
+            for c in raw_chunks[:8]:  # tối đa 8 chunks
+                label = getattr(c, 'chunk_type', 'text').upper()
+                doc = getattr(c, 'doc', '')
+                page = getattr(c, 'page', '')
+                content = getattr(c, 'content', '')
+                caption = getattr(c, 'caption', '')
+                snippet = (content or caption or '')[:300]
+                raw_parts.append(f"[{label} | {doc} | Trang {page}] {snippet}")
+            raw_ctx = "\n---\n".join(raw_parts)
+
+        user_msg = f"Bản nháp (phân tích từ từng Agent):\n{draft}\n\n"
+        if raw_ctx:
+            user_msg += f"Context gốc (dùng để kiểm chứng):\n{raw_ctx}\n\n"
+        user_msg += f"Câu hỏi gốc: {question}"
 
         raw = self._call_llm(user_msg)
         parsed = _parse_json(raw)
@@ -418,7 +485,7 @@ class SumAgent:
                 {"role": "user",   "content": user_msg},
             ],
             temperature=0.1,
-            max_tokens=2000,
+            max_tokens=3500,
         )
         if not resp.choices:
             return ""
@@ -501,6 +568,12 @@ def _parse_json(text: str) -> dict:
         lines = [l for l in lines if not l.strip().startswith("```")]
         text = "\n".join(lines)
     try:
-        return json.loads(text)
+        parsed = json.loads(text)
+        # LLM đôi khi trả về [{...}] thay vì {...} → unwrap
+        if isinstance(parsed, list) and parsed:
+            parsed = parsed[0]
+        if isinstance(parsed, dict):
+            return parsed
+        return {"analysis": str(parsed), "confidence": 0.5}
     except json.JSONDecodeError:
         return {"analysis": text, "confidence": 0.5}

@@ -22,7 +22,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from dotenv import load_dotenv
 from config.settings import CFG
-from embedder import embed_and_store
+from src.embedding.embedder import embed_and_store
 
 
 def run() -> None:

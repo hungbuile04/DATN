@@ -18,6 +18,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -47,10 +48,33 @@ def _empty_output(agent_name: str) -> AgentOutput:
     )
 
 
+ALL_VARIANTS = ["full", "no_text", "no_image", "no_sum", "single_llm"]
+
+MAX_RETRIES = 3
+RETRY_WAITS = [10, 30, 60]   # seconds
+
+
+def _retry_call(fn, *args, label="API call", **kwargs):
+    """Gọi fn với retry + exponential backoff."""
+    for attempt in range(MAX_RETRIES):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:
+            wait = RETRY_WAITS[min(attempt, len(RETRY_WAITS) - 1)]
+            print(f"\n  ⚠ {label} failed (attempt {attempt+1}/{MAX_RETRIES}): {e}")
+            if attempt < MAX_RETRIES - 1:
+                print(f"    Retry in {wait}s...")
+                time.sleep(wait)
+            else:
+                print(f"    ✗ All {MAX_RETRIES} attempts failed, skipping.")
+                raise
+
+
 def run(questions_path: str, output_path: str,
         text_top_k: int = 5, image_top_k: int = 3,
         use_judge: bool = False, judge_model: str = "openai/gpt-4o-mini",
-        only_full: bool = False):
+        only_full: bool = False,
+        variants: list[str] | None = None):
 
     google_key     = os.environ.get("GOOGLE_API_KEY", "")
     openrouter_key = os.environ.get("OPENROUTER_API_KEY", "")
@@ -62,6 +86,16 @@ def run(questions_path: str, output_path: str,
     with open(questions_path, encoding="utf-8") as f:
         questions = json.load(f)
     print(f"Loaded {len(questions)} questions")
+
+    # ── Resume: load kết quả cũ nếu có ──
+    out = Path(output_path)
+    done_ids: set[str] = set()
+    results: list[dict] = []
+    if out.exists():
+        with open(out, encoding="utf-8") as f:
+            results = json.load(f)
+        done_ids = {r["id"] for r in results}
+        print(f"  ↻ Resume: đã có {len(done_ids)} câu, skip những câu đã chạy")
 
     # ── Init ──
     retriever = DualRetriever(
@@ -83,10 +117,15 @@ def run(questions_path: str, output_path: str,
         vision_model=vision_model,
     )
 
-    if only_full:
+    if variants:
+        VARIANTS = [v for v in variants if v in ALL_VARIANTS]
+        if not VARIANTS:
+            raise ValueError(f"No valid variants. Choose from: {ALL_VARIANTS}")
+    elif only_full:
         VARIANTS = ["full"]
     else:
-        VARIANTS = ["full", "no_text", "no_image", "no_sum", "single_llm"]
+        VARIANTS = list(ALL_VARIANTS)
+    print(f"Variants: {VARIANTS}")
 
     # ── LLM Judge (nếu bật) ──
     judge = None
@@ -97,30 +136,62 @@ def run(questions_path: str, output_path: str,
             model=judge_model,
         )
 
-    results = []
     total = len(questions)
 
     for i, q in enumerate(questions, 1):
         question = q["question"]
         qid = q["id"]
 
+        # Skip nếu đã chạy rồi
+        if qid in done_ids:
+            print(f"\n  [{i}/{total}] {qid}: SKIP (đã có)")
+            continue
+
         print(f"\n{'='*60}")
         print(f"[{i}/{total}] {qid}: {question[:60]}")
 
-        # Retrieve 1 lần
-        result = retriever.retrieve(
-            question, text_top_k=text_top_k, image_top_k=image_top_k,
-        )
+        # Retrieve 1 lần (có retry)
+        try:
+            result = _retry_call(
+                retriever.retrieve, question,
+                text_top_k=text_top_k, image_top_k=image_top_k,
+                label=f"Retrieve {qid}",
+            )
+        except Exception:
+            print(f"  ✗ Skip {qid} — retrieve failed")
+            continue
+
         text_chunks  = result.text_chunks
         image_chunks = result.image_chunks
         print(f"  T={len(text_chunks)} I={len(image_chunks)}")
 
         # ── Chạy full pipeline 1 lần (dùng lại cho các variant) ──
-        text_out = text_agent.analyze(question, text_chunks)
-        print(f"  Text: conf={text_out.confidence:.2f}")
+        try:
+            # Cross-context: tóm tắt captions từ image chunks cho TextAgent
+            image_hints = ""
+            if image_chunks:
+                hints = [f"[{i+1}] {c.caption}" for i, c in enumerate(image_chunks) if c.caption]
+                if hints:
+                    image_hints = "\n".join(hints)
 
-        image_out = image_agent.analyze(question, image_chunks)
-        print(f"  Image: conf={image_out.confidence:.2f}")
+            text_out = _retry_call(
+                text_agent.analyze, question, text_chunks,
+                image_hints=image_hints,
+                label=f"TextAgent {qid}",
+            )
+            print(f"  Text: conf={text_out.confidence:.2f}")
+
+            image_out = _retry_call(
+                image_agent.analyze, question, image_chunks,
+                label=f"ImageAgent {qid}",
+            )
+            print(f"  Image: conf={image_out.confidence:.2f}")
+        except Exception:
+            print(f"  ✗ Skip {qid} — agent call failed")
+            continue
+
+        # Raw chunks cho SumAgent kiểm chứng
+        all_chunks = list(text_chunks) + list(image_chunks)
 
         # ── Build variants ──
         entry = {
@@ -136,13 +207,16 @@ def run(questions_path: str, output_path: str,
             print(f"  → [{variant}]", end=" ", flush=True)
 
             if variant == "full":
-                gen = sum_agent.synthesize(question, text_out, image_out)
+                gen = sum_agent.synthesize(question, text_out, image_out,
+                                          raw_chunks=all_chunks)
 
             elif variant == "no_text":
-                gen = sum_agent.synthesize(question, _empty_output("text"), image_out)
+                gen = sum_agent.synthesize(question, _empty_output("text"), image_out,
+                                          raw_chunks=all_chunks)
 
             elif variant == "no_image":
-                gen = sum_agent.synthesize(question, text_out, _empty_output("image"))
+                gen = sum_agent.synthesize(question, text_out, _empty_output("image"),
+                                          raw_chunks=all_chunks)
 
             elif variant == "no_sum":
                 # Ghép thô không qua SumAgent
@@ -191,12 +265,19 @@ def run(questions_path: str, output_path: str,
                 m = entry["modes"].get(variant, {})
                 answer_text = m.get("answer", "")
                 print(f"    [{variant}]", end=" ", flush=True)
-                score = judge.evaluate(
-                    question, answer_text, expected_hint,
-                    context=context_str,
-                )
-                m["judge"] = score
-                print(f"→ {score['total']}/20")
+                try:
+                    score = _retry_call(
+                        judge.evaluate,
+                        question, answer_text, expected_hint,
+                        context=context_str,
+                        label=f"Judge {qid}/{variant}",
+                    )
+                    m["judge"] = score
+                    print(f"→ {score['total']}/20")
+                except Exception:
+                    m["judge"] = {"correctness": 0, "completeness": 0,
+                                 "reasoning": 0, "faithfulness": 0, "total": 0}
+                    print(f"→ FAILED (scored 0)")
 
         results.append(entry)
 
@@ -225,11 +306,17 @@ if __name__ == "__main__":
                         help="Model dùng làm judge")
     parser.add_argument("--only_full", action="store_true",
                         help="Chỉ đánh giá biến thể full (không chạy ablation)")
+    parser.add_argument("--variants", type=str, default="",
+                        help="Danh sách variants cách nhau bằng dấu phẩy, VD: full,single_llm")
     args = parser.parse_args()
+
+    variant_list = [v.strip() for v in args.variants.split(",") if v.strip()] or None
+
     run(
         args.questions, args.output,
         args.text_top_k, args.image_top_k,
         use_judge=args.judge,
         judge_model=args.judge_model,
         only_full=args.only_full,
+        variants=variant_list,
     )

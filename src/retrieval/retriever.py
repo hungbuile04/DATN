@@ -69,17 +69,22 @@ class DualRetriever:
     Dual-pipeline retriever: text và image riêng biệt.
 
     Text pipeline:
-        Dense (cosine similarity) → ticker boost x1.5 → top-k
+        Dense (cosine similarity) → ticker boost x1.5 → [Reranker] → top-k
 
     Image pipeline:
-        Dense (cosine similarity) → ticker hard filter → top-k
+        Dense (cosine similarity) → ticker hard filter → [Reranker] → top-k
         Fallback: nếu filter ra ít kết quả, bổ sung từ search không filter
 
     Query encode 1 lần bằng Gemini Embedding 2, search trên 2 collections.
     KHÔNG merge scores giữa 2 pipelines.
+
+    Reranker (optional):
+        Gemini Flash cross-encoder scoring — chèn giữa dense search và top-k.
+        Bật/tắt qua use_reranker flag.
     """
 
-    def __init__(self, chroma_path: str, api_key: str, cfg: dict):
+    def __init__(self, chroma_path: str, api_key: str, cfg: dict,
+                 openrouter_key: str = "", use_reranker: bool = False):
         embed_cfg = cfg["embedding"]
 
         model_name      = embed_cfg.get("model", "gemini-embedding-2-preview")
@@ -96,6 +101,18 @@ class DualRetriever:
         chroma_client = chromadb.PersistentClient(path=chroma_path)
         self.text_col  = chroma_client.get_collection(text_col_name)
         self.image_col = chroma_client.get_collection(image_col_name)
+
+        # Reranker (optional)
+        self.use_reranker = use_reranker
+        self._reranker = None
+        if use_reranker and openrouter_key:
+            from src.retrieval.reranker import GeminiReranker
+            reranker_cfg = cfg.get("retrieval", {})
+            self._reranker = GeminiReranker(
+                api_key=openrouter_key,
+                model=reranker_cfg.get("reranker_model", "google/gemini-2.5-flash"),
+            )
+            print("  ✓ Reranker enabled (Gemini Flash)")
 
         # Known tickers — populated during _load_corpus
         self._known_tickers: set[str] = set()
@@ -116,20 +133,28 @@ class DualRetriever:
     def retrieve(
         self,
         query: str,
-        text_top_k: int = 5,
-        image_top_k: int = 3,
+        text_top_k: int = 6,
+        image_top_k: int = 4,
+        unified_top_k: int = 0,
     ) -> RetrievalResult:
         """
         Truy vấn dual pipeline và trả về kết quả riêng biệt.
+
+        Hai chế độ:
+            - Cố định (mặc định): text_top_k=6, image_top_k=4
+            - Thích ứng: unified_top_k > 0 → query cả 2 collection,
+              gộp theo score, lấy top-k chung → tự phân bổ tỷ lệ
+              text/image theo mức độ liên quan của câu hỏi.
 
         Ticker detection 2 tầng:
             1. Detect trực tiếp từ query ("VNM", "Vinamilk")
             2. Fallback: suy luận từ text results (majority vote)
 
         Args:
-            query:        câu hỏi người dùng
-            text_top_k:   top-k cho text pipeline
-            image_top_k:  top-k cho image pipeline
+            query:          câu hỏi người dùng
+            text_top_k:     top-k cho text pipeline (chế độ cố định)
+            image_top_k:    top-k cho image pipeline (chế độ cố định)
+            unified_top_k:  nếu > 0, dùng chế độ thích ứng
 
         Returns:
             RetrievalResult với text_chunks và image_chunks riêng biệt
@@ -142,14 +167,19 @@ class DualRetriever:
         if tickers:
             print(f"  🏷  Detected tickers (query): {tickers}")
 
+        # ── Chế độ thích ứng (unified) ──
+        if unified_top_k > 0:
+            return self._unified_retrieve(
+                query, query_vec, tickers, unified_top_k,
+            )
+
+        # ── Chế độ cố định (legacy) ──
         # === TEXT PIPELINE (chạy trước) ===
         text_chunks = []
         if text_top_k > 0:
             text_chunks = self._text_pipeline(query, query_vec, text_top_k, tickers)
 
         # === Ticker fallback: suy luận từ text results ===
-        # Nếu query không nhắc ticker nhưng text results đa số cùng 1 mã
-        # → suy luận đó là ticker chính → dùng cho image filter
         if not tickers and text_chunks:
             tickers = self._infer_tickers_from_chunks(text_chunks)
             if tickers:
@@ -159,7 +189,6 @@ class DualRetriever:
         image_chunks = []
         if image_top_k > 0:
             image_chunks = self._image_pipeline(query, query_vec, image_top_k, tickers)
-            # Lọc ảnh score quá thấp — không relevant, chỉ gây nhiễu
             image_chunks = [
                 c for c in image_chunks if c.score >= self.IMAGE_MIN_SCORE
             ]
@@ -167,6 +196,77 @@ class DualRetriever:
         return RetrievalResult(
             text_chunks=text_chunks,
             image_chunks=image_chunks,
+        )
+
+    def _unified_retrieve(
+        self,
+        query: str,
+        query_vec: list[float],
+        tickers: list[str],
+        total_k: int,
+    ) -> RetrievalResult:
+        """
+        Truy xuất thích ứng: lấy dư từ cả 2 collection,
+        chuẩn hoá score theo từng luồng, gộp và chọn top-k chung.
+
+        Score chuẩn hoá min-max trong mỗi luồng (text, image) để
+        so sánh công bằng giữa 2 không gian embedding khác nhau.
+        """
+        # Lấy dư (total_k mỗi bên) để có đủ ứng viên
+        text_chunks = self._text_pipeline(query, query_vec, total_k, tickers)
+
+        # Ticker fallback
+        if not tickers and text_chunks:
+            tickers = self._infer_tickers_from_chunks(text_chunks)
+            if tickers:
+                print(f"  🏷  Inferred tickers (text): {tickers}")
+
+        image_chunks = self._image_pipeline(query, query_vec, total_k, tickers)
+        image_chunks = [
+            c for c in image_chunks if c.score >= self.IMAGE_MIN_SCORE
+        ]
+
+        # ── Chuẩn hoá score min-max trong mỗi luồng ──
+        def _normalize(chunks):
+            if not chunks:
+                return []
+            scores = [c.score for c in chunks]
+            s_min, s_max = min(scores), max(scores)
+            spread = s_max - s_min if s_max > s_min else 1.0
+            result = []
+            for c in chunks:
+                norm_score = (c.score - s_min) / spread
+                result.append((c, norm_score))
+            return result
+
+        norm_text = _normalize(text_chunks)
+        norm_image = _normalize(image_chunks)
+
+        # Gộp và sort theo score chuẩn hoá giảm dần
+        all_chunks = [(c, ns, "text") for c, ns in norm_text] + \
+                     [(c, ns, "image") for c, ns in norm_image]
+        all_chunks.sort(key=lambda x: x[1], reverse=True)
+
+        # Lấy top-k chung, tách lại thành text/image
+        final_text = []
+        final_image = []
+        for chunk, norm_score, ctype in all_chunks[:total_k]:
+            if ctype == "text":
+                final_text.append(chunk)
+            else:
+                final_image.append(chunk)
+
+        n_text = len(final_text)
+        n_image = len(final_image)
+        total = n_text + n_image
+        pct_t = (n_text / total * 100) if total > 0 else 0
+        pct_i = (n_image / total * 100) if total > 0 else 0
+        print(f"  📊 Unified top-{total_k}: {n_text} text + {n_image} image "
+              f"(tự phân bổ {pct_t:.0f}%/{pct_i:.0f}%)")
+
+        return RetrievalResult(
+            text_chunks=final_text,
+            image_chunks=final_image,
         )
 
     # ──────────────────────────────────────────
@@ -211,6 +311,11 @@ class DualRetriever:
         "hai an":         "HAH",
         "hà đô":          "HDG",
         "ha do":          "HDG",
+        "vingroup":       "VIC",
+        "tập đoàn vingroup": "VIC",
+        "vinhomes":       "VHM",
+        "petrolimex":     "PLX",
+        "xăng dầu":       "PLX",
     }
 
     def _detect_tickers(self, query: str) -> list[str]:
@@ -270,13 +375,13 @@ class DualRetriever:
         self, query: str, query_vec: list[float], top_k: int, tickers: list[str] = None
     ) -> list[RetrievedChunk]:
         """
-        Text pipeline: Dense search → ticker boost → top-k.
+        Text pipeline: Dense search → ticker boost → [Reranker] → top-k.
 
         Nếu detect ticker, áp dụng soft boost (x1.5) cho chunks cùng ticker.
         Không hard filter — text context từ doc khác vẫn có thể hữu ích
         (ví dụ: so sánh ngành, thị trường chung).
         """
-        candidate_k = top_k * 4
+        candidate_k = top_k * 4 if not (self._reranker and self.use_reranker) else top_k * 2
 
         # Dense search (Gemini Embedding 2 cosine similarity)
         dense_results = self._dense_search(
@@ -286,6 +391,17 @@ class DualRetriever:
         # Ticker boost: ưu tiên chunks cùng mã, nhưng không loại bỏ mã khác
         if tickers:
             dense_results = _ticker_boost(dense_results, tickers, boost=1.5)
+
+        # ── Reranker: chỉ khi KHÔNG detect được ticker ──
+        # Khi có ticker → ticker boost đã đủ chính xác
+        # Khi không có ticker → dense search dễ nhiễu → reranker giúp lọc
+        if self._reranker and self.use_reranker and not tickers:
+            candidates_for_rerank = []
+            for chunk_id, score in dense_results:
+                content = self._get_chunk_content(chunk_id, self.text_col)
+                candidates_for_rerank.append((chunk_id, content, score))
+            if candidates_for_rerank:
+                dense_results = self._reranker.rerank(query, candidates_for_rerank)
 
         results = []
         for chunk_id, score in dense_results[:top_k]:
@@ -298,7 +414,7 @@ class DualRetriever:
         self, query: str, query_vec: list[float], top_k: int, tickers: list[str] = None
     ) -> list[RetrievedChunk]:
         """
-        Image pipeline: Dense search → ticker hard filter → top-k.
+        Image pipeline: Dense search → ticker hard filter → [Reranker] → top-k.
 
         Nếu detect ticker → HARD FILTER:
             Phase 1: chỉ search trong ảnh đúng ticker
@@ -307,54 +423,55 @@ class DualRetriever:
         Biểu đồ GAS không bao giờ relevant khi hỏi về VNM
         → hard filter là hành vi đúng cho image pipeline.
         """
-        candidate_k = top_k * 4
+        candidate_k = top_k * 4 if not (self._reranker and self.use_reranker) else top_k * 2
 
-        if tickers:
-            # ── Phase 1: Ticker-filtered Dense search ──
-            where_clause = {"ticker": tickers[0]} if len(tickers) == 1 else {"ticker": {"$in": tickers}}
-            filtered_results = self._dense_search(
-                query_vec, self.image_col, top_n=candidate_k,
-                where=where_clause,
-            )
+        # ── Dense Search ──
+        where_clause = {"ticker": tickers[0]} if (tickers and len(tickers) == 1) else ({"ticker": {"$in": tickers}} if tickers else None)
+        dense_results = self._dense_search(
+            query_vec, self.image_col, top_n=candidate_k, where=where_clause
+        )
 
-            results = []
-            for chunk_id, score in filtered_results[:top_k]:
-                chunk = self._build_image_chunk(chunk_id, score)
-                if chunk:
-                    results.append(chunk)
-
-            # ── Phase 2: Nếu thiếu, bổ sung không filter ──
-            if len(results) < top_k:
-                seen = {c.chunk_id for c in results}
-                all_results = self._dense_search(
-                    query_vec, self.image_col, top_n=candidate_k
-                )
-                for chunk_id, score in all_results:
-                    if chunk_id not in seen:
-                        chunk = self._build_image_chunk(chunk_id, score)
-                        if chunk:
-                            results.append(chunk)
-                            if len(results) >= top_k:
-                                break
-
-            return results
-
-        else:
-            # ── No ticker — Dense search trực tiếp ──
-            dense_results = self._dense_search(
+        # ── Bổ sung nếu thiếu (khi có tickers) ──
+        if tickers and len(dense_results) < top_k:
+            seen = {cid for cid, score in dense_results}
+            extra_results = self._dense_search(
                 query_vec, self.image_col, top_n=candidate_k
             )
+            for cid, score in extra_results:
+                if cid not in seen:
+                    dense_results.append((cid, score))
+                    seen.add(cid)
+                    if len(dense_results) >= candidate_k: break
 
-            results = []
-            for chunk_id, score in dense_results[:top_k]:
-                chunk = self._build_image_chunk(chunk_id, score)
-                if chunk:
-                    results.append(chunk)
-            return results
+        # ── Reranker: chỉ khi KHÔNG detect được ticker ──
+        if self._reranker and self.use_reranker and not tickers:
+            candidates = []
+            for chunk_id, score in dense_results:
+                content = self._get_chunk_content(chunk_id, self.image_col)
+                candidates.append((chunk_id, content, score))
+            if candidates:
+                dense_results = self._reranker.rerank(query, candidates)
+
+        results = []
+        for chunk_id, score in dense_results[:top_k]:
+            chunk = self._build_image_chunk(chunk_id, score)
+            if chunk:
+                results.append(chunk)
+        return results
 
     # ──────────────────────────────────────────
     # Private: search methods
     # ──────────────────────────────────────────
+
+    def _get_chunk_content(self, chunk_id: str, collection: chromadb.Collection) -> str:
+        """Lấy nội dung text/document của 1 chunk từ ChromaDB."""
+        try:
+            result = collection.get(ids=[chunk_id], include=["documents"])
+            if result["documents"]:
+                return result["documents"][0] or ""
+        except Exception:
+            pass
+        return ""
 
     def _dense_search(
         self,
@@ -431,12 +548,14 @@ class DualRetriever:
         Embed query bằng Gemini Embedding 2.
         Cache kết quả để tránh gọi API lại cho query giống hệt.
         Auto-retry khi bị 429 RESOURCE_EXHAUSTED (quota per minute).
+        Áp dụng Matryoshka truncation theo embed_dim trong config.
         """
         # ── Cache hit → skip API call ──
         if query in self._query_cache:
             return self._query_cache[query]
 
         import time
+        target_dim = CFG.get("embedding", {}).get("embed_dim", 3072)
         max_retries = 6
         for attempt in range(max_retries):
             try:
@@ -445,6 +564,12 @@ class DualRetriever:
                     contents=query,
                 )
                 vec = list(result.embeddings[0].values)
+                # Matryoshka truncation + L2 renormalize
+                if target_dim < len(vec):
+                    vec = vec[:target_dim]
+                    norm = sum(x * x for x in vec) ** 0.5
+                    if norm > 0:
+                        vec = [x / norm for x in vec]
                 self._query_cache[query] = vec  # cache for reuse
                 return vec
             except Exception as e:

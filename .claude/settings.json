@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(python -m src.eval.eval_retrieval:*)",
+      "Bash(python ask.py --q:*)",
+      "Bash(pip list:*)",
+      "Bash(pip show:*)"
+    ]
+  }
+}

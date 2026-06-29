@@ -21,6 +21,10 @@ ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT))
 load_dotenv(ROOT / ".env")
 
+import json
+import shutil
+import re
+
 from config.settings import CFG
 from src.retrieval.retriever import DualRetriever, RetrievalResult
 from src.agents.orchestrator import MultiAgentOrchestrator
@@ -43,87 +47,154 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    /* CSS Variables for theming */
+    :root {
+        --primary: #1e3a5f;
+        --secondary: #2d6a9f;
+        --accent: #3498db;
+        --success: #2ecc71;
+        --warning: #f39c12;
+        --danger: #e74c3c;
+        --bg-card: #fafbfc;
+        --border: #e0e0e0;
+        --text-main: #333;
+        --text-muted: #6c757d;
+    }
+    
+    [data-theme="dark"] {
+        --primary: #0f1c2e;
+        --secondary: #1a3c5a;
+        --bg-card: #1e1e1e;
+        --border: #333;
+        --text-main: #eee;
+        --text-muted: #aaa;
+    }
+
+    /* Chỉ áp dụng font cho các thành phần custom để không làm hỏng icon của Streamlit */
+    .main-header, .agent-card, .chunk-card, .stat-box {
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes progressGlow {
+        0% { box-shadow: 0 0 5px var(--accent); }
+        50% { box-shadow: 0 0 15px var(--accent); }
+        100% { box-shadow: 0 0 5px var(--accent); }
+    }
+
     /* Header */
     .main-header {
-        background: linear-gradient(135deg, #1e3a5f 0%, #2d6a9f 100%);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
         padding: 1.5rem 2rem;
         border-radius: 12px;
         color: white;
         margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        animation: fadeInUp 0.5s ease;
     }
-    .main-header h1 { margin: 0; font-size: 1.8rem; }
+    .main-header h1 { margin: 0; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.5px; }
     .main-header p  { margin: 0.3rem 0 0 0; opacity: 0.85; font-size: 0.95rem; }
 
     /* Agent cards */
     .agent-card {
-        border: 1px solid #e0e0e0;
+        border: 1px solid var(--border);
         border-radius: 10px;
         padding: 1rem;
         margin-bottom: 0.8rem;
-        background: #fafbfc;
+        background: var(--bg-card);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-    .agent-card.text     { border-left: 4px solid #3498db; }
-    .agent-card.image    { border-left: 4px solid #2ecc71; }
-    .agent-card.sum      { border-left: 4px solid #f39c12; }
+    .agent-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .agent-card.text     { border-left: 4px solid var(--accent); }
+    .agent-card.image    { border-left: 4px solid var(--success); }
+    .agent-card.sum      { border-left: 4px solid var(--warning); }
 
     /* Chunk cards */
     .chunk-card {
-        border: 1px solid #e8e8e8;
+        border: 1px solid var(--border);
         border-radius: 8px;
         padding: 0.8rem;
         margin-bottom: 0.6rem;
-        background: white;
+        background: var(--bg-card);
+        animation: fadeInUp 0.4s ease;
     }
     .chunk-score {
         display: inline-block;
-        padding: 2px 8px;
+        padding: 2px 10px;
         border-radius: 12px;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 600;
+        letter-spacing: 0.5px;
     }
-    .score-high   { background: #d4edda; color: #155724; }
-    .score-medium { background: #fff3cd; color: #856404; }
-    .score-low    { background: #f8d7da; color: #721c24; }
+    .score-high   { background: rgba(46, 204, 113, 0.2); color: #155724; }
+    .score-medium { background: rgba(243, 156, 18, 0.2); color: #856404; }
+    .score-low    { background: rgba(231, 76, 60, 0.2); color: #721c24; }
+    
+    [data-theme="dark"] .score-high { color: #82e0aa; }
+    [data-theme="dark"] .score-medium { color: #f5b041; }
+    [data-theme="dark"] .score-low { color: #f1948a; }
 
-    /* Confidence meter */
-    .confidence-bar {
-        height: 8px;
-        border-radius: 4px;
-        background: #e9ecef;
-        overflow: hidden;
-        margin-top: 4px;
-    }
-    .confidence-fill {
-        height: 100%;
-        border-radius: 4px;
-        transition: width 0.5s ease;
-    }
 
     /* Pipeline flow */
     .pipeline-step {
         text-align: center;
         padding: 0.5rem;
+        transition: all 0.3s ease;
     }
     .pipeline-arrow {
         text-align: center;
         font-size: 1.5rem;
-        color: #6c757d;
+        color: var(--text-muted);
         padding: 0.3rem;
     }
 
     /* Stats */
     .stat-box {
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        background: linear-gradient(135deg, var(--bg-card) 0%, var(--border) 100%);
         border-radius: 10px;
         padding: 1rem;
         text-align: center;
     }
-    .stat-box h3 { margin: 0; font-size: 1.6rem; color: #1e3a5f; }
-    .stat-box p  { margin: 0.2rem 0 0 0; font-size: 0.85rem; color: #6c757d; }
+    .stat-box h3 { margin: 0; font-size: 1.6rem; color: var(--primary); }
+    .stat-box p  { margin: 0.2rem 0 0 0; font-size: 0.85rem; color: var(--text-muted); }
 
-    /* Chat messages */
-    .stChatMessage { max-width: 100% !important; }
+    /* Chat messages adjustments */
+    .stChatMessage { 
+        max-width: 100% !important; 
+        animation: fadeInUp 0.4s ease; 
+        margin-bottom: 1.2rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid var(--border);
+    }
+    .stChatMessage.user { 
+        background-color: rgba(52, 152, 219, 0.06); 
+        border-radius: 16px 16px 4px 16px; 
+        border: 1px solid rgba(52, 152, 219, 0.15);
+    }
+    .stChatMessage.assistant { 
+        background-color: var(--bg-card);
+        border-radius: 16px 16px 16px 4px; 
+    }
+    
+    /* Làm đẹp expander bên trong chat bubble */
+    .stChatMessage .stExpander {
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        background-color: rgba(0, 0, 0, 0.01) !important;
+        margin-top: 0.5rem;
+    }
+    [data-theme="dark"] .stChatMessage .stExpander {
+        background-color: rgba(255, 255, 255, 0.01) !important;
+    }
 </style>
+
 """, unsafe_allow_html=True)
 
 
@@ -140,10 +211,15 @@ def init_system():
     if not google_key or not openrouter_key:
         return None, None, None, "Thiếu GOOGLE_API_KEY hoặc OPENROUTER_API_KEY trong .env"
 
+    # Reranker config từ config.yaml
+    use_reranker = CFG.get("retrieval", {}).get("use_reranker", False)
+
     retriever = DualRetriever(
         chroma_path=str(CFG["paths"]["vector_db"]),
         api_key=google_key,
         cfg=CFG,
+        openrouter_key=openrouter_key,
+        use_reranker=use_reranker,
     )
 
     orchestrator = MultiAgentOrchestrator(
@@ -178,28 +254,162 @@ def get_system_stats(retriever: DualRetriever) -> dict:
     }
 
 
-# ─────────────────────────────────────────────
-# Helper: render confidence
-# ─────────────────────────────────────────────
+def get_document_list() -> list[dict]:
+    """Lấy danh sách tài liệu từ metadata.json và ChromaDB."""
+    meta_path = CFG["paths"]["metadata"]
+    if not Path(meta_path).exists():
+        return []
 
-def render_confidence(confidence: float, label: str = "Confidence"):
-    """Hiển thị thanh confidence."""
-    pct = int(confidence * 100)
-    if confidence >= 0.7:
-        color = "#28a745"
-    elif confidence >= 0.4:
-        color = "#ffc107"
-    else:
-        color = "#dc3545"
+    with open(meta_path, encoding="utf-8") as f:
+        all_entries = json.load(f)
 
-    st.markdown(f"""
-    <div style="margin: 0.3rem 0;">
-        <span style="font-size:0.85rem; color:#555;">{label}: <b>{pct}%</b></span>
-        <div class="confidence-bar">
-            <div class="confidence-fill" style="width:{pct}%; background:{color};"></div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    # Group by doc name
+    docs = {}
+    for entry in all_entries:
+        doc_name = entry.get("doc", "unknown")
+        if doc_name not in docs:
+            docs[doc_name] = {
+                "doc": doc_name,
+                "ticker": entry.get("ticker", ""),
+                "report_date": entry.get("report_date", ""),
+                "text_chunks": 0,
+                "table_chunks": 0,
+                "image_chunks": 0,
+            }
+        chunk_type = entry.get("chunk_type", "")
+        if chunk_type == "text":
+            docs[doc_name]["text_chunks"] += 1
+        elif chunk_type == "table":
+            docs[doc_name]["table_chunks"] += 1
+        elif chunk_type == "image":
+            docs[doc_name]["image_chunks"] += 1
+
+    result = list(docs.values())
+    result.sort(key=lambda x: x["ticker"])
+    return result
+
+
+def upload_and_process(uploaded_file, retriever) -> tuple[bool, str]:
+    """
+    Xử lý file PDF upload: lưu → extract → embed → cập nhật retriever.
+    Returns: (success, message)
+    """
+    pdf_dir = Path(CFG["paths"]["pdf_raw"])
+    out_dir = str(CFG["paths"]["pdf_processed"])
+    meta_path = Path(CFG["paths"]["metadata"])
+
+    # 1. Lưu file PDF
+    pdf_path = pdf_dir / uploaded_file.name
+    if pdf_path.exists():
+        return False, f"⚠️ File `{uploaded_file.name}` đã tồn tại trong hệ thống."
+
+    pdf_path.write_bytes(uploaded_file.getvalue())
+
+    try:
+        # 2. Extract PDF → chunks
+        from src.extraction.extractor import extract_pdf
+        chunks = extract_pdf(
+            str(pdf_path), out_dir,
+            images_dpi=CFG["extraction"].get("dpi", 150),
+        )
+        if not chunks:
+            return False, f"❌ Không extract được chunk nào từ `{uploaded_file.name}`."
+
+        # 3. Cập nhật metadata.json (append)
+        all_meta = []
+        if meta_path.exists():
+            all_meta = json.loads(meta_path.read_text(encoding="utf-8"))
+        all_meta.extend(chunks)
+        meta_path.write_text(
+            json.dumps(all_meta, ensure_ascii=False, indent=2),
+            encoding="utf-8"
+        )
+
+        # 4. Embed chunks mới → ChromaDB
+        from src.embedding.embedder import GeminiEmbedder, load_or_create_collection, _build_meta
+        embed_cfg = CFG["embedding"]
+        api_key = os.environ.get("GOOGLE_API_KEY", "")
+        embedder = GeminiEmbedder(api_key=api_key, model=embed_cfg.get("model", "gemini-embedding-2-preview"))
+
+        text_col = load_or_create_collection(
+            str(CFG["paths"]["vector_db"]), embed_cfg.get("text_collection", "rag_text")
+        )
+        image_col = load_or_create_collection(
+            str(CFG["paths"]["vector_db"]), embed_cfg.get("image_collection", "rag_image")
+        )
+
+        n_text = 0
+        n_image = 0
+
+        # Text + Table chunks
+        text_chunks = [c for c in chunks if c.get("chunk_type") in ("text", "table")]
+        if text_chunks:
+            contents = []
+            for c in text_chunks:
+                txt_path = Path(c["text_path"])
+                contents.append(txt_path.read_text(encoding="utf-8") if txt_path.exists() else "")
+            vectors = embedder.embed_texts_batch(contents)
+            text_col.upsert(
+                ids=[c["chunk_id"] for c in text_chunks],
+                embeddings=vectors,
+                documents=contents,
+                metadatas=[_build_meta(c) for c in text_chunks],
+            )
+            n_text = len(text_chunks)
+
+        # Image chunks
+        img_chunks = [c for c in chunks if c.get("chunk_type") == "image" and c.get("img_path") and Path(c["img_path"]).exists()]
+        for c in img_chunks:
+            try:
+                caption = embedder.caption_image(c["img_path"])
+                c["caption"] = caption
+                vec = embedder.embed_image(c["img_path"], caption=caption)
+                image_col.upsert(
+                    ids=[c["chunk_id"]],
+                    embeddings=[vec],
+                    documents=[caption],
+                    metadatas=[_build_meta(c)],
+                )
+                n_image += 1
+            except Exception as e:
+                cid = c.get("chunk_id", "?")
+                st.warning(f"⚠️ Lỗi embed ảnh {cid}: {e}")
+                continue
+
+        # 5. Reload retriever collections
+        retriever.text_col = text_col
+        retriever.image_col = image_col
+        retriever._known_tickers = set(
+            m.get("ticker", "") for m in text_col.get(include=["metadatas"])["metadatas"]
+            if m.get("ticker")
+        )
+
+        ticker = chunks[0].get("ticker", "N/A") if chunks else "N/A"
+        return True, (
+            f"✅ Upload thành công `{uploaded_file.name}`!\n\n"
+            f"- **Mã CK:** {ticker}\n"
+            f"- **Text/Table chunks:** {n_text}\n"
+            f"- **Image chunks:** {n_image}\n"
+            f"- **Tổng chunks mới:** {n_text + n_image}"
+        )
+
+    except Exception as e:
+        # Rollback: xóa file PDF nếu lỗi
+        if pdf_path.exists():
+            pdf_path.unlink()
+        return False, f"❌ Lỗi xử lý: {e}"
+
+
+@st.cache_resource(ttl=300, show_spinner=False)
+def cached_retrieve(_retriever, question: str, text_top_k: int, image_top_k: int):
+    """Bọc retriever.retrieve() với cache 5 phút để tăng tốc."""
+    return _retriever.retrieve(
+        question,
+        text_top_k=text_top_k,
+        image_top_k=image_top_k,
+    )
+
+
 
 
 def score_class(score: float) -> str:
@@ -217,6 +427,14 @@ def score_class(score: float) -> str:
 def render_sidebar(retriever):
     with st.sidebar:
         st.markdown("## ⚙️ Cấu hình")
+        
+        # Nút xóa lịch sử chat
+        if st.button("🗑️ Xóa lịch sử chat", use_container_width=True, type="secondary"):
+            st.session_state.messages = []
+            st.session_state.results_history = []
+            st.rerun()
+            
+        st.markdown("---")
 
         # ── Chế độ trả lời ──
         MODE_OPTIONS = {
@@ -242,14 +460,29 @@ def render_sidebar(retriever):
 
         text_top_k = st.slider(
             "Số lượng Text chunks (top-k)",
-            min_value=1, max_value=15, value=5,
+            min_value=1, max_value=15, value=6,
             help="Số đoạn văn bản/bảng được truy xuất"
         )
         image_top_k = st.slider(
             "Số lượng Image chunks (top-k)",
-            min_value=0, max_value=10, value=3,
+            min_value=0, max_value=10, value=4,
             help="Số biểu đồ/hình ảnh được truy xuất"
         )
+
+        st.markdown("")
+
+        # ── Reranker toggle ──
+        use_reranker = st.toggle(
+            "🔄 Reranker (Gemini Flash)",
+            value=CFG.get("retrieval", {}).get("use_reranker", False),
+            help="Bật/tắt Gemini Flash Reranker. Reranker đánh giá lại độ liên quan của từng chunk bằng LLM, "
+                 "cải thiện Precision và MRR. Tốn thêm ~0.5-1s/câu hỏi."
+        )
+
+        if use_reranker:
+            st.caption("⚡ Reranker: Dense Search → LLM scoring → Top-k")
+        else:
+            st.caption("⚡ Dense Search → Top-k (không rerank)")
 
         st.markdown("---")
 
@@ -272,30 +505,8 @@ def render_sidebar(retriever):
 
         st.markdown("---")
 
-        # Tech stack
-        st.markdown("## 🔧 Công nghệ")
-        st.markdown(f"""
-        - **Embedding:** {CFG['embedding']['model']}
-        - **LLM:** {CFG['agents']['llm_model']}
-        - **Vision:** {CFG['agents']['vision_model']}
-        - **Vector DB:** ChromaDB
-        - **Dimension:** {CFG['embedding']['embed_dim']}
-        """)
-
-        st.markdown("---")
-        st.markdown("## 💡 Câu hỏi mẫu")
-        samples = [
-            "Biên lợi nhuận gộp (GPM) của VNM thay đổi thế nào qua các quý gần đây?",
-            "So sánh NIM của HDB và CTG trong năm 2025",
-            "Doanh thu và lợi nhuận của HPG trong Q3/2025 là bao nhiêu?",
-            "Xu hướng giá cổ phiếu MWG trong 6 tháng gần đây?",
-            "Tỷ lệ nợ xấu của Vietcombank thay đổi ra sao?",
-        ]
-        for s in samples:
-            if st.button(s, key=f"sample_{hash(s)}", use_container_width=True):
-                st.session_state["sample_question"] = s
-
-    return text_top_k, image_top_k, answer_mode
+        # Mở đầu file, bỏ phần tech stack ở sidebar.
+    return text_top_k, image_top_k, answer_mode, use_reranker
 
 
 # ─────────────────────────────────────────────
@@ -303,63 +514,49 @@ def render_sidebar(retriever):
 # ─────────────────────────────────────────────
 
 def render_retrieval_results(result: RetrievalResult):
-    """Hiển thị kết quả retrieval."""
-    st.markdown("### 🔍 Kết quả Retrieval")
+    """Hiển thị kết quả retrieval — dùng container thay expander để tránh lồng expander."""
 
     tab_text, tab_image = st.tabs([
-        f"📄 Text/Table ({len(result.text_chunks)})",
-        f"🖼️ Image ({len(result.image_chunks)})",
+        "Text/Table (" + str(len(result.text_chunks)) + ")",
+        "Image (" + str(len(result.image_chunks)) + ")",
     ])
 
     with tab_text:
         if not result.text_chunks:
             st.info("Không tìm thấy text chunks phù hợp.")
         for i, chunk in enumerate(result.text_chunks):
-            with st.expander(
-                f"#{i+1} | {chunk.chunk_type.upper()} | {chunk.doc} — Trang {chunk.page} | Score: {chunk.score:.4f}",
-                expanded=(i == 0),
-            ):
-                # Score badge
-                st.markdown(f"""
-                <span class="chunk-score {score_class(chunk.score)}">
-                    Score: {chunk.score:.4f}
-                </span>
-                """, unsafe_allow_html=True)
-
-                st.markdown(f"**Chunk ID:** `{chunk.chunk_id}`")
-                st.markdown(f"**Loại:** {chunk.chunk_type} | **Trang:** {chunk.page} | **Tài liệu:** {chunk.doc}")
-
-                st.markdown("**Nội dung:**")
-                st.markdown(chunk.content[:1500] if len(chunk.content) > 1500 else chunk.content)
+            st.markdown(
+                f"**[{i+1}]** `{chunk.chunk_type.upper()}` | **{chunk.doc}** — Trang {chunk.page} "
+                f"<span class='chunk-score {score_class(chunk.score)}'>Score: {chunk.score:.4f}</span>",
+                unsafe_allow_html=True,
+            )
+            st.caption(f"Chunk ID: {chunk.chunk_id}")
+            st.markdown(chunk.content[:1200] if len(chunk.content) > 1200 else chunk.content)
+            if i < len(result.text_chunks) - 1:
+                st.divider()
 
     with tab_image:
         if not result.image_chunks:
             st.info("Không tìm thấy image chunks phù hợp.")
         for i, chunk in enumerate(result.image_chunks):
-            with st.expander(
-                f"#{i+1} | {chunk.doc} — Trang {chunk.page} | Score: {chunk.score:.4f}",
-                expanded=(i == 0),
-            ):
-                col_img, col_info = st.columns([1, 1])
-
-                with col_img:
-                    if chunk.img_path and Path(chunk.img_path).exists():
-                        st.image(chunk.img_path, use_container_width=True)
-                    else:
-                        st.warning("Không tìm thấy file ảnh.")
-
-                with col_info:
-                    st.markdown(f"""
-                    <span class="chunk-score {score_class(chunk.score)}">
-                        Score: {chunk.score:.4f}
-                    </span>
-                    """, unsafe_allow_html=True)
-                    st.markdown(f"**Chunk ID:** `{chunk.chunk_id}`")
-                    st.markdown(f"**Trang:** {chunk.page} | **Tài liệu:** {chunk.doc}")
-
-                    if chunk.caption:
-                        st.markdown("**Caption:**")
-                        st.markdown(chunk.caption[:800])
+            col_img, col_info = st.columns([1, 1])
+            with col_img:
+                if chunk.img_path and Path(chunk.img_path).exists():
+                    st.image(chunk.img_path, use_container_width=True)
+                else:
+                    st.warning("Không tìm thấy file ảnh.")
+            with col_info:
+                st.markdown(
+                    f"**[{i+1}]** **{chunk.doc}** — Trang {chunk.page} "
+                    f"<span class='chunk-score {score_class(chunk.score)}'>Score: {chunk.score:.4f}</span>",
+                    unsafe_allow_html=True,
+                )
+                st.caption(f"Chunk ID: {chunk.chunk_id}")
+                if chunk.caption:
+                    st.markdown("**Caption:**")
+                    st.markdown(chunk.caption[:800])
+            if i < len(result.image_chunks) - 1:
+                st.divider()
 
 
 # ─────────────────────────────────────────────
@@ -368,7 +565,6 @@ def render_retrieval_results(result: RetrievalResult):
 
 def render_agent_pipeline(final: dict):
     """Hiển thị quá trình reasoning của 3-agent pipeline."""
-    st.markdown("### 🤖 Multi-Agent Reasoning Pipeline")
 
     # Pipeline flow diagram: Text + Image (song song) → Sum
     cols = st.columns([1, 0.3, 1, 0.3, 1])
@@ -409,77 +605,114 @@ def render_agent_pipeline(final: dict):
     col_text, col_image = st.columns(2)
 
     with col_text:
-        with st.expander("📄 Stage 1a: Text Agent — Phân tích văn bản & bảng", expanded=False):
-            if text_out.get("has_data"):
-                render_confidence(text_out.get("confidence", 0), "Text Confidence")
-                st.markdown("**Phân tích:**")
-                st.markdown(text_out.get("analysis", "N/A"))
-            else:
-                st.warning("Text Agent không nhận được dữ liệu.")
+        st.markdown("**📄 Stage 1a: Text Agent**")
+        if text_out.get("has_data"):
+            st.markdown(text_out.get("analysis", "N/A"))
+        else:
+            st.warning("Text Agent không nhận được dữ liệu.")
 
     with col_image:
-        with st.expander("🖼️ Stage 1b: Image Agent — Phân tích biểu đồ", expanded=False):
-            if image_out.get("has_data"):
-                render_confidence(image_out.get("confidence", 0), "Image Confidence")
-                st.markdown("**Phân tích:**")
-                st.markdown(image_out.get("analysis", "N/A"))
-            else:
-                st.warning("Image Agent không nhận được dữ liệu.")
+        st.markdown("**🖼️ Stage 1b: Image Agent**")
+        if image_out.get("has_data"):
+            st.markdown(image_out.get("analysis", "N/A"))
+        else:
+            st.warning("Image Agent không nhận được dữ liệu.")
 
     # Sum Agent reasoning
     if final.get("reasoning"):
-        with st.expander("✏️ Stage 2: Sum Agent — Biên tập & tổng hợp", expanded=False):
-            st.markdown(final["reasoning"])
+        st.divider()
+        st.markdown("**✏️ Stage 2: Sum Agent — Biên tập & tổng hợp**")
+        st.markdown(final["reasoning"])
 
 
 # ─────────────────────────────────────────────
 # Render: Final Answer
 # ─────────────────────────────────────────────
 
-def render_answer(final: dict):
+def render_answer(final: dict, total_time: float = None):
     """Hiển thị câu trả lời cuối cùng."""
     st.markdown("### 💡 Câu trả lời")
 
-    st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #f0f7ff 0%, #e8f4f8 100%);
-                border: 1px solid #b8daff; border-radius: 12px; padding: 1.2rem 1.5rem;
-                font-size: 1.05rem; line-height: 1.7;">
-        {final['answer']}
-    </div>
-    """, unsafe_allow_html=True)
+    # Dùng markdown để render **Nguồn tham khảo:** và nhãn [X, Trang Y] đúng định dạng
+    st.markdown(final['answer'])
+
 
     st.markdown("")
 
-    # Metadata
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        render_confidence(final.get("confidence", 0), "Tổng Confidence")
-    with col2:
-        st.markdown(f"**Model:** `{final.get('model', 'N/A')}`")
-    with col3:
-        st.markdown(f"**Có biểu đồ:** {'✅' if final.get('has_image') else '❌'}")
-    with col4:
-        st.markdown(f"**Số nguồn:** {len(final.get('sources', []))}")
+    # Metadata inline
+    time_str = f" &nbsp;|&nbsp; **⏱️ Thời gian:** {total_time:.1f}s" if total_time is not None else ""
+    meta_str = (
+        f"**Model:** `{final.get('model', 'N/A')}` &nbsp;|&nbsp; "
+        f"**Ảnh:** {'✅' if final.get('has_image') else '❌'} ({final.get('num_images', 0)}) &nbsp;|&nbsp; "
+        f"**Nguồn:** {len(final.get('sources', []))} chunks"
+        f"{time_str}"
+    )
+    st.caption(meta_str)
 
 
 # ─────────────────────────────────────────────
-# Render: Sources
+# Render: Sources and Details Helpers
 # ─────────────────────────────────────────────
 
-def render_sources(final: dict):
-    """Hiển thị danh sách nguồn tài liệu."""
-    sources = final.get("sources", [])
+def format_answer_with_sources(answer: str, sources: list) -> str:
+    """Tự động đính kèm danh sách tài liệu tham chiếu gọn gàng vào cuối câu trả lời nếu chưa có."""
     if not sources:
-        return
+        return answer
+    
+    # Chuẩn hóa để tránh đính kèm trùng lặp
+    lower_answer = answer.lower()
+    if "nguồn tham" in lower_answer or "tài liệu tham" in lower_answer or "danh sách tài liệu" in lower_answer:
+        return answer
 
-    with st.expander(f"📝 Nguồn tài liệu ({len(sources)} chunks)", expanded=False):
-        for i, src in enumerate(sources):
-            doc = src.get("doc", "N/A")
-            page = src.get("page", "?")
-            chunk_id = src.get("chunk_id", "N/A")
-            img = src.get("img_path", "")
-            icon = "🖼️" if img else "📄"
-            st.markdown(f"{icon} **{chunk_id}** — {doc}, trang {page}")
+    # Tách text và image sources, đánh số riêng
+    text_sources = [s for s in sources if not s.get("img_path")]
+    image_sources = [s for s in sources if s.get("img_path")]
+
+    lines = []
+    for i, src in enumerate(text_sources, 1):
+        doc = src.get("doc", "N/A")
+        page = src.get("page", "?")
+        lines.append(f"[Đ{i}] {doc} | Trang {page}")
+    for i, src in enumerate(image_sources, 1):
+        doc = src.get("doc", "N/A")
+        page = src.get("page", "?")
+        lines.append(f"[HÌNH {i}] {doc} | Trang {page}")
+
+    if not lines:
+        return answer
+
+    sources_md = "\n\n---\n**Nguồn tham khảo:**\n\n" + "\n\n".join(lines) + "\n"
+    return answer + sources_md
+
+
+def render_assistant_details(final: dict, result, answer_mode: str, total_time: float):
+    """Render các thông tin chi tiết (timing, retrieval, pipeline) đi kèm tin nhắn."""
+
+    # ── Metadata dòng nhỏ ──
+    if total_time is not None:
+        mode_label = "Multi-Agent" if answer_mode == "multi_agent" else "Single LLM"
+        num_text = len(result.text_chunks) if (result and hasattr(result, "text_chunks")) else 0
+        num_image = len(result.image_chunks) if (result and hasattr(result, "image_chunks")) else 0
+        st.caption(
+            f"⏱️ {total_time:.1f}s ({mode_label}) &nbsp;|&nbsp; "
+            f"🗂️ {num_text}T + {num_image}I chunks &nbsp;|&nbsp; "
+            f"`{final.get('model', 'N/A')}`"
+        )
+
+    # ── Chi tiết thu gọn — nằm trong chat bubble ──
+    if result:
+        num_text = len(result.text_chunks) if hasattr(result, "text_chunks") else 0
+        num_image = len(result.image_chunks) if hasattr(result, "image_chunks") else 0
+        with st.expander(
+            f"🔍 Kết quả Retrieval — {num_text} text, {num_image} ảnh",
+            expanded=False,
+        ):
+            render_retrieval_results(result)
+
+    if answer_mode == "multi_agent":
+        with st.expander("🤖 Multi-Agent Reasoning Pipeline", expanded=False):
+            render_agent_pipeline(final)
+
 
 
 # ─────────────────────────────────────────────
@@ -490,8 +723,8 @@ def main():
     # Header
     st.markdown("""
     <div class="main-header">
-        <h1>📊 Hệ thống RAG Phân tích Tài chính Đa phương thức</h1>
-        <p>Multi-Agent RAG với Dual-Pipeline Retrieval • Đồ án tốt nghiệp</p>
+        <h1>📊 Hệ thống RAG Phân tích tài chính đa phương thức</h1>
+        <p>Đồ án tốt nghiệp</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -503,10 +736,12 @@ def main():
         st.stop()
 
     # Sidebar
-    text_top_k, image_top_k, answer_mode = render_sidebar(retriever)
+    text_top_k, image_top_k, answer_mode, use_reranker = render_sidebar(retriever)
+    # Cho phép toggle reranker runtime (không cần restart)
+    retriever.use_reranker = use_reranker
 
     # ── Tabs chính ──
-    tab_chat, tab_arch = st.tabs(["💬 Hỏi đáp", "🏗️ Kiến trúc hệ thống"])
+    tab_chat, tab_docs, tab_arch = st.tabs(["💬 Hỏi đáp", "📁 Tài liệu", "🏗️ Kiến trúc hệ thống"])
 
     # ═══════════════════════════════════════════
     # Tab 1: Hỏi đáp (Chat)
@@ -522,13 +757,43 @@ def main():
         for msg in st.session_state.messages:
             with st.chat_message(msg["role"]):
                 st.markdown(msg["content"])
+                # Nếu là assistant và có chứa dữ liệu phân tích đầy đủ, render lại các expander
+                if msg["role"] == "assistant" and "final" in msg:
+                    render_assistant_details(
+                        final=msg["final"],
+                        result=msg.get("result"),
+                        answer_mode=msg.get("answer_mode"),
+                        total_time=msg.get("total_time")
+                    )
 
-        # Xử lý câu hỏi mẫu
+        # ── Câu hỏi gợi ý (luôn hiển thị) ──
+        samples = [
+            "Biên lợi nhuận gộp VNM các quý?",
+            "So sánh NIM của HDB và CTG",
+            "Doanh thu và LN HPG Q3/2025?",
+            "Xu hướng giá MWG 6 tháng?",
+            "Tỷ lệ nợ xấu Vietcombank?",
+        ]
+
+        def _set_sample(q: str):
+            st.session_state["sample_question"] = q
+
+        if not st.session_state.messages:
+            st.markdown("### 💡 Gợi ý câu hỏi:")
+        else:
+            st.markdown("##### 💡 Gợi ý:")
+
+        cols = st.columns(len(samples))
+        for i, s in enumerate(samples):
+            cols[i].button(s, key=f"sample_{i}", on_click=_set_sample, args=(s,))
+
+        # Xử lý câu hỏi mẫu (nếu được click)
         sample_q = st.session_state.pop("sample_question", None)
 
-        # Chat input
-        user_input = st.chat_input("Đặt câu hỏi về tài chính, cổ phiếu...")
+    # ── Chat input đặt NGOÀI tab để Streamlit neo cố định ở đáy trang ──
+    user_input = st.chat_input("Nhập câu hỏi về tài chính, cổ phiếu...")
 
+    with tab_chat:
         question = sample_q or user_input
 
         if question:
@@ -540,44 +805,46 @@ def main():
             # Xử lý
             with st.chat_message("assistant"):
                 # Step 1: Retrieval
-                with st.status("🔍 Đang tìm kiếm tài liệu...", expanded=True) as status:
-                    st.write("Encoding query và search trên ChromaDB...")
+                with st.status("Đang tìm kiếm tài liệu...", expanded=True) as status:
+                    st.write("① Encoding query và search trên ChromaDB...")
                     t0 = time.time()
                     try:
-                        result = retriever.retrieve(
+                        result = cached_retrieve(
+                            retriever,
                             question,
                             text_top_k=text_top_k,
                             image_top_k=image_top_k,
                         )
                         retrieval_time = time.time() - t0
                         st.write(f"✅ Tìm thấy **{len(result.text_chunks)}** text chunks, **{len(result.image_chunks)}** image chunks ({retrieval_time:.1f}s)")
-                        status.update(label=f"🔍 Retrieval hoàn tất ({retrieval_time:.1f}s)", state="complete")
+                        status.update(label=f"Retrieval hoàn tất ({retrieval_time:.1f}s)", state="complete", expanded=False)
                     except Exception as e:
                         st.error(f"Lỗi retrieval: {e}")
-                        status.update(label="❌ Retrieval thất bại", state="error")
+                        status.update(label="Retrieval thất bại", state="error", expanded=True)
+                        st.button("🔄 Thử lại", on_click=lambda: st.session_state.pop("sample_question", None))
                         st.stop()
 
                 # Step 2: Generation (phân nhánh theo chế độ)
                 if answer_mode == "multi_agent":
                     # ── Multi-Agent: 3-agent pipeline ──
-                    with st.status("🤖 Multi-Agent đang phân tích...", expanded=True) as status:
-                        st.write("Stage 1: Text Agent + Image Agent — phân tích song song...")
-                        st.write("Stage 2: Sum Agent — tổng hợp & biên tập...")
+                    with st.status("Multi-Agent đang phân tích...", expanded=True) as status:
+                        st.write("② Stage 1: Text Agent + Image Agent — phân tích song song...")
+                        st.write("③ Stage 2: Sum Agent — tổng hợp & biên tập...")
                         t0 = time.time()
                         try:
                             final = orchestrator.run(question, result)
                             reasoning_time = time.time() - t0
                             st.write(f"✅ Hoàn tất 3-agent reasoning ({reasoning_time:.1f}s)")
-                            status.update(label=f"🤖 Multi-Agent hoàn tất ({reasoning_time:.1f}s)", state="complete")
+                            status.update(label=f"Multi-Agent hoàn tất ({reasoning_time:.1f}s)", state="complete", expanded=False)
                         except Exception as e:
                             st.error(f"Lỗi reasoning: {e}")
-                            status.update(label="❌ Multi-Agent thất bại", state="error")
+                            status.update(label="Multi-Agent thất bại", state="error", expanded=True)
                             st.stop()
                 else:
                     # ── Single LLM: 1 lần gọi duy nhất ──
                     gen_mode = "full_multimodal" if result.image_chunks else "text_table"
-                    with st.status(f"💬 Single LLM đang sinh câu trả lời ({gen_mode})...", expanded=True) as status:
-                        st.write(f"Gửi {len(result.text_chunks)} text + {len(result.image_chunks)} image chunks cho LLM...")
+                    with st.status(f"Single LLM đang sinh câu trả lời ({gen_mode})...", expanded=True) as status:
+                        st.write(f"② Gửi {len(result.text_chunks)} text + {len(result.image_chunks)} image chunks cho LLM...")
                         t0 = time.time()
                         try:
                             gen_result = generator.generate(question, result, mode=gen_mode)
@@ -588,7 +855,6 @@ def main():
                                 "model": gen_result["model"],
                                 "has_image": gen_result["has_image"],
                                 "num_images": gen_result["num_images"],
-                                "confidence": 0.0,  # Single LLM không trả confidence
                                 "sources": [
                                     {"chunk_id": c.chunk_id, "page": c.page, "doc": c.doc}
                                     for c in result.text_chunks
@@ -600,21 +866,39 @@ def main():
                                 "agent_outputs": {},
                             }
                             st.write(f"✅ Hoàn tất ({reasoning_time:.1f}s) — model: {gen_result['model']}")
-                            status.update(label=f"💬 Single LLM hoàn tất ({reasoning_time:.1f}s)", state="complete")
+                            status.update(label=f"Single LLM hoàn tất ({reasoning_time:.1f}s)", state="complete", expanded=False)
                         except Exception as e:
                             st.error(f"Lỗi generation: {e}")
-                            status.update(label="❌ Single LLM thất bại", state="error")
+                            status.update(label="Single LLM thất bại", state="error", expanded=True)
                             st.stop()
 
-                # Hiển thị câu trả lời
-                answer_text = final.get("answer", "Không thể tạo câu trả lời.")
+                # ── Câu trả lời chính ──
+                raw_answer = final.get("answer", "Không thể tạo câu trả lời.")
+                sources = final.get("sources", [])
+                
+                # Định dạng câu trả lời kèm tài liệu tham chiếu trực tiếp
+                answer_text = format_answer_with_sources(raw_answer, sources)
                 st.markdown(answer_text)
 
-                if answer_mode == "multi_agent":
-                    render_confidence(final.get("confidence", 0), "Độ tin cậy")
+                total_time = retrieval_time + reasoning_time
+                
+                # Render chi tiết đi kèm dưới dạng expanders
+                render_assistant_details(
+                    final=final,
+                    result=result,
+                    answer_mode=answer_mode,
+                    total_time=total_time
+                )
 
-                # Lưu vào history
-                st.session_state.messages.append({"role": "assistant", "content": answer_text})
+                # Lưu đầy đủ dữ liệu vào history để khi render lại lịch sử chat có thể hiển thị expander
+                st.session_state.messages.append({
+                    "role": "assistant",
+                    "content": answer_text,
+                    "result": result,
+                    "final": final,
+                    "answer_mode": answer_mode,
+                    "total_time": total_time
+                })
                 st.session_state.results_history.append({
                     "question": question,
                     "result": result,
@@ -624,23 +908,90 @@ def main():
                     "reasoning_time": reasoning_time,
                 })
 
-            # Chi tiết bên dưới chat
-            st.markdown("---")
+    # ═══════════════════════════════════════════
+    # Tab 2: Quản lý Tài liệu
+    # ═══════════════════════════════════════════
+    with tab_docs:
+        st.markdown("## 📁 Quản lý Tài liệu")
 
-            # Render chi tiết
-            render_answer(final)
-            if answer_mode == "multi_agent":
-                render_agent_pipeline(final)
-            render_retrieval_results(result)
-            render_sources(final)
+        # ── Upload section ──
+        st.markdown("### 📤 Upload tài liệu mới")
+        st.caption("Upload file PDF báo cáo SSI Research. Hệ thống sẽ tự động: Extract text/table/image → Embedding → Lưu vào Vector DB.")
 
-            # Timing
-            mode_label = "Multi-Agent" if answer_mode == "multi_agent" else "Single LLM"
-            total_time = retrieval_time + reasoning_time
-            st.caption(f"⏱️ Tổng thời gian: {total_time:.1f}s (Retrieval: {retrieval_time:.1f}s | {mode_label}: {reasoning_time:.1f}s)")
+        uploaded_file = st.file_uploader(
+            "Chọn file PDF",
+            type=["pdf"],
+            help="Định dạng tên: MÃ_YYYY_MM_DD_SSIResearch.pdf (VD: VIC_2026_05_15_SSIResearch.pdf)",
+        )
+
+        if uploaded_file:
+            st.info(f"📄 File: `{uploaded_file.name}` ({uploaded_file.size / 1024:.0f} KB)")
+            if st.button("🚀 Xử lý & Embed tài liệu", type="primary", use_container_width=True):
+                with st.status("Đang xử lý tài liệu...", expanded=True) as status:
+                    st.write("📄 Lưu file PDF...")
+                    st.write("🔍 Extracting text, tables, images...")
+                    st.write("🧬 Embedding chunks vào Vector DB...")
+
+                    success, message = upload_and_process(uploaded_file, retriever)
+
+                    if success:
+                        status.update(label="✅ Upload thành công!", state="complete")
+                        st.success(message)
+                        # Clear cache để sidebar cập nhật stats
+                        st.cache_resource.clear()
+                        time.sleep(1)
+                        st.rerun()
+                    else:
+                        status.update(label="❌ Upload thất bại", state="error")
+                        st.error(message)
+
+        st.markdown("---")
+
+        # ── Document list ──
+        st.markdown("### 📋 Danh sách tài liệu trong hệ thống")
+
+        doc_list = get_document_list()
+
+        if doc_list:
+            # Summary metrics
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("📄 Tổng tài liệu", len(doc_list))
+            col2.metric("📝 Text chunks", sum(d["text_chunks"] for d in doc_list))
+            col3.metric("📊 Table chunks", sum(d["table_chunks"] for d in doc_list))
+            col4.metric("🖼️ Image chunks", sum(d["image_chunks"] for d in doc_list))
+
+            st.markdown("")
+
+            # Table
+            import pandas as pd
+            df = pd.DataFrame(doc_list)
+            df = df.rename(columns={
+                "doc": "Tài liệu",
+                "ticker": "Mã CK",
+                "report_date": "Ngày",
+                "text_chunks": "Text",
+                "table_chunks": "Table",
+                "image_chunks": "Image",
+            })
+            df["Tổng"] = df["Text"] + df["Table"] + df["Image"]
+
+            st.dataframe(
+                df,
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "Mã CK": st.column_config.TextColumn(width="small"),
+                    "Text": st.column_config.NumberColumn(width="small"),
+                    "Table": st.column_config.NumberColumn(width="small"),
+                    "Image": st.column_config.NumberColumn(width="small"),
+                    "Tổng": st.column_config.NumberColumn(width="small"),
+                },
+            )
+        else:
+            st.info("Chưa có tài liệu nào. Upload file PDF ở trên để bắt đầu.")
 
     # ═══════════════════════════════════════════
-    # Tab 2: Kiến trúc hệ thống
+    # Tab 3: Kiến trúc hệ thống
     # ═══════════════════════════════════════════
     with tab_arch:
         st.markdown("## 🏗️ Kiến trúc hệ thống RAG Đa phương thức")
@@ -757,6 +1108,19 @@ def main():
             - Ablation studies đầy đủ
             - Precision, Recall, MRR, Hit Rate
             """)
+
+        st.markdown("---")
+        
+        # Tech stack
+        from config.settings import CFG
+        st.markdown("### 🔧 Công nghệ sử dụng")
+        st.markdown(f"""
+        - **Embedding:** `{CFG['embedding']['model']}`
+        - **LLM:** `{CFG['agents']['llm_model']}`
+        - **Vision:** `{CFG['agents']['vision_model']}`
+        - **Vector DB:** `ChromaDB`
+        - **Dimension:** `{CFG['embedding']['embed_dim']}`
+        """)
 
 
 if __name__ == "__main__":

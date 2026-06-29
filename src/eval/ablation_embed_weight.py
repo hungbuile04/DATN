@@ -79,8 +79,19 @@ def run():
 
     img_data = image_col.get(include=["documents", "metadatas"])
 
-    # Chỉ lấy ảnh VNM và HDB — khớp với bộ câu hỏi eval
-    TARGET_TICKERS = {"VNM", "HDB"}
+    # Lấy ảnh 10 mã cổ phiếu — nhất quán với ablation_embed_image.py
+    TARGET_TICKERS = {
+        "VNM",  # FMCG
+        "HDB",  # Ngân hàng
+        "HPG",  # Thép
+        "GAS",  # Dầu khí
+        "MWG",  # Bán lẻ
+        "FRT",  # Bán lẻ dược
+        "VCB",  # Ngân hàng nhà nước
+        "PVD",  # Dịch vụ dầu khí
+        "REE",  # Cơ điện
+        "DCM",  # Hoá chất
+    }
 
     images = []
     for i, chunk_id in enumerate(img_data["ids"]):

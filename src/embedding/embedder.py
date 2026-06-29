@@ -50,7 +50,8 @@ class GeminiEmbedder:
     """
 
     def __init__(self, api_key: str, model: str = "gemini-embedding-2-preview",
-                 sleep_seconds: float = 1.5, max_retries: int = 5):
+                 sleep_seconds: float = 1.5, max_retries: int = 5,
+                 output_dim: int = 3072):
         from google import genai
         from google.genai import types
         self._genai = genai
@@ -58,6 +59,7 @@ class GeminiEmbedder:
         self.model = model
         self.sleep_seconds = sleep_seconds
         self.max_retries = max_retries
+        self.output_dim = output_dim  # Matryoshka target dim
         self.client = genai.Client(api_key=api_key)
 
     def _retry(self, fn, *args, **kwargs):
@@ -76,12 +78,31 @@ class GeminiEmbedder:
 
     # ── Text methods ──────────────────────────────────
 
+    # ── Matryoshka truncation ─────────────────────
+
+    @staticmethod
+    def _truncate(vec: list[float], dim: int) -> list[float]:
+        """Matryoshka truncation + L2 re-normalize.
+
+        Gemini Embedding 2 hỗ trợ Matryoshka: cắt N chiều đầu tiên
+        vẫn giữ chất lượng ngữ nghĩa. Sau khi cắt, cần normalize lại
+        để cosine similarity hoạt động đúng.
+        """
+        if dim >= len(vec):
+            return vec
+        truncated = vec[:dim]
+        norm = sum(x * x for x in truncated) ** 0.5
+        if norm > 0:
+            truncated = [x / norm for x in truncated]
+        return truncated
+
     def embed_text(self, text: str) -> list[float]:
         """Embed một đoạn text."""
         result = self._retry(
             self.client.models.embed_content, model=self.model, contents=text,
         )
-        return list(result.embeddings[0].values)
+        vec = list(result.embeddings[0].values)
+        return self._truncate(vec, self.output_dim)
 
     def embed_texts_batch(self, texts: list[str]) -> list[list[float]]:
         """Embed batch texts trong 1 API call."""
@@ -90,14 +111,16 @@ class GeminiEmbedder:
         result = self._retry(
             self.client.models.embed_content, model=self.model, contents=texts,
         )
-        return [list(e.values) for e in result.embeddings]
+        return [self._truncate(list(e.values), self.output_dim)
+                for e in result.embeddings]
 
     def embed_query(self, query: str) -> list[float]:
         """Embed query string. Dùng cho cả text và image retrieval."""
         result = self._retry(
             self.client.models.embed_content, model=self.model, contents=query,
         )
-        return list(result.embeddings[0].values)
+        vec = list(result.embeddings[0].values)
+        return self._truncate(vec, self.output_dim)
 
     # ── Image methods ─────────────────────────────────
 
@@ -202,6 +225,7 @@ class GeminiEmbedder:
             contents=[self._types.Content(parts=parts)],
         )
         image_vec = list(result.embeddings[0].values)
+        image_vec = self._truncate(image_vec, self.output_dim)
 
         # ── Blend: α × caption + (1-α) × image, rồi L2-normalize ──
         if caption_vec is None:
@@ -255,8 +279,10 @@ def embed_and_store(
     text_col_name   = embed_cfg.get("text_collection", "rag_text")
     image_col_name  = embed_cfg.get("image_collection", "rag_image")
     model_name      = embed_cfg.get("model", "gemini-embedding-2-preview")
+    output_dim      = embed_cfg.get("embed_dim", 3072)
 
-    embedder = GeminiEmbedder(api_key=api_key, model=model_name, sleep_seconds=sleep_sec)
+    embedder = GeminiEmbedder(api_key=api_key, model=model_name,
+                              sleep_seconds=sleep_sec, output_dim=output_dim)
     text_collection  = load_or_create_collection(chroma_path, text_col_name)
     image_collection = load_or_create_collection(chroma_path, image_col_name)
 

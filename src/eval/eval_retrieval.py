@@ -83,11 +83,19 @@ def mrr(retrieved: list[RetrievedChunk], relevant_doc: str,
     return 0.0
 
 
-def _is_relevant(chunk: RetrievedChunk, relevant_doc: str,
+def _is_relevant(chunk: RetrievedChunk, relevant_doc,
                  relevant_types: list[str]) -> bool:
-    """Chunk có relevant không? Dựa trên doc name + chunk type."""
-    if relevant_doc and relevant_doc not in chunk.doc:
-        return False
+    """Chunk có relevant không? Dựa trên doc name + chunk type.
+    relevant_doc có thể là str hoặc list[str] (cho câu hỏi so sánh nhiều mã).
+    """
+    if relevant_doc:
+        if isinstance(relevant_doc, list):
+            # Chunk relevant nếu khớp BẤT KỲ doc nào trong list
+            if not any(d in chunk.doc for d in relevant_doc):
+                return False
+        else:
+            if relevant_doc not in chunk.doc:
+                return False
     if relevant_types and chunk.chunk_type not in relevant_types:
         return False
     return True

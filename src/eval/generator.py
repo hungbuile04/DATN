@@ -30,9 +30,16 @@ SYSTEM_PROMPT = (
     "- Nếu câu hỏi không nhắc tên công ty/mã cổ phiếu cụ thể, "
     "hãy XÁC ĐỊNH công ty nào phù hợp nhất dựa trên đặc điểm mô tả "
     "trong câu hỏi và thông tin trong context.\n\n"
+    "TRÍCH DẪN NGUỒN — BẮT BUỘC:\n"
+    "- Mỗi khi nêu số liệu hoặc nhận định, gắn nhãn nguồn [X, Trang Y] vào sau.\n"
+    "  (với X là số thứ tự đoạn văn trong context, Y là số trang ghi trong header)\n"
+    "  Ví dụ: \"NIM của HDB đạt 4,5% [1, Trang 8] trong khi CTG đạt 3,2% [3, Trang 5].\"\n"
+    "- Cuối câu trả lời, LUÔN thêm phần:\n"
+    "  **Nguồn tham khảo:**\n"
+    "  - [X] Tên tài liệu | Trang Y\n\n"
     "Nếu context không đủ để trả lời, hãy nói rõ: "
     "'Thông tin không có trong tài liệu được cung cấp.'\n"
-    "Trả lời bằng tiếng Việt, ngắn gọn, chính xác."
+    "Trả lời bằng tiếng Việt, chi tiết, đầy đủ, chính xác."
 )
 
 
@@ -110,7 +117,7 @@ class AnswerGenerator:
                 "type": "text",
                 "text": (
                     f"Text context:\n{text_context}\n\n"
-                    f"Image captions:\n{image_context}\n\n"
+                    f"Biểu đồ/Hình ảnh (caption kèm nguồn):\n{image_context}\n\n"
                     f"Câu hỏi: {question}"
                 ),
             },
@@ -150,12 +157,12 @@ class AnswerGenerator:
 
 
 def _format_context(chunks: list[RetrievedChunk]) -> str:
-    """Format danh sách chunk thành chuỗi context cho LLM."""
+    """Format danh sách chunk thành chuỗi context cho LLM, kèm nhãn để trích dẫn."""
     if not chunks:
         return "(không có dữ liệu)"
     parts: list[str] = []
     for i, c in enumerate(chunks, 1):
-        header = f"[{i}] {c.chunk_type.upper()} | Trang {c.page} | {c.doc}"
+        header = f"[{i}] {c.chunk_type.upper()} | {c.doc} | Trang {c.page}"
         parts.append(f"{header}\n{c.content}")
     return "\n\n---\n\n".join(parts)
 

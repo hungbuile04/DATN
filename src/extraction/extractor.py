@@ -95,6 +95,14 @@ def extract_pdf(pdf_path: str, out_dir: str, images_dpi: int = 150) -> list[dict
     # Mở PDF bằng fitz để screenshot full page khi cần
     fitz_doc = fitz.open(pdf_path)
 
+    # ── Fallback: trích ticker từ nội dung trang 1 nếu tên file không parse được ──
+    if not _ticker or not re.match(r'^[A-Z]{2,5}$', _ticker):
+        first_page_text = fitz_doc[0].get_text() if len(fitz_doc) > 0 else ""
+        fallback_ticker = _extract_ticker_from_content(first_page_text)
+        if fallback_ticker:
+            print(f"  ⚡ Ticker từ nội dung: {fallback_ticker} (tên file không parse được)")
+            _ticker = fallback_ticker
+
     metadata: list[dict] = []
 
     # ---------------------------------------------------
@@ -294,6 +302,9 @@ def extract_pdf(pdf_path: str, out_dir: str, images_dpi: int = 150) -> list[dict
             if not table_md:
                 continue
 
+            # Sửa lỗi Docling tách dấu tiếng Việt trong nội dung bảng
+            table_md = _clean_ocr_text(table_md)
+
             # Normalize table_name: slug lowercase
             raw_name = table_caption or f"table_{ti}"
             table_name = re.sub(r'[^\w]+', '_', raw_name.lower()).strip('_')
@@ -442,6 +453,10 @@ def extract_pdf(pdf_path: str, out_dir: str, images_dpi: int = 150) -> list[dict
             metadata.extend(image_chunks)
 
     fitz_doc.close()
+
+    # Post-process: merge bảng cross-page
+    metadata = _merge_cross_page_tables(metadata, out_base)
+
     return metadata
 
 
@@ -681,6 +696,31 @@ def _parse_doc_name(doc_name: str) -> dict:
     return result
 
 
+def _extract_ticker_from_content(text: str) -> str:
+    """
+    Trích mã cổ phiếu từ nội dung trang 1 khi tên file không theo format chuẩn.
+
+    Nhận diện các pattern phổ biến trong báo cáo tài chính Việt Nam:
+      - "HSX: DCM", "HOSE: VNM", "HNX: PVS", "UPCOM: ACV"
+      - "Mã CK: DCM", "Mã CP: VNM"
+      - "(HSX: DCM)", "(HOSE: VNM)"
+      - "Mã cổ phiếu: DCM"
+    """
+    patterns = [
+        # (HSX: DCM), (HOSE: VNM), (HNX: PVS), (UPCOM: ACV)
+        r'\(?(?:HSX|HOSE|HNX|UPCOM|UPCoM)\s*[:\-]\s*([A-Z]{2,5})\)?',
+        # Mã CK: DCM, Mã CP: VNM, Mã cổ phiếu: DCM
+        r'[Mm]ã\s+(?:CK|CP|cổ phiếu|chứng khoán)\s*[:\-]\s*([A-Z]{2,5})',
+        # Ticker: DCM
+        r'[Tt]icker\s*[:\-]\s*([A-Z]{2,5})',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            return match.group(1)
+    return ""
+
+
 def _split_chart_regions(
     pic,
     fitz_doc: fitz.Document,
@@ -877,3 +917,152 @@ def _find_table_captions(texts: list[str]) -> list[str]:
         if _TABLE_RE.search(clean):
             captions.append(_clean_ocr_text(clean))
     return captions
+
+
+def _merge_cross_page_tables(
+    metadata: list[dict], out_base: Path
+) -> list[dict]:
+    """
+    Post-process: merge bảng continuation cross-page.
+
+    Khi một bảng trải qua 2 trang PDF, Docling tạo 2 table items riêng biệt.
+    Bảng ở trang sau thường:
+      - Không có caption → tên generic "table_0"
+      - Không có header row riêng (dòng đầu là data)
+      - Cùng số cột với bảng cuối trang trước
+
+    Hàm này merge rows của bảng trang sau vào bảng trang trước,
+    cập nhật file .md và metadata, rồi xoá entry trang sau.
+
+    Returns:
+        metadata list đã loại bỏ các continuation tables đã merge.
+    """
+    # Chỉ xử lý table chunks, group theo doc
+    from collections import defaultdict
+    doc_tables: dict[str, list[int]] = defaultdict(list)
+    for idx, m in enumerate(metadata):
+        if m["chunk_type"] == "table":
+            doc_tables[m["doc"]].append(idx)
+
+    merged_indices: set[int] = set()  # indices to remove
+
+    for doc_name, indices in doc_tables.items():
+        # Sort theo page rồi chunk_index
+        indices.sort(key=lambda i: (metadata[i]["page"], metadata[i]["chunk_index"]))
+
+        for pos in range(len(indices) - 1):
+            idx_prev = indices[pos]
+            idx_next = indices[pos + 1]
+            prev = metadata[idx_prev]
+            nxt = metadata[idx_next]
+
+            # Chỉ merge nếu trang liên tiếp
+            if nxt["page"] != prev["page"] + 1:
+                continue
+
+            # Chỉ merge nếu bảng trang sau có tên generic
+            if not nxt.get("table_name", "").startswith("table_"):
+                continue
+
+            # Bảng trước phải là bảng cuối trên trang đó
+            same_page_after = [
+                i for i in indices
+                if metadata[i]["page"] == prev["page"]
+                and metadata[i]["chunk_index"] > prev["chunk_index"]
+            ]
+            if same_page_after:
+                continue
+
+            # Bảng sau phải là bảng đầu trên trang đó
+            same_page_before = [
+                i for i in indices
+                if metadata[i]["page"] == nxt["page"]
+                and metadata[i]["chunk_index"] < nxt["chunk_index"]
+            ]
+            if same_page_before:
+                continue
+
+            # Đọc nội dung 2 bảng
+            try:
+                prev_path = Path(prev["text_path"])
+                next_path = Path(nxt["text_path"])
+                prev_content = prev_path.read_text(encoding="utf-8")
+                next_content = next_path.read_text(encoding="utf-8")
+            except Exception:
+                continue
+
+            # Parse markdown table lines
+            prev_lines = [l for l in prev_content.split("\n") if l.strip().startswith("|")]
+            next_lines = [l for l in next_content.split("\n") if l.strip().startswith("|")]
+
+            if not prev_lines or not next_lines:
+                continue
+
+            # Kiểm tra số cột bằng nhau
+            prev_cols = prev_lines[0].count("|") - 1
+            next_cols = next_lines[0].count("|") - 1
+            if prev_cols != next_cols:
+                continue
+
+            # Kiểm tra bảng sau có separator row (---|---) không
+            # Docling to_markdown() LUÔN tạo separator (dùng data row đầu làm header)
+            # → cần phân biệt: bảng mới thật sự vs continuation bị format lại
+            sep_idx = -1
+            for si, line in enumerate(next_lines[:3]):
+                if all(c in "-|: " for c in line):
+                    sep_idx = si
+                    break
+
+            if sep_idx >= 0 and len(next_lines) >= 2:
+                # Có separator → kiểm tra "header" bảng sau
+                next_header = next_lines[0].strip() if sep_idx > 0 else ""
+                prev_header = prev_lines[0].strip()
+
+                if next_header == prev_header:
+                    # Docling lặp lại header y hệt → bỏ header + sep
+                    next_data_lines = [
+                        l for l in next_lines[sep_idx + 1:]
+                        if l.strip().startswith("|")
+                    ]
+                else:
+                    # Header khác → có thể là data row bị format thành pseudo-header
+                    # Vẫn merge: lấy tất cả non-separator rows (gồm cả pseudo-header)
+                    next_data_lines = [
+                        l for l in next_lines
+                        if l.strip().startswith("|") and not all(c in "-|: " for c in l)
+                    ]
+            else:
+                # Không có separator → toàn bộ là data rows
+                next_data_lines = next_lines
+
+            if not next_data_lines:
+                continue
+
+            # === Merge ===
+            # Nối data rows vào cuối file bảng trước
+            merged_content = prev_content.rstrip("\n") + "\n" + "\n".join(next_data_lines) + "\n"
+            prev_path.write_text(merged_content, encoding="utf-8")
+
+            # Cập nhật token_count
+            all_text = "\n".join(prev_lines + next_data_lines)
+            prev["token_count"] = len(all_text.split())
+
+            # Xoá file bảng sau
+            try:
+                next_path.unlink(missing_ok=True)
+            except Exception:
+                pass
+
+            # Đánh dấu entry bảng sau để xoá khỏi metadata
+            merged_indices.add(idx_next)
+
+            parent_name = prev.get("table_name", "")
+            print(f"  [merge] {nxt['chunk_id']} → {prev['chunk_id']} "
+                  f"(+{len(next_data_lines)} rows, table: {parent_name})")
+
+    # Loại bỏ các entry đã merge
+    if merged_indices:
+        metadata = [m for i, m in enumerate(metadata) if i not in merged_indices]
+        print(f"  [merge] Đã merge {len(merged_indices)} continuation tables")
+
+    return metadata

@@ -5,7 +5,7 @@ sys.path.append(str(Path(__file__).parent.parent.parent))  # để import config
 
 import json
 from config.settings import CFG
-from extractor import extract_pdf
+from src.extraction.extractor import extract_pdf
 
 
 def run():
