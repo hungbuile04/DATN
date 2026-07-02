@@ -37,8 +37,6 @@ from src.eval.eval_retrieval import (
     _score_strategy,
     _aggregate_and_print,
     hit_rate_at_k,
-    precision_at_k,
-    mrr,
 )
 
 

@@ -28,7 +28,7 @@ load_dotenv()
 
 from openai import OpenAI
 from config.settings import CFG
-from src.retrieval.retriever import DualRetriever, RetrievalResult, RetrievedChunk
+from src.retrieval.retriever import DualRetriever, RetrievedChunk
 
 # ── Giá Gemini 2.5 Flash trên OpenRouter (USD / token) ──
 PRICE_INPUT  = 0.15 / 1_000_000   # $0.15 / 1M input tokens
@@ -128,7 +128,7 @@ def run():
         print(f"[{i}/{len(questions)}] {qid}: {question[:70]}...")
 
         # ── Retrieve ──
-        result: RetrievalResult = retriever.retrieve(
+        result = retriever.retrieve(
             question, text_top_k=text_top_k, image_top_k=image_top_k
         )
         text_chunks  = result.text_chunks

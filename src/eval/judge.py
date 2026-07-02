@@ -174,32 +174,6 @@ class LLMJudge:
         finally:
             time.sleep(self.sleep_sec)
 
-    def evaluate_batch(
-        self,
-        items: list[dict],
-    ) -> list[dict]:
-        """
-        Chấm nhiều câu lần lượt.
-
-        Args:
-            items: list of {"question", "answer", "expected_hint", "context"(optional)}
-
-        Returns:
-            list of score dicts
-        """
-        scores = []
-        for i, item in enumerate(items, 1):
-            print(f"    Judge [{i}/{len(items)}]", end=" ", flush=True)
-            s = self.evaluate(
-                item["question"],
-                item["answer"],
-                item["expected_hint"],
-                context=item.get("context", ""),
-            )
-            print(f"→ {s['total']}/20")
-            scores.append(s)
-        return scores
-
     @staticmethod
     def _empty_score(reason: str) -> dict:
         return {

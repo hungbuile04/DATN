@@ -23,7 +23,6 @@ from openai import OpenAI
 from src.retrieval.retriever import RetrievedChunk
 
 
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
 # ──────────────────────────────────────────────
@@ -492,29 +491,6 @@ class SumAgent:
         return resp.choices[0].message.content or ""
 
 
-# ──────────────────────────────────────────────
-# Backward compatibility
-# ──────────────────────────────────────────────
-
-# CriticalAgent stub — giữ lại cho backward compat (import cũ không bị vỡ)
-class CriticalAgent:
-    """Deprecated — CriticalAgent đã bị loại bỏ khỏi pipeline chính."""
-    def __init__(self, client, model):
-        pass
-    def extract(self, question="", text_context="", image_context=""):
-        return {"text": "", "image": ""}
-
-# TableAgent = TextAgent (gộp)
-TableAgent = TextAgent
-
-# GeneralAgent stub cho code cũ
-class GeneralAgent:
-    """Deprecated — giữ lại cho backward compatibility."""
-    def __init__(self, client, model):
-        pass
-    def analyze(self, question, text_chunks, image_chunks):
-        return AgentOutput(agent="general", analysis="", confidence=0.0,
-                          sources=[], has_data=False)
 
 
 # ──────────────────────────────────────────────

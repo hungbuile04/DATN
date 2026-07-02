@@ -54,11 +54,6 @@ class RetrievalResult:
     text_chunks:  list[RetrievedChunk] = field(default_factory=list)
     image_chunks: list[RetrievedChunk] = field(default_factory=list)
 
-    @property
-    def all_chunks(self) -> list[RetrievedChunk]:
-        """Gộp cả 2 list (text trước, image sau) — dùng cho display."""
-        return self.text_chunks + self.image_chunks
-
 
 # ──────────────────────────────────────────────
 # DualRetriever
@@ -90,7 +85,6 @@ class DualRetriever:
         model_name      = embed_cfg.get("model", "gemini-embedding-2-preview")
         text_col_name   = embed_cfg.get("text_collection", "rag_text")
         image_col_name  = embed_cfg.get("image_collection", "rag_image")
-        self.metadata_path = cfg["paths"]["metadata"]
 
         # Gemini client cho query embedding
         from google import genai
@@ -633,11 +627,8 @@ class DualRetriever:
 
 
 # ──────────────────────────────────────────────
-# RRF merge + ticker utilities
+# Ticker utilities
 # ──────────────────────────────────────────────
-
-
-
 
 def _ticker_of(chunk_id: str) -> str:
     """Extract ticker từ chunk_id (phần đầu trước _)."""

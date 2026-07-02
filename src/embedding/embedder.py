@@ -19,7 +19,6 @@ import chromadb
 from tqdm import tqdm
 
 sys.path.append(str(Path(__file__).parent.parent.parent))
-from config.settings import CFG
 
 # Model dùng để auto-caption charts trước khi embed
 # gemini-2.0-flash đã deprecated → dùng gemini-2.5-flash-lite
@@ -159,36 +158,6 @@ class GeminiEmbedder:
             return response.text.strip()
         except Exception:
             return f"Biểu đồ tài chính ({img_path.stem})"
-
-    # def embed_image(self, image_path: str, caption: str = "") -> list[float]:
-    #     """
-    #     Embed ảnh bằng aggregated embedding: caption + image bytes → 1 vector.
-
-    #     Khi gửi (text_part, image_part) trong cùng 1 Content entry,
-    #     model trả về 1 embedding kết hợp cả ngữ nghĩa text lẫn visual.
-    #     """
-    #     img_path = Path(image_path)
-    #     if not img_path.exists():
-    #         raise FileNotFoundError(f"Ảnh không tồn tại: {image_path}")
-
-    #     with open(img_path, 'rb') as f:
-    #         image_bytes = f.read()
-
-    #     mime_type = _get_mime(img_path)
-
-    #     parts = []
-    #     if caption:
-    #         parts.append(self._types.Part(text=caption))
-    #     parts.append(
-    #         self._types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
-    #     )
-
-    #     result = self._retry(
-    #         self.client.models.embed_content,
-    #         model=self.model,
-    #         contents=[self._types.Content(parts=parts)],
-    #     )
-    #     return list(result.embeddings[0].values)
 
     def embed_image(self, image_path: str, caption: str = "", alpha: float = 0.8) -> list[float]:
         """

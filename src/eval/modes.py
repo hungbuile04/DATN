@@ -15,15 +15,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.retrieval.retriever import DualRetriever, RetrievedChunk, RetrievalResult
+from src.retrieval.retriever import DualRetriever, RetrievalResult
 
 
 class TextOnlyRetriever:
     """
     Baseline — chỉ dùng text chunks (loại bỏ table và image).
     """
-
-    MODE = "text_only"
 
     def __init__(self, base: DualRetriever):
         self._r = base
@@ -46,8 +44,6 @@ class TextTableRetriever:
     Text + Table — thêm bảng số liệu nhưng không có image.
     """
 
-    MODE = "text_table"
-
     def __init__(self, base: DualRetriever):
         self._r = base
 
@@ -65,8 +61,6 @@ class FullMultimodalRetriever:
     """
     Full multimodal — Dual pipeline đầy đủ (text + table + image).
     """
-
-    MODE = "full_multimodal"
 
     def __init__(self, base: DualRetriever):
         self._r = base

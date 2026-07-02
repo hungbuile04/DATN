@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from config.settings import CFG
 from src.retrieval.retriever import DualRetriever
-from src.eval.eval_retrieval import precision_at_k, hit_rate_at_k, mrr, _is_relevant
+from src.eval.eval_retrieval import precision_at_k, hit_rate_at_k, mrr
 
 google_key = os.environ["GOOGLE_API_KEY"]
 openrouter_key = os.environ["OPENROUTER_API_KEY"]

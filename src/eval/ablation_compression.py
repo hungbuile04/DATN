@@ -28,11 +28,11 @@ Usage:
 
 import argparse
 import json
-import math
+
 import os
 import sys
 import time
-import struct
+
 from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
@@ -49,7 +49,7 @@ from src.retrieval.retriever import DualRetriever, RetrievedChunk
 
 # Import metrics
 from src.eval.eval_retrieval import (
-    precision_at_k, hit_rate_at_k, mrr, _is_relevant,
+    precision_at_k, hit_rate_at_k, mrr,
 )
 
 

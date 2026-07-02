@@ -43,18 +43,6 @@ COMPARATIVE_KEYWORDS = [
     "các ngành", "các lĩnh vực", "nhóm ngành", "phân ngành",
 ]
 
-FACTUAL_KEYWORDS = [
-    # câu hỏi trực tiếp
-    "bao nhiêu", "là gì", "định nghĩa", "giải thích",
-    # con số / chỉ số
-    "mức", "tỷ lệ", "chỉ số", "con số", "giá trị", "điểm",
-    # đơn vị tài chính
-    "%", "tỷ đồng", "nghìn tỷ", "triệu usd", "usd", "vnd",
-    "eps", "pe", "roe", "roa", "npatmi",
-    # câu hỏi fact
-    "khi nào", "ở đâu", "ai", "mấy",
-]
-
 
 # ──────────────────────────────────────────────
 # Router

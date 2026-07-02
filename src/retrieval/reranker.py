@@ -16,8 +16,7 @@ Fallback: nếu LLM API lỗi → trả về thứ tự cũ (dense score).
 
 import json
 import re
-import time
-from typing import Optional
+
 
 from openai import OpenAI
 

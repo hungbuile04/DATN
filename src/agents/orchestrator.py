@@ -15,7 +15,6 @@ from openai import OpenAI
 from src.retrieval.retriever import RetrievalResult
 from src.agents.agents import (
     TextAgent, ImageAgent, SumAgent,
-    AgentOutput, _format_chunks,
 )
 
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"

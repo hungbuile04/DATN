@@ -43,7 +43,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from config.settings import CFG
-from src.retrieval.retriever import DualRetriever, RetrievalResult, RetrievedChunk
+from src.retrieval.retriever import DualRetriever, RetrievedChunk
 from src.eval.generator import AnswerGenerator
 from src.agents.orchestrator import MultiAgentOrchestrator
 

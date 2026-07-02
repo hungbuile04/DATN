@@ -34,8 +34,8 @@ load_dotenv()
 
 from config.settings import CFG
 from src.retrieval.retriever import (
-    DualRetriever, RetrievalResult, RetrievedChunk,
-    _ticker_of, _ticker_boost,
+    DualRetriever, RetrievedChunk,
+    _ticker_boost,
 )
 
 

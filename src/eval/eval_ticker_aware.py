@@ -27,7 +27,7 @@ import sys
 import time
 from pathlib import Path
 from datetime import datetime
-from collections import defaultdict
+
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
@@ -35,7 +35,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from config.settings import CFG
-from src.retrieval.retriever import DualRetriever, RetrievalResult, RetrievedChunk
+from src.retrieval.retriever import DualRetriever, RetrievedChunk
 
 
 # ══════════════════════════════════════════════

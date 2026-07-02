@@ -22,8 +22,7 @@ sys.path.insert(0, str(ROOT))
 load_dotenv(ROOT / ".env")
 
 import json
-import shutil
-import re
+
 
 from config.settings import CFG
 from src.retrieval.retriever import DualRetriever, RetrievalResult
@@ -625,29 +624,6 @@ def render_agent_pipeline(final: dict):
         st.markdown(final["reasoning"])
 
 
-# ─────────────────────────────────────────────
-# Render: Final Answer
-# ─────────────────────────────────────────────
-
-def render_answer(final: dict, total_time: float = None):
-    """Hiển thị câu trả lời cuối cùng."""
-    st.markdown("### 💡 Câu trả lời")
-
-    # Dùng markdown để render **Nguồn tham khảo:** và nhãn [X, Trang Y] đúng định dạng
-    st.markdown(final['answer'])
-
-
-    st.markdown("")
-
-    # Metadata inline
-    time_str = f" &nbsp;|&nbsp; **⏱️ Thời gian:** {total_time:.1f}s" if total_time is not None else ""
-    meta_str = (
-        f"**Model:** `{final.get('model', 'N/A')}` &nbsp;|&nbsp; "
-        f"**Ảnh:** {'✅' if final.get('has_image') else '❌'} ({final.get('num_images', 0)}) &nbsp;|&nbsp; "
-        f"**Nguồn:** {len(final.get('sources', []))} chunks"
-        f"{time_str}"
-    )
-    st.caption(meta_str)
 
 
 # ─────────────────────────────────────────────
@@ -1112,7 +1088,7 @@ def main():
         st.markdown("---")
         
         # Tech stack
-        from config.settings import CFG
+
         st.markdown("### 🔧 Công nghệ sử dụng")
         st.markdown(f"""
         - **Embedding:** `{CFG['embedding']['model']}`

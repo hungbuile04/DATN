@@ -31,7 +31,7 @@ from config.settings import CFG
 from src.retrieval.retriever import DualRetriever
 from src.agents.agents import (
     TextAgent, ImageAgent, SumAgent,
-    AgentOutput, _format_chunks,
+    AgentOutput,
 )
 from src.eval.generator import AnswerGenerator
 from src.eval.judge import LLMJudge, print_judge_summary

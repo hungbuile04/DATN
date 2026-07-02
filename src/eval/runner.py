@@ -38,7 +38,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from config.settings import CFG
-from src.retrieval.retriever import DualRetriever, RetrievalResult
+from src.retrieval.retriever import DualRetriever
 from src.retrieval.query_router import classify_query
 from src.eval.modes import TextOnlyRetriever, TextTableRetriever, FullMultimodalRetriever
 from src.eval.generator import AnswerGenerator

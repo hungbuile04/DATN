@@ -23,7 +23,7 @@ PDF → Docling DocumentConverter → DoclingDocument
 import re
 import sys
 import fitz  # PyMuPDF – chỉ dùng cho full-page screenshot
-from itertools import zip_longest
+
 from pathlib import Path
 
 from docling.document_converter import DocumentConverter, PdfFormatOption
