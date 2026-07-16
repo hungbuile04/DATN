@@ -64,7 +64,7 @@ def run(questions_path: str):
 
     queries = [
         q for q in all_questions
-        if q["category"] in ("visual", "cross_modal")
+        if "image" in q.get("requires", []) or q.get("category") in ("visual", "cross_modal")
     ]
     print(f"Loaded {len(queries)} visual/cross_modal questions from {questions_path}")
 

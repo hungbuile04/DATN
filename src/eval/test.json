@@ -1,0 +1,14 @@
+[{
+    "id": "q198",
+    "question": "Giá điện thị trường năm 2025 dao động trong khoảng nào và tháng nào thấp nhất?",
+    "category": "visual_analysis",
+    "requires": [
+      "image"
+    ],
+    "expected_answer_hint": "Đỉnh ~1.748 VNĐ/kWh (tháng 3), đáy ~190 VNĐ/kWh (tháng 11); Q4/2025 giá dưới 1.000 do bão và mưa lớn → thủy điện dồi dào; 2024 ổn định hơn ở 1.200-1.700",
+    "source_page": 2,
+    "doc": "NT2_2026_01_22_SSIResearch",
+    "answer_in_text": false,
+    "ticker": "NT2",
+    "chart_note": "Biểu đồ 5 trang 2: Giá điện thị trường theo tháng 2024 vs 2025 — 2025 biến động cực mạnh, đáy tháng 11 ~190"
+}]

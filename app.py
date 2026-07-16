@@ -237,16 +237,34 @@ def init_system():
 
 
 def get_system_stats(retriever: DualRetriever) -> dict:
-    """Lấy thống kê hệ thống."""
-    text_count = retriever.text_col.count()
-    image_count = retriever.image_col.count()
+    """Lấy thống kê hệ thống từ metadata.json (nhất quán với tab Tài liệu)."""
+    meta_path = CFG["paths"]["metadata"]
+    text_count = 0
+    table_count = 0
+    image_count = 0
+    doc_names = set()
+    if Path(meta_path).exists():
+        with open(meta_path, encoding="utf-8") as f:
+            all_entries = json.load(f)
+        for e in all_entries:
+            ct = e.get("chunk_type", "")
+            if ct == "text":
+                text_count += 1
+            elif ct == "table":
+                table_count += 1
+            elif ct == "image":
+                image_count += 1
+            doc_names.add(e.get("doc", ""))
+
     tickers = sorted(retriever._known_tickers)
     pdf_dir = CFG["paths"]["pdf_raw"]
     pdf_count = len(list(Path(pdf_dir).glob("*.pdf"))) if Path(pdf_dir).exists() else 0
     return {
+        "num_docs": len(doc_names),
         "text_chunks": text_count,
+        "table_chunks": table_count,
         "image_chunks": image_count,
-        "total_chunks": text_count + image_count,
+        "total_chunks": text_count + table_count + image_count,
         "tickers": tickers,
         "num_tickers": len(tickers),
         "num_pdfs": pdf_count,
@@ -328,7 +346,12 @@ def upload_and_process(uploaded_file, retriever) -> tuple[bool, str]:
         from src.embedding.embedder import GeminiEmbedder, load_or_create_collection, _build_meta
         embed_cfg = CFG["embedding"]
         api_key = os.environ.get("GOOGLE_API_KEY", "")
-        embedder = GeminiEmbedder(api_key=api_key, model=embed_cfg.get("model", "gemini-embedding-2-preview"))
+        batch_size = embed_cfg.get("batch_size", 10)
+        embedder = GeminiEmbedder(
+            api_key=api_key,
+            model=embed_cfg.get("model", "gemini-embedding-2-preview"),
+            sleep_seconds=0.5,  # Giảm sleep cho upload (ít chunks)
+        )
 
         text_col = load_or_create_collection(
             str(CFG["paths"]["vector_db"]), embed_cfg.get("text_collection", "rag_text")
@@ -340,17 +363,25 @@ def upload_and_process(uploaded_file, retriever) -> tuple[bool, str]:
         n_text = 0
         n_image = 0
 
-        # Text + Table chunks
+        # Text + Table chunks — embed theo batch
         text_chunks = [c for c in chunks if c.get("chunk_type") in ("text", "table")]
         if text_chunks:
             contents = []
             for c in text_chunks:
                 txt_path = Path(c["text_path"])
                 contents.append(txt_path.read_text(encoding="utf-8") if txt_path.exists() else "")
-            vectors = embedder.embed_texts_batch(contents)
+
+            all_vectors = []
+            for i in range(0, len(contents), batch_size):
+                batch = contents[i:i + batch_size]
+                vectors = embedder.embed_texts_batch(batch)
+                all_vectors.extend(vectors)
+                if i + batch_size < len(contents):
+                    time.sleep(0.5)
+
             text_col.upsert(
                 ids=[c["chunk_id"] for c in text_chunks],
-                embeddings=vectors,
+                embeddings=all_vectors,
                 documents=contents,
                 metadatas=[_build_meta(c) for c in text_chunks],
             )
@@ -370,6 +401,7 @@ def upload_and_process(uploaded_file, retriever) -> tuple[bool, str]:
                     metadatas=[_build_meta(c)],
                 )
                 n_image += 1
+                time.sleep(0.3)
             except Exception as e:
                 cid = c.get("chunk_id", "?")
                 st.warning(f"⚠️ Lỗi embed ảnh {cid}: {e}")
@@ -397,6 +429,83 @@ def upload_and_process(uploaded_file, retriever) -> tuple[bool, str]:
         if pdf_path.exists():
             pdf_path.unlink()
         return False, f"❌ Lỗi xử lý: {e}"
+
+
+def delete_document(doc_name: str, retriever: DualRetriever) -> tuple[bool, str]:
+    """
+    Xóa tài liệu khỏi hệ thống: metadata, ChromaDB, file chunks, ảnh, PDF.
+    Returns: (success, message)
+    """
+    meta_path = Path(CFG["paths"]["metadata"])
+    if not meta_path.exists():
+        return False, "Không tìm thấy metadata.json."
+
+    with open(meta_path, encoding="utf-8") as f:
+        all_entries = json.load(f)
+
+    # Lọc entries của doc cần xóa
+    to_delete = [e for e in all_entries if e.get("doc") == doc_name]
+    if not to_delete:
+        return False, f"Không tìm thấy tài liệu `{doc_name}` trong metadata."
+
+    remaining = [e for e in all_entries if e.get("doc") != doc_name]
+
+    try:
+        # 1. Xóa khỏi ChromaDB
+        text_ids = [e["chunk_id"] for e in to_delete if e.get("chunk_type") in ("text", "table")]
+        image_ids = [e["chunk_id"] for e in to_delete if e.get("chunk_type") == "image"]
+
+        if text_ids:
+            try:
+                retriever.text_col.delete(ids=text_ids)
+            except Exception:
+                pass
+        if image_ids:
+            try:
+                retriever.image_col.delete(ids=image_ids)
+            except Exception:
+                pass
+
+        # 2. Xóa file chunks (.md) và ảnh (.png)
+        n_files = 0
+        for e in to_delete:
+            for key in ("text_path", "img_path"):
+                fpath = e.get(key)
+                if fpath and Path(fpath).exists():
+                    Path(fpath).unlink()
+                    n_files += 1
+
+        # 3. Xóa file PDF gốc (tìm theo tên doc)
+        pdf_dir = Path(CFG["paths"]["pdf_raw"])
+        pdf_deleted = False
+        for pdf_file in pdf_dir.glob("*.pdf"):
+            if pdf_file.stem == doc_name:
+                pdf_file.unlink()
+                pdf_deleted = True
+                break
+
+        # 4. Cập nhật metadata.json
+        meta_path.write_text(
+            json.dumps(remaining, ensure_ascii=False, indent=2),
+            encoding="utf-8"
+        )
+
+        # 5. Reload retriever
+        retriever._known_tickers = set(
+            m.get("ticker", "") for m in retriever.text_col.get(include=["metadatas"])["metadatas"]
+            if m.get("ticker")
+        )
+
+        return True, (
+            f"✅ Đã xóa tài liệu `{doc_name}`:\n\n"
+            f"- **Chunks xóa:** {len(to_delete)} ({len(text_ids)} text/table + {len(image_ids)} image)\n"
+            f"- **File xóa:** {n_files} file\n"
+            f"- **PDF gốc:** {'đã xóa' if pdf_deleted else 'không tìm thấy'}\n"
+            f"- **Còn lại:** {len(remaining)} chunks trong hệ thống"
+        )
+
+    except Exception as e:
+        return False, f"❌ Lỗi khi xóa: {e}"
 
 
 @st.cache_resource(ttl=300, show_spinner=False)
@@ -490,12 +599,13 @@ def render_sidebar(retriever):
         stats = get_system_stats(retriever)
 
         col1, col2 = st.columns(2)
-        col1.metric("PDF báo cáo", stats["num_pdfs"])
+        col1.metric("Tài liệu", stats["num_docs"])
         col2.metric("Mã cổ phiếu", stats["num_tickers"])
 
-        col3, col4 = st.columns(2)
-        col3.metric("Text chunks", f"{stats['text_chunks']:,}")
-        col4.metric("Image chunks", f"{stats['image_chunks']:,}")
+        col3, col4, col5 = st.columns(3)
+        col3.metric("Text", f"{stats['text_chunks']:,}")
+        col4.metric("Table", f"{stats['table_chunks']:,}")
+        col5.metric("Image", f"{stats['image_chunks']:,}")
 
         st.markdown(f"**Tổng:** {stats['total_chunks']:,} chunks")
 
@@ -913,9 +1023,6 @@ def main():
                     if success:
                         status.update(label="✅ Upload thành công!", state="complete")
                         st.success(message)
-                        # Clear cache để sidebar cập nhật stats
-                        st.cache_resource.clear()
-                        time.sleep(1)
                         st.rerun()
                     else:
                         status.update(label="❌ Upload thất bại", state="error")
@@ -930,11 +1037,15 @@ def main():
 
         if doc_list:
             # Summary metrics
+            total_text = sum(d["text_chunks"] for d in doc_list)
+            total_table = sum(d["table_chunks"] for d in doc_list)
+            total_image = sum(d["image_chunks"] for d in doc_list)
+
             col1, col2, col3, col4 = st.columns(4)
             col1.metric("📄 Tổng tài liệu", len(doc_list))
-            col2.metric("📝 Text chunks", sum(d["text_chunks"] for d in doc_list))
-            col3.metric("📊 Table chunks", sum(d["table_chunks"] for d in doc_list))
-            col4.metric("🖼️ Image chunks", sum(d["image_chunks"] for d in doc_list))
+            col2.metric("📝 Text chunks", total_text)
+            col3.metric("📊 Table chunks", total_table)
+            col4.metric("🖼️ Image chunks", total_image)
 
             st.markdown("")
 
@@ -963,6 +1074,45 @@ def main():
                     "Tổng": st.column_config.NumberColumn(width="small"),
                 },
             )
+
+            # ── Xóa tài liệu ──
+            st.markdown("---")
+            st.markdown("### 🗑️ Xóa tài liệu")
+            st.caption("Xóa tài liệu sẽ loại bỏ toàn bộ: chunks trong ChromaDB, file text/ảnh, PDF gốc, và metadata.")
+
+            doc_names = [d["doc"] for d in doc_list]
+            selected_doc = st.selectbox(
+                "Chọn tài liệu cần xóa",
+                options=doc_names,
+                index=None,
+                placeholder="Chọn tài liệu...",
+            )
+
+            if selected_doc:
+                # Hiển thị thông tin tài liệu được chọn
+                doc_info = next((d for d in doc_list if d["doc"] == selected_doc), {})
+                st.warning(
+                    f"⚠️ Sắp xóa **{selected_doc}** — "
+                    f"{doc_info.get('text_chunks', 0)} text, "
+                    f"{doc_info.get('table_chunks', 0)} table, "
+                    f"{doc_info.get('image_chunks', 0)} image chunks"
+                )
+
+                if st.button("🗑️ Xác nhận xóa", type="primary", use_container_width=True):
+                    with st.status("Đang xóa tài liệu...", expanded=True) as status:
+                        st.write(f"Xóa chunks khỏi ChromaDB...")
+                        st.write(f"Xóa file text, ảnh, PDF...")
+                        st.write(f"Cập nhật metadata.json...")
+
+                        success, message = delete_document(selected_doc, retriever)
+
+                        if success:
+                            status.update(label="✅ Xóa thành công!", state="complete")
+                            st.success(message)
+                            st.rerun()
+                        else:
+                            status.update(label="❌ Xóa thất bại", state="error")
+                            st.error(message)
         else:
             st.info("Chưa có tài liệu nào. Upload file PDF ở trên để bắt đầu.")
 

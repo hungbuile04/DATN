@@ -62,7 +62,7 @@
     "requires": [
       "image"
     ],
-    "expected_answer_hint": "Biểu đồ 4 cho thấy tỷ lệ hình thành nợ xấu (đường đỏ) đạt đỉnh giai đoạn 2020-2021 (Covid, ~1,0-1,2%) rồi giảm mạnh về ~0,2-0,4% (2022-2024). Tuy nhiên Q2-Q3/2025 tăng vọt lên 0,65% — gấp đôi Q2. Chi phí tín dụng (đường nâu) cũng tăng theo nhưng có độ trễ. Bẫy: nhìn NPL tuyệt đối (1,87%) có vẻ thấp, nhưng tốc độ hình thành nợ xấu gấp đôi mới là chỉ báo leading đáng lo ngại hơn. Giai đoạn hiện tại rủi ro cao thứ hai sau Covid",
+    "expected_answer_hint": "Biểu đồ 4 cho thấy tỷ lệ hình thành nợ xấu (đường đỏ) đạt đỉnh giai đoạn 2020-2021 (Covid, ~1,0-1,2%) rồi giảm mạnh về ~0,2-0,4% (2022-2024). Tuy nhiên Q2-Q3/2025 tăng vọt lên 0,65% — gấp đôi Q2. Chi phí tín dụng (đường nâu) cũng tăng theo nhưng có độ trễ. Bẫy: YÊU CẦU BẮT BUỘC phải nhận diện được đỉnh Covid 2020-2021 (~1,0-1,2%) trên biểu đồ. Báo cáo bằng chữ (text) không nhắc đến giai đoạn này, do đó nếu câu trả lời chỉ nói 'năm 2025 là cao nhất' hoặc bỏ sót đỉnh Covid thì phải trừ nặng điểm Correctness và Completeness. Giai đoạn hiện tại rủi ro cao thứ hai sau Covid",
     "source_page": "3",
     "doc": "MBB_2025_12_04_SSIResearch",
     "answer_in_text": false,
