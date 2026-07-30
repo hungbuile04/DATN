@@ -1,0 +1,2 @@
+# Thư mục này chứa LoRA adapter weights cho cross-encoder reranker.
+# Chạy scripts/finetune_reranker.py để tạo adapter weights.

@@ -13,10 +13,10 @@ PDF Reports  -->  Extraction (Docling)  -->  Embedding (Gemini)  -->  ChromaDB
                                               - rag_text  (text + table)
                                               - rag_image (caption + image blend α=0.8)
 
-Question  -->  Dual Retrieval  -->  3-Agent Reasoning  -->  Answer
-               |                     |
-               text: dense+boost     Text + Image (parallel) → Sum (Editor)
-               image: dense+filter
+Question  -->  Dual Retrieval  -->  Reranker  -->  3-Agent Reasoning  -->  Answer
+               |                     |              |
+               text: dense+boost     Gemini Flash   Text + Image (parallel) → Sum
+               image: dense+filter   or LoRA CE ◄── Fine-tuned cross-encoder (local)
 ```
 
 ### Multi-Agent Pipeline (3 Agents, 2 Stages)
@@ -38,6 +38,9 @@ source_code_2/
 ├── config/
 │   ├── config.yaml        # System configuration
 │   └── settings.py        # Loads config as Python dict
+├── scripts/
+│   ├── generate_reranker_data.py  # Tạo training data cho LoRA reranker
+│   └── finetune_reranker.py       # Fine-tune cross-encoder với LoRA
 ├── src/
 │   ├── extraction/        # PDF extraction (Docling + figure detection)
 │   │   ├── extractor.py
@@ -49,7 +52,9 @@ source_code_2/
 │   │   ├── fix_captions.py
 │   │   └── reembed_images.py
 │   ├── retrieval/         # Dual retrieval (text + image)
-│   │   ├── retriever.py
+│   │   ├── retriever.py   # DualRetriever (supports gemini/lora reranker)
+│   │   ├── reranker.py    # GeminiReranker (LLM-based, via API)
+│   │   ├── lora_reranker.py  # LoRAReranker (fine-tuned cross-encoder, local)
 │   │   ├── query_router.py
 │   │   └── run_retrieval.py
 │   ├── agents/            # 3-Agent reasoning
@@ -60,14 +65,16 @@ source_code_2/
 │       ├── runner.py      # 4-mode comparison
 │       ├── ablation_agents.py
 │       ├── eval_retrieval.py
-│       ├── questions.json               # Main eval dataset (265 questions)
+│       ├── eval_lora_reranker.py  # Dense vs Gemini vs LoRA reranker
+│       ├── eval_e2e_lora.py       # End-to-end LLM-as-Judge comparison
+│       ├── questions.json               # Main eval dataset (200 questions)
 │       ├── questions_hard.json          # Hard reasoning questions (100 questions)
 │       ├── questions_151_250.json       # Extended eval questions
-│       ├── questions_sab_ree_pvt_pvs.json
-│       ├── questions_vcb_tpb_tng_stb.json
-│       ├── questions_vpb_vnm_vhm_vea.json
 │       ├── question_test.json           # Small test set for quick runs
 │       └── ...
+├── models/
+│   └── reranker_lora/     # LoRA adapter weights (after fine-tuning)
+├── training_data/         # Generated training pairs for reranker
 ├── pdfs/
 │   ├── raw/               # Raw financial report PDFs
 │   └── processed/         # Metadata, vector DB (git-ignored)
@@ -146,6 +153,8 @@ streamlit run app.py
 | Vector DB | ChromaDB (Dual collection: `rag_text` + `rag_image`) |
 | LLM | Gemini 2.5 Flash (text + vision, via OpenRouter) |
 | Retrieval | Dense-only + ticker-aware scoring (BM25 removed) |
+| Reranking | Gemini Flash (API) or **LoRA fine-tuned cross-encoder** (local) |
+| Fine-tuning | LoRA/PEFT on `BAAI/bge-reranker-v2-m3`, PyTorch |
 | Image Embedding | Aggregated blend: α×caption + (1-α)×image, α=0.8 |
 | Web UI | Streamlit |
 
@@ -187,4 +196,50 @@ python -m src.eval.ablation_agents --questions src/eval/question_test.json --jud
 
 # Retrieval-level metrics
 python -m src.eval.eval_retrieval
+```
+
+## Fine-tuning: LoRA Cross-Encoder Reranker
+
+The system supports fine-tuning a local cross-encoder reranker to replace the Gemini Flash API-based reranker, reducing latency (~10x) and eliminating per-query API costs.
+
+**Base model:** `BAAI/bge-reranker-v2-m3` (XLM-RoBERTa, 568M params, multilingual)
+**Method:** LoRA (Low-Rank Adaptation) — trains only ~0.5% of parameters
+**Training data:** Auto-generated from 300 eval questions + ChromaDB (4350 pairs)
+
+### Step 1: Generate training data
+
+```bash
+python scripts/generate_reranker_data.py
+# Output: training_data/reranker_pairs.jsonl (4350 pairs, ratio 1:3)
+```
+
+### Step 2: Fine-tune with LoRA
+
+```bash
+# Mac (MPS) — batch_size=2, gradient checkpointing enabled
+python -m scripts.finetune_reranker --epochs 3
+
+# CUDA GPU — larger batch possible
+python -m scripts.finetune_reranker --epochs 3 --batch_size 16 --lora_r 16
+```
+
+Output: LoRA adapter weights → `models/reranker_lora/`
+
+### Step 3: Switch to LoRA reranker
+
+Edit `config/config.yaml`:
+
+```yaml
+retrieval:
+  reranker_type: "lora"   # "gemini" (API) → "lora" (local)
+```
+
+### Step 4: Evaluate
+
+```bash
+# Retrieval-level: Dense vs Gemini vs LoRA (Precision@k, MRR, Latency)
+python -m src.eval.eval_lora_reranker --questions src/eval/questions_hard.json
+
+# End-to-end: LLM-as-Judge comparison (0-20 scale)
+python -m src.eval.eval_e2e_lora --questions src/eval/questions_hard.json --n 20
 ```

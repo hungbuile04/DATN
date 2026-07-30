@@ -79,7 +79,8 @@ class DualRetriever:
     """
 
     def __init__(self, chroma_path: str, api_key: str, cfg: dict,
-                 openrouter_key: str = "", use_reranker: bool = False):
+                 openrouter_key: str = "", use_reranker: bool = False,
+                 reranker_type: str = None):
         embed_cfg = cfg["embedding"]
 
         model_name      = embed_cfg.get("model", "gemini-embedding-2-preview")
@@ -99,14 +100,28 @@ class DualRetriever:
         # Reranker (optional)
         self.use_reranker = use_reranker
         self._reranker = None
-        if use_reranker and openrouter_key:
-            from src.retrieval.reranker import GeminiReranker
-            reranker_cfg = cfg.get("retrieval", {})
-            self._reranker = GeminiReranker(
-                api_key=openrouter_key,
-                model=reranker_cfg.get("reranker_model", "google/gemini-2.5-flash"),
-            )
-            print("  ✓ Reranker enabled (Gemini Flash)")
+        reranker_cfg = cfg.get("retrieval", {})
+        # Auto-detect reranker type from config if not specified
+        if reranker_type is None:
+            reranker_type = reranker_cfg.get("reranker_type", "gemini")
+
+        if use_reranker:
+            if reranker_type == "lora":
+                from src.retrieval.lora_reranker import LoRAReranker
+                adapter_path = str(Path(__file__).parent.parent.parent
+                                   / reranker_cfg.get("lora_reranker_path", "models/reranker_lora"))
+                base_model = reranker_cfg.get("lora_reranker_model", "BAAI/bge-reranker-v2-m3")
+                self._reranker = LoRAReranker(
+                    adapter_path=adapter_path,
+                    base_model=base_model,
+                )
+            elif openrouter_key:
+                from src.retrieval.reranker import GeminiReranker
+                self._reranker = GeminiReranker(
+                    api_key=openrouter_key,
+                    model=reranker_cfg.get("reranker_model", "google/gemini-2.5-flash"),
+                )
+                print("  ✓ Reranker enabled (Gemini Flash)")
 
         # Known tickers — populated during _load_corpus
         self._known_tickers: set[str] = set()

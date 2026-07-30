@@ -25,8 +25,11 @@ retrieval:
   text_top_k: 6       # top-k cho text pipeline
   image_top_k: 4      # top-k cho image pipeline
   rrf_k: 60
-  use_reranker: true                      # bật/tắt Gemini Flash Reranker
-  reranker_model: "google/gemini-2.5-flash"  # model dùng cho reranking
+  use_reranker: true                      # bật/tắt Reranker
+  reranker_type: "gemini"                 # "gemini" (API) | "lora" (local fine-tuned)
+  reranker_model: "google/gemini-2.5-flash"  # model dùng cho Gemini reranking
+  lora_reranker_model: "BAAI/bge-reranker-v2-m3"  # base model cho LoRA reranker
+  lora_reranker_path: "models/reranker_lora"       # đường dẫn LoRA adapter weights
 
 agents:
   llm_model: "google/gemini-2.5-flash"
